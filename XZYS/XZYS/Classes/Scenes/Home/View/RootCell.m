@@ -7,6 +7,10 @@
 //
 
 #import "RootCell.h"
+#import <UIImageView+WebCache.h>
+#import "XZYS_URL.h"
+#import "XZYS_Other.h"
+
 
 @implementation RootCell
 
@@ -24,26 +28,41 @@
     
     UIView *aView = [[UIView alloc] initWithFrame:self.bounds];
     // 创建对象
-    self.photoImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.width)];
+    self.photoImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, 10, self.frame.size.width - 10, self.frame.size.width - 10)];
     self.photoImage.layer.cornerRadius = 3;
     self.photoImage.layer.masksToBounds = YES;
-    self.tittleLable = [[UILabel alloc]initWithFrame:CGRectMake(2, CGRectGetMaxY(self.photoImage.frame) + 3, CGRectGetWidth(self.frame) - 5, 35)];
-    self.tittleLable.backgroundColor = [UIColor brownColor];
+    self.tittleLable = [[UILabel alloc]initWithFrame:CGRectMake(5, CGRectGetMaxY(self.photoImage.frame) + 3, CGRectGetWidth(self.frame) - 10, 36)];
+    self.tittleLable.numberOfLines = 0;
+    self.tittleLable.font = [UIFont systemFontOfSize:18];
     
-    self.priceLable = [[UILabel alloc]initWithFrame:CGRectMake(2, CGRectGetMaxY(self.tittleLable.frame) + 3, 80, 20)];
+    self.priceLable = [[UILabel alloc]initWithFrame:CGRectMake(4, CGRectGetMaxY(self.tittleLable.frame) + 3, 80, 20)];
     self.priceLable.textAlignment = NSTextAlignmentLeft;
-    self.priceLable.backgroundColor = [UIColor brownColor];
-    
-    self.NumberLable = [[UILabel alloc]initWithFrame:CGRectMake(self.frame.size.width - 82, CGRectGetMaxY(self.tittleLable.frame) + 3, 80, 20)];
+    self.priceLable.font = [UIFont systemFontOfSize:14];
+
+    self.NumberLable = [[UILabel alloc]initWithFrame:CGRectMake(self.frame.size.width - 105, CGRectGetMaxY(self.tittleLable.frame) + 3, 90, 20)];
     self.NumberLable.textAlignment = NSTextAlignmentRight;
-    self.NumberLable.backgroundColor = [UIColor brownColor];
-    
+    self.NumberLable.font = [UIFont systemFontOfSize:14];
+
     [aView addSubview:self.photoImage];
     [aView addSubview:self.tittleLable];
     [aView addSubview:self.priceLable];
     [aView addSubview:self.NumberLable];
     
     [self.contentView addSubview:aView];
+}
+
+-(void)setOneModel:(SDFQModel *)oneModel{
+    
+    _oneModel = oneModel;
+    NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL,oneModel.goods_img];
+    NSString *numStr = [NSString stringWithFormat:@"销量：%@件", _oneModel.sales_num];
+    NSString *priceStr = [NSString stringWithFormat:@"￥ %@", _oneModel.price];
+    [_photoImage sd_setImageWithURL:[NSURL URLWithString:str]];
+    _tittleLable.text = _oneModel.goods_name;
+    _priceLable.text = priceStr;
+    _priceLable.textColor = XZYSBlueColor;
+    _NumberLable.text = numStr;
+    _NumberLable.textColor = XZYSPinkColor;
 }
 
 

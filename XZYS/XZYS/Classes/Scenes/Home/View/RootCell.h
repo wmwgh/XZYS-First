@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SDFQModel.h"
 
 @interface RootCell : UICollectionViewCell
 
@@ -16,6 +17,7 @@
 @property(nonatomic ,strong)UILabel *priceLable;
 @property(nonatomic ,strong)UILabel *NumberLable;
 
+@property (nonatomic,retain) SDFQModel *oneModel;
 
 
 @end

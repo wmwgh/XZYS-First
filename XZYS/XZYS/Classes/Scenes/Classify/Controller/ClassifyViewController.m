@@ -20,6 +20,7 @@
 #import <SVProgressHUD.h>
 #import <MJRefresh.h>
 #import "ShowAllViewController.h"
+#import "HomeViewController.h"
 
 @interface ClassifyViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UIScrollViewDelegate>
 {
@@ -46,6 +47,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    self.tabBarController.selectedIndex = 1;    
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = XZYSBackBColor;
     self.mianCollectionView.backgroundColor = [UIColor clearColor];
@@ -118,7 +120,8 @@
 
 - (void)backButtonClick:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
-
+//    HomeViewController *homeVC = [[HomeViewController alloc] init];
+//    [self.navigationController pushViewController:homeVC animated:NO];
 }
 
 
@@ -217,6 +220,7 @@
 - (void)qweClock:(UIButton *)sender {
     ShowAllViewController *showVC = [[ShowAllViewController alloc] init];
     [self.navigationController pushViewController:showVC animated:YES];
+    
 }
 
 //设置头视图的大小
@@ -296,7 +300,6 @@
     //    cell.backgroundColor = [UIColor cyanColor];
     
     NSArray *arr = [dataDic objectForKey:allkeys[indexPath.section]];
-    
     cell.oneModel = arr[indexPath.row];
     
     return cell;
@@ -319,8 +322,7 @@
     [dataDic removeAllObjects];
     [allkeys removeAllObjects];
     [[AFHTTPSessionManager manager] GET:@"http://api.liwushuo.com/v2/item_categories/tree" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
+        
         NSDictionary *data = [responseObject objectForKey:@"data"];
         
         NSArray *categories = [data objectForKey:@"categories"];
@@ -362,6 +364,9 @@
         [self createCollectionView];
         
         [self.mianCollectionView.mj_header endRefreshing];
+
+        // 隐藏指示器
+        [SVProgressHUD dismiss];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败

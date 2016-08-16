@@ -38,7 +38,7 @@
     self.myFlowLayout.sectionInset = UIEdgeInsetsMake(2, 2, 2, 2);
     
 //    // 布局头视图尺寸  移到了Home 头视图设置中
-    self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 35);
+    self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 369);
     
     // 2.布局collectionView
     

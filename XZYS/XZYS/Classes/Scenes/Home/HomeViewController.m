@@ -23,12 +23,11 @@
 #import "ScanningViewController.h"
 #import "FzhScrollViewAndPageView.h"
 #import "SearchViewController.h"
-#import "SDFQCollectionViewCell.h"
 #import "FirstHeaderReusableView.h"
 #import "HeaderReusableView.h"
 #import "RootCell.h"
 #import "RootView.h"
-
+#import "XIangQingViewController.h"
 #import "ClassifyViewController.h"
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
@@ -97,18 +96,15 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // 请求数据
-    [self requesdCollectionData];
-    [self requestData];
-    self.rootView = [[RootView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.view = self.rootView;
-    
-    // Do any additional setup after loading the view from its nib.
-    
+//    self.tabBarController.selectedIndex = 0;
     self.navigationController.navigationBarHidden = YES;
     self.headerBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 338)];
-    
-    
+
+    // 请求数据
+    [self requestData];
+//    [self requesdCollectionData];
+    [self setCollection];
+
     // 导航栏
     [self setNavigation];
     // 添加顶部刷新
@@ -117,13 +113,227 @@ static NSString *const secondID = @"secondHeader";//字和线
     [self fourButton];
     // 手势设置
     [self setTap];
-    [self setCollection];
-    
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
 
 
+- (void)setCollection {
+    self.rootView = [[RootView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.view = self.rootView;
+    // 设置代理
+    self.rootView.collectionView.dataSource = self;
+    self.rootView.collectionView.delegate = self;
+    
+    // 第一步：注册cell
+    [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
+    
+    // 注册头视图
+    [self.rootView.collectionView registerClass:[FirstHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID];
+    
+    [self.rootView.collectionView registerClass:[HeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:secondID];
+    
+    // 注册尾视图
+    [self.rootView.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footView"];
+}
+
+#pragma mark - 四大区数据
+- (void)requesdCollectionData {
+    __weak typeof(self) weakSelf = self;
+    [self.SPTArray removeAllObjects];
+    [weakSelf.SPTTittleArray removeAllObjects];
+    
+    [[AFHTTPSessionManager manager] GET:XZYS_SDQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 请求成功，解析数据
+        NSArray *dataArray = responseObject[@"data"];
+        NSDictionary *dict = [NSDictionary dictionary];
+        NSMutableArray *listArray = [NSMutableArray array];
+        
+        if (dataArray.count > 0) {
+            for (int i = 0; i < 3; i++) {
+                dict = dataArray[i];
+                listArray = dict[@"goods_list"];
+                if ([listArray isEqual:[NSNull null]]) {
+                } else {
+                    SDFQModel *model = [[SDFQModel alloc] init];
+                    [model setValuesForKeysWithDictionary:dict];
+                    [weakSelf.SPTTittleArray addObject:model];
+                }
+                
+                NSMutableArray *sectionArray= [NSMutableArray array];
+                if ([listArray isEqual:[NSNull null]]) {
+                    NSLog(@"22222---%d空", i);
+                } else {
+                    
+                    for (NSDictionary *dic in listArray) {
+                    SDFQModel *model = [[SDFQModel alloc] init];
+                    
+                    [model setValuesForKeysWithDictionary:dic];
+                    [sectionArray addObject:model];
+                    
+                    }
+                    [weakSelf.SPTArray addObject:sectionArray];
+                }
+            }
+        }
+        // 请求调货区数据
+        [self requestTHQData];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+}
+
+- (void)requestTHQData {
+    __weak typeof(self) weakSelf = self;
+    [[AFHTTPSessionManager manager] GET:XZYS_THQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        // 请求成功，解析数据
+        NSDictionary *THQDic = responseObject[@"data"];
+        NSMutableArray *sectionArray= [NSMutableArray array];
+        NSArray *THQAr = THQDic[@"goods_list"];
+        
+        if (THQDic.count > 0) {
+            
+            if ([THQAr isEqual:[NSNull null]]) {
+                NSLog(@"tiaohuoqu11111--空");
+            } else {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:THQDic];
+                [weakSelf.SPTTittleArray addObject:model];
+            }
+            
+
+            if ([THQAr isEqual:[NSNull null]]) {
+                NSLog(@"tiaohuoqu22222--空");
+            } else {
+                for (NSDictionary *dic in THQAr) {
+                    SDFQModel *model = [[SDFQModel alloc] init];
+                    [model setValuesForKeysWithDictionary:dic];
+                    [sectionArray addObject:model];
+                }
+                [weakSelf.SPTArray addObject:sectionArray];
+            }
+        }
+        
+        [self.rootView.collectionView.mj_header endRefreshing];
+        [self.rootView.collectionView reloadData];
+        // 隐藏指示器
+        [SVProgressHUD dismiss];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        // 显示加载错误信息
+        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+    }];
+}
+
+#pragma mark UICollectionViewDataSource Method----
+
+// 设置多少个分区
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    NSLog(@"%ld", self.SPTArray.count);
+    return self.SPTTittleArray.count;
+}
+
+// 设置每个分区里面有几个item
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+
+    
+    if (section == 0) {
+        NSArray *itemArr = self.SPTArray[0];
+        return itemArr.count;
+        }
+    
+    if (section == 1) {
+        NSArray *itemArr = self.SPTArray[1];
+        return itemArr.count;
+        }
+    
+    if (section == 2) {
+        if (!self.SPTArray[2]) {
+            NSArray *itemArr = self.SPTArray[2];
+            return itemArr.count;
+        }
+    }
+    if (section == 3) {
+        if (!self.SPTArray[3]) {
+            NSArray *itemArr = self.SPTArray[3];
+            return itemArr.count;
+        }
+    }
+    return 0;
+}
+
+// 返回每一个item的cell对象
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    // 第二步：重用cell
+    RootCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier_cell forIndexPath:indexPath];
+    
+    NSArray *modelArray = self.SPTArray[indexPath.section];
+    cell.oneModel = modelArray[indexPath.row];
+    return cell;
+}
+// 返回头视图和尾视图
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    
+    SDFQModel *model = [SDFQModel new];
+    
+    // 判断是头视图还是尾视图
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        if (indexPath.section == 0){
+            model = self.SPTTittleArray[0];
+            
+            FirstHeaderReusableView *firstHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
+            // 布局头视图尺寸
+            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 369);
+            [firstHeaderView addSubview:self.headerBackView];
+            firstHeaderView.headerLabel.text = model.name;
+            [self.rootView.collectionView bringSubviewToFront:firstHeaderView];
+            return firstHeaderView;
+        }
+        
+        HeaderReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:secondID forIndexPath:indexPath];
+        
+        if (indexPath.section == 1){
+            model = self.SPTTittleArray[1];
+
+            // 布局头视图尺寸
+            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
+            headerView.headerLabel.text = model.name;
+            return headerView;
+        }
+        
+        if (indexPath.section == 2){
+            model = self.SPTTittleArray[2];
+            // 布局头视图尺寸
+            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
+            headerView.headerLabel.text = model.name;
+            return headerView;
+        }
+        
+        if (indexPath.section == 3){
+            model = self.SPTTittleArray[3];
+            // 布局头视图尺寸
+            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
+            headerView.headerLabel.text = model.name;
+            return headerView;
+        }
+        return headerView;
+    }
+    return nil;
+    
+}
+
+// 点击item
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+//    NSArray *modelArray = self.SPTArray[indexPath.section];
+    //    cell.oneModel = modelArray[indexPath.row];
+    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    [self.navigationController pushViewController:XXVC animated:YES];
+    
+}
 
 - (void)setNavigation {
     
@@ -164,134 +374,6 @@ static NSString *const secondID = @"secondHeader";//字和线
     [self.navigationController pushViewController:messageVC animated:YES];
 }
 
-
-- (void)setCollection {
-    // 设置代理
-    self.rootView.collectionView.dataSource = self;
-    self.rootView.collectionView.delegate = self;
-    
-    // 第一步：注册cell
-    [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
-    
-    // 注册头视图
-    [self.rootView.collectionView registerClass:[FirstHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID];
-    
-    [self.rootView.collectionView registerClass:[HeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:secondID];
-    
-    // 注册尾视图
-    [self.rootView.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footView"];
-    [self.rootView.collectionView reloadData];
-}
-
-
-#pragma mark UICollectionViewDataSource Method----
-
-// 设置多少个分区
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.SPTArray.count + 1;
-}
-
-// 设置每个分区里面有几个item
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    
-    return self.SPTArray.count + 1;
-}
-
-// 返回每一个item的cell对象
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    // 第二步：重用cell
-    RootCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier_cell forIndexPath:indexPath];
-    
-    cell.backgroundColor = [UIColor orangeColor];
-    
-    if (!self.SPTArray) {
-        
-        SDFQModel *model = [[SDFQModel alloc] init];
-        model = self.SPTArray[indexPath.row];
-        NSLog(@"%@", model.goods_img);
-        NSLog(@"走了");
-
-    } else {
-        NSLog(@"没走啊");
-    }
-    
-    if (indexPath.section == 0) {
-        cell.photoImage.image = [UIImage imageNamed:@"11"];
-    }
-    
-    if (indexPath.section == 1) {
-        cell.photoImage.image = [UIImage imageNamed:@"22"];
-    }
-    
-    if (indexPath.section == 2) {
-        cell.photoImage.image = [UIImage imageNamed:@"33"];
-    }
-    
-    return cell;
-}
-
-// 返回头视图和尾视图
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
-    // 判断是头视图还是尾视图
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        
-        if (indexPath.section == 0){
-            
-            FirstHeaderReusableView *firstHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 369);
-            [firstHeaderView addSubview:self.headerBackView];
-            firstHeaderView.headerLabel.text = @"11111";
-            [self.rootView.collectionView bringSubviewToFront:firstHeaderView];
-            return firstHeaderView;
-            
-        }
-        
-        HeaderReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:secondID forIndexPath:indexPath];
-        
-        if (indexPath.section == 1){
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
-            headerView.headerLabel.text = @"2222";
-            return headerView;
-        }
-        
-        if (indexPath.section == 2){
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
-            headerView.headerLabel.text = @"33333";
-            return headerView;
-        }
-        
-        if (indexPath.section == 3){
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
-            headerView.headerLabel.text = @"42444";
-            return headerView;
-        }
-        return headerView;
-    }
-    return nil;
-    
-}
-
-// 点击item
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    NSLog(@"dianji:%ld", (long)indexPath.row);
-    
-}
-
-
-
-
-
-
-
-
-
 #pragma mark --- 手势设置
 
 - (void)setTap {
@@ -320,7 +402,7 @@ static NSString *const secondID = @"secondHeader";//字和线
         LBTModel *model = [[LBTModel alloc] init];
         model = self.LBTArray[i];
         NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.img];
-        [imageView sd_setImageWithURL:urlStr];
+        [imageView sd_setImageWithURL:[NSURL URLWithString:urlStr]];
         [tempAry addObject:imageView];
     }
     
@@ -346,38 +428,11 @@ static NSString *const secondID = @"secondHeader";//字和线
     [self.rootView.collectionView.mj_header beginRefreshing];
 }
 
-- (void)requesdCollectionData {
-    __weak typeof(self) weakSelf = self;
-#pragma mark - 四大区数据
-    [self.SPTArray removeAllObjects];
-    [[AFHTTPSessionManager manager] GET:XZYS_SDQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        
-        if (dataArray.count > 0) {
-            for (NSDictionary *dict in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dict];
-                [weakSelf.SPTArray addObject:model];
-                
-            }
-        }
-        
-        [self.rootView.collectionView.mj_header endRefreshing];
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
-        // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
-    }];
-}
 
+#pragma mark - 三大专区数据
 // 请求数据
 - (void)requestData {
     __weak typeof(self) weakSelf = self;
-#pragma mark - 三大专区数据
     
     [[AFHTTPSessionManager manager] GET:XZYS_SDZQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
@@ -417,12 +472,6 @@ static NSString *const secondID = @"secondHeader";//字和线
         }
         // 轮播图
         [weakSelf LBTView];
-        //回到主线程刷新UI
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [weakSelf.rootView.collectionView reloadData];
-            
-        });
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
@@ -472,9 +521,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     [backView addSubview:button3];
     [backView addSubview:button4];
     
-    
 }
-
 
 // 订单按钮点击事件
 - (void)button1Click {
@@ -519,7 +566,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     NSString *aimage = tempAry[0];
     manImageBT.layer.cornerRadius = 3;
     manImageBT.layer.masksToBounds = YES;
-    [manImageBT sd_setImageWithURL:aimage];
+    [manImageBT sd_setImageWithURL:[NSURL URLWithString:aimage]];
     [manImageBT setUserInteractionEnabled:YES];
     [manImageBT addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(manImageBTClick:)]];
     [collectionButtonView addSubview:manImageBT];
@@ -530,7 +577,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     NSString *bimage = tempAry[1];
     womanImageBT.layer.cornerRadius = 3;
     womanImageBT.layer.masksToBounds = YES;
-    [womanImageBT sd_setImageWithURL:bimage];
+    [womanImageBT sd_setImageWithURL:[NSURL URLWithString:bimage]];
     [womanImageBT setUserInteractionEnabled:YES];
     [womanImageBT addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(womanImageBTClick:)]];
     
@@ -542,7 +589,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     childImageBT.layer.cornerRadius = 3;
     childImageBT.layer.masksToBounds = YES;
     NSString *cimage = tempAry[2];
-    [childImageBT sd_setImageWithURL:cimage];
+    [childImageBT sd_setImageWithURL:[NSURL URLWithString:cimage]];
     [childImageBT setUserInteractionEnabled:YES];
     [childImageBT addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(childImageBTClick:)]];
     

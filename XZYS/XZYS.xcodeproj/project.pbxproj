@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1D6A35B68EB4269AF8F55F42 /* libPods-XZYS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA3FFFDBB8556A79AC5D80D4 /* libPods-XZYS.a */; };
+		8FA6F4EC1D62F22000C62CC8 /* XIangQingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6F4E71D62F22000C62CC8 /* XIangQingViewController.m */; };
+		8FA6F4ED1D62F22000C62CC8 /* XLScrollViewer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6F4E81D62F22000C62CC8 /* XLScrollViewer.m */; };
+		8FA6F4EE1D62F22000C62CC8 /* XIangQingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FA6F4EB1D62F22000C62CC8 /* XIangQingViewController.xib */; };
+		8FA6F4F51D62F24000C62CC8 /* Deatais.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6F4EF1D62F24000C62CC8 /* Deatais.m */; };
+		8FA6F4F61D62F24000C62CC8 /* Etalon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6F4F01D62F24000C62CC8 /* Etalon.m */; };
+		8FA6F4F71D62F24000C62CC8 /* Goods.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA6F4F11D62F24000C62CC8 /* Goods.m */; };
 		8FA925301D582D5100112FFD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA9252F1D582D5100112FFD /* main.m */; };
 		8FA925391D582D5100112FFD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8FA925371D582D5100112FFD /* Main.storyboard */; };
 		8FA9253C1D582D5200112FFD /* XZYS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8FA9253A1D582D5200112FFD /* XZYS.xcdatamodeld */; };
@@ -51,7 +57,6 @@
 		8FA926561D5968B600112FFD /* tb_08.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FA9264E1D5968B600112FFD /* tb_08.png */; };
 		8FB7910A1D5C68F100E29218 /* UserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FB791071D5C68F100E29218 /* UserViewController.xib */; };
 		8FB7910B1D5C68F100E29218 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB791091D5C68F100E29218 /* UserViewController.m */; };
-		8FB7911E1D5C8C4B00E29218 /* SDFQCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB7911D1D5C8C4B00E29218 /* SDFQCollectionViewCell.m */; };
 		8FB791251D5D5E6A00E29218 /* HeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB7911F1D5D5E6A00E29218 /* HeaderReusableView.m */; };
 		8FB791261D5D5E6A00E29218 /* RootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB791211D5D5E6A00E29218 /* RootView.m */; };
 		8FB791271D5D5E6A00E29218 /* RootCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB791221D5D5E6A00E29218 /* RootCell.m */; };
@@ -84,6 +89,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8FA6F4E71D62F22000C62CC8 /* XIangQingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XIangQingViewController.m; sourceTree = "<group>"; };
+		8FA6F4E81D62F22000C62CC8 /* XLScrollViewer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLScrollViewer.m; sourceTree = "<group>"; };
+		8FA6F4E91D62F22000C62CC8 /* XLScrollViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLScrollViewer.h; sourceTree = "<group>"; };
+		8FA6F4EA1D62F22000C62CC8 /* XIangQingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XIangQingViewController.h; sourceTree = "<group>"; };
+		8FA6F4EB1D62F22000C62CC8 /* XIangQingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XIangQingViewController.xib; sourceTree = "<group>"; };
+		8FA6F4EF1D62F24000C62CC8 /* Deatais.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deatais.m; sourceTree = "<group>"; };
+		8FA6F4F01D62F24000C62CC8 /* Etalon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Etalon.m; sourceTree = "<group>"; };
+		8FA6F4F11D62F24000C62CC8 /* Goods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Goods.m; sourceTree = "<group>"; };
+		8FA6F4F21D62F24000C62CC8 /* Etalon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Etalon.h; sourceTree = "<group>"; };
+		8FA6F4F31D62F24000C62CC8 /* Deatais.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Deatais.h; sourceTree = "<group>"; };
+		8FA6F4F41D62F24000C62CC8 /* Goods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Goods.h; sourceTree = "<group>"; };
 		8FA9252B1D582D5100112FFD /* XZYS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XZYS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA9252F1D582D5100112FFD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8FA925381D582D5100112FFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -140,8 +156,6 @@
 		8FB791071D5C68F100E29218 /* UserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserViewController.xib; sourceTree = "<group>"; };
 		8FB791081D5C68F100E29218 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		8FB791091D5C68F100E29218 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
-		8FB7911C1D5C8C4B00E29218 /* SDFQCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDFQCollectionViewCell.h; sourceTree = "<group>"; };
-		8FB7911D1D5C8C4B00E29218 /* SDFQCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDFQCollectionViewCell.m; sourceTree = "<group>"; };
 		8FB7911F1D5D5E6A00E29218 /* HeaderReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderReusableView.m; sourceTree = "<group>"; };
 		8FB791201D5D5E6A00E29218 /* HeaderReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderReusableView.h; sourceTree = "<group>"; };
 		8FB791211D5D5E6A00E29218 /* RootView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootView.m; sourceTree = "<group>"; };
@@ -412,6 +426,11 @@
 		8FA925571D582FF500112FFD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				8FA6F4E91D62F22000C62CC8 /* XLScrollViewer.h */,
+				8FA6F4E81D62F22000C62CC8 /* XLScrollViewer.m */,
+				8FA6F4EA1D62F22000C62CC8 /* XIangQingViewController.h */,
+				8FA6F4E71D62F22000C62CC8 /* XIangQingViewController.m */,
+				8FA6F4EB1D62F22000C62CC8 /* XIangQingViewController.xib */,
 				8FA9256B1D58462300112FFD /* HomeViewController.h */,
 				8FA9256C1D58462300112FFD /* HomeViewController.m */,
 				8FD7266C1D5AC5D80030E04B /* MessageViewController.h */,
@@ -440,6 +459,12 @@
 		8FA925591D582FF500112FFD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8FA6F4F31D62F24000C62CC8 /* Deatais.h */,
+				8FA6F4EF1D62F24000C62CC8 /* Deatais.m */,
+				8FA6F4F21D62F24000C62CC8 /* Etalon.h */,
+				8FA6F4F01D62F24000C62CC8 /* Etalon.m */,
+				8FA6F4F41D62F24000C62CC8 /* Goods.h */,
+				8FA6F4F11D62F24000C62CC8 /* Goods.m */,
 				8FB791201D5D5E6A00E29218 /* HeaderReusableView.h */,
 				8FB7911F1D5D5E6A00E29218 /* HeaderReusableView.m */,
 				8FB791311D5DCD5400E29218 /* FirstHeaderReusableView.h */,
@@ -450,8 +475,6 @@
 				8FB791221D5D5E6A00E29218 /* RootCell.m */,
 				8FD726921D5B24370030E04B /* FzhScrollViewAndPageView.h */,
 				8FD726931D5B24370030E04B /* FzhScrollViewAndPageView.m */,
-				8FB7911C1D5C8C4B00E29218 /* SDFQCollectionViewCell.h */,
-				8FB7911D1D5C8C4B00E29218 /* SDFQCollectionViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -639,6 +662,7 @@
 				8FD7268A1D5B09480030E04B /* scanscanBg.png in Resources */,
 				8FB7912C1D5D5EBB00E29218 /* 22.png in Resources */,
 				8FA926501D5968B600112FFD /* tb_02.png in Resources */,
+				8FA6F4EE1D62F22000C62CC8 /* XIangQingViewController.xib in Resources */,
 				8FA925741D58464900112FFD /* ShoppingCartViewController.xib in Resources */,
 				8FA925F01D58B2A300112FFD /* nav_03.png in Resources */,
 				8FA9256A1D5845F900112FFD /* ClassifyViewController.xib in Resources */,
@@ -750,22 +774,26 @@
 				8FD726981D5C03B10030E04B /* SearchViewController.m in Sources */,
 				8FA925621D582FF500112FFD /* AppDelegate.m in Sources */,
 				8FD726611D59C3210030E04B /* SDFQModel.m in Sources */,
+				8FA6F4F51D62F24000C62CC8 /* Deatais.m in Sources */,
+				8FA6F4F61D62F24000C62CC8 /* Etalon.m in Sources */,
 				8FA925651D58325800112FFD /* MainViewController.m in Sources */,
 				8FD726941D5B24370030E04B /* FzhScrollViewAndPageView.m in Sources */,
 				8FA925811D585DC700112FFD /* ClassSearchView.m in Sources */,
 				8FB791331D5DCD5400E29218 /* FirstHeaderReusableView.m in Sources */,
 				8FB7918D1D5F078100E29218 /* ShowAllViewController.m in Sources */,
-				8FB7911E1D5C8C4B00E29218 /* SDFQCollectionViewCell.m in Sources */,
 				8FB791411D5E180200E29218 /* ShopModel.m in Sources */,
 				8FB791261D5D5E6A00E29218 /* RootView.m in Sources */,
 				8FD726871D5B09480030E04B /* ScanningViewController.m in Sources */,
 				8FB791251D5D5E6A00E29218 /* HeaderReusableView.m in Sources */,
 				8FA9257E1D585D9E00112FFD /* HomeSearchView.m in Sources */,
+				8FA6F4EC1D62F22000C62CC8 /* XIangQingViewController.m in Sources */,
 				8FB791421D5E180200E29218 /* OneModel.m in Sources */,
 				8FB791381D5E178D00E29218 /* ShopCollectionViewCell.m in Sources */,
+				8FA6F4ED1D62F22000C62CC8 /* XLScrollViewer.m in Sources */,
 				8FD7265B1D59C2F30030E04B /* LBTModel.m in Sources */,
 				8FA9256E1D58462300112FFD /* HomeViewController.m in Sources */,
 				8FA925731D58464900112FFD /* ShoppingCartViewController.m in Sources */,
+				8FA6F4F71D62F24000C62CC8 /* Goods.m in Sources */,
 				8FD7266F1D5AC5D80030E04B /* MessageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

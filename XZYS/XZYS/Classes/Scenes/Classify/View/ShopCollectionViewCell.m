@@ -31,7 +31,7 @@
 
     _oneModel = oneModel;
     
-    [_imgV setImageWithURL:[NSURL URLWithString:_oneModel.icon_url]];
+    [_imgV sd_setImageWithURL:[NSURL URLWithString:_oneModel.icon_url]];
     
     _nameLabel.text = _oneModel.name;
 }
