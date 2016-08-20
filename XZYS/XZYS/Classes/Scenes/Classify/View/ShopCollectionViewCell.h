@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OneModel.h"
+#import "FLModel.h"
 
 @interface ShopCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic,retain) OneModel *oneModel;
+@property (nonatomic,retain) FLModel *oneModel;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgV;
 

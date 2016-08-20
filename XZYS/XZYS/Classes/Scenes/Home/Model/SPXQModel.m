@@ -9,5 +9,7 @@
 #import "SPXQModel.h"
 
 @implementation SPXQModel
-
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    
+}
 @end

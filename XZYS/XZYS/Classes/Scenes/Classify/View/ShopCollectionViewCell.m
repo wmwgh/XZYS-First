@@ -8,6 +8,7 @@
 
 #import "ShopCollectionViewCell.h"
 #import "UIImageView+WebCache.h"
+#import "XZYS_URL.h"
 
 @implementation ShopCollectionViewCell
 
@@ -27,13 +28,12 @@
     return self;
 }
 
--(void)setOneModel:(OneModel *)oneModel{
+-(void)setOneModel:(FLModel *)oneModel{
 
     _oneModel = oneModel;
-    
-    [_imgV sd_setImageWithURL:[NSURL URLWithString:_oneModel.icon_url]];
-    
-    _nameLabel.text = _oneModel.name;
+    NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _oneModel.img];
+    [_imgV sd_setImageWithURL:[NSURL URLWithString:str]];
+    _nameLabel.text = _oneModel.title;
 }
 
 @end

@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "XLScrollViewer.h"
+#import "SDFQModel.h"
+
 
 @interface XIangQingViewController : UIViewController
-@property(nonatomic ,strong)XLScrollViewer *scroll;//如果无需外部调用XLScrollViewer的属性，则无需写此属性
+
+@property (nonatomic ,strong) NSMutableArray *allDataArray;
+@property (nonatomic ,strong) SDFQModel *model;
 @end

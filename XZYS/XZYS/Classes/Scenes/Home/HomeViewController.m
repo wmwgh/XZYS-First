@@ -162,15 +162,15 @@ static NSString *const secondID = @"secondHeader";//字和线
                 
                 NSMutableArray *sectionArray= [NSMutableArray array];
                 if ([listArray isEqual:[NSNull null]]) {
-                    NSLog(@"22222---%d空", i);
+//                    NSLog(@"22222---%d空", i);
                 } else {
                     
                     for (NSDictionary *dic in listArray) {
                     SDFQModel *model = [[SDFQModel alloc] init];
                     
-                    [model setValuesForKeysWithDictionary:dic];
-                    [sectionArray addObject:model];
-                    
+                        [model setValuesForKeysWithDictionary:dic];
+                        [sectionArray addObject:model];
+//                        NSLog(@"id=%@", model.goods_id);
                     }
                     [weakSelf.SPTArray addObject:sectionArray];
                 }
@@ -196,7 +196,7 @@ static NSString *const secondID = @"secondHeader";//字和线
         if (THQDic.count > 0) {
             
             if ([THQAr isEqual:[NSNull null]]) {
-                NSLog(@"tiaohuoqu11111--空");
+//                NSLog(@"tiaohuoqu11111--空");
             } else {
                 SDFQModel *model = [[SDFQModel alloc] init];
                 [model setValuesForKeysWithDictionary:THQDic];
@@ -205,7 +205,7 @@ static NSString *const secondID = @"secondHeader";//字和线
             
 
             if ([THQAr isEqual:[NSNull null]]) {
-                NSLog(@"tiaohuoqu22222--空");
+//                NSLog(@"tiaohuoqu22222--空");
             } else {
                 for (NSDictionary *dic in THQAr) {
                     SDFQModel *model = [[SDFQModel alloc] init];
@@ -232,7 +232,6 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 // 设置多少个分区
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    NSLog(@"%ld", self.SPTArray.count);
     return self.SPTTittleArray.count;
 }
 
@@ -328,11 +327,13 @@ static NSString *const secondID = @"secondHeader";//字和线
 // 点击item
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-//    NSArray *modelArray = self.SPTArray[indexPath.section];
-    //    cell.oneModel = modelArray[indexPath.row];
     XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    NSArray *ar = self.SPTArray[indexPath.section];
+    XXVC.model = ar[indexPath.row];
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
-    
+    self.hidesBottomBarWhenPushed = NO;
+
 }
 
 - (void)setNavigation {
@@ -362,7 +363,6 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 #pragma mark -  扫一扫
 - (void)saoButtonClick:(UIButton *)sender {
-    
     ScanningViewController * sVC = [[ScanningViewController alloc]init];
     sVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:sVC animated:YES];

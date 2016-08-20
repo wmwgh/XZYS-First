@@ -12,7 +12,8 @@
 
 /// 拼接
 #define XZYS_PJ_URL @"http://www.xiezhongyunshang.com"
-
+/// 接口头
+#define XZYS_JKT_URL = @"http://www.xiezhongyunshang.com/App/"
 /// 轮播图
 #define XZYS_LBT_URL @"http://www.xiezhongyunshang.com/App/Index/getCarousel"
 /// 获取三大专场数据
@@ -32,9 +33,9 @@
 /// 分类：获取商品主导航数据（顶级导航）
 #define XZYS_FLSPDH_URL @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateMain"
 /// 分类：获取指定主导航下的子商品分类列表（二级导航 ＆ 三级导航）
-#define XZYS_FLZDH_URL @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/1"
-//
-#define XZYS__URL @""
+#define XZYS_FLZDH_URL @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/"
+/// 商品详情
+#define XZYS_SPXQ_URL @"http://www.xiezhongyunshang.com/App/Goods/goodsDetails/goods_id/17"
 //
 #define XZYS__URL @""
 //

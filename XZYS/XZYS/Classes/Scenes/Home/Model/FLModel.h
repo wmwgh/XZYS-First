@@ -9,5 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface FLModel : NSObject
+/// 商品ID
+@property (nonatomic, copy) NSString *cid;
+/// 店铺ID
+@property (nonatomic, copy) NSString *pid;
+/// 商品名称
+@property (nonatomic, copy) NSString *title;
+/// 商品主图
+@property (nonatomic, copy) NSString *img;
 
 @end

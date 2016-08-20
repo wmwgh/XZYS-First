@@ -20,7 +20,6 @@
 
 // 初始化布局
 - (void)initLayout {
-    
     // 1.定义collectionView的样式
     self.myFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     // 设置属性
@@ -33,13 +32,11 @@
     
     // 设置滚动方向
     self.myFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;// 垂直方向
-    
     // 设置视图的内边距（上左下右）
-    self.myFlowLayout.sectionInset = UIEdgeInsetsMake(2, 2, 2, 2);
     
+    self.myFlowLayout.sectionInset = UIEdgeInsetsMake(2, 2, 2, 2);
 //    // 布局头视图尺寸  移到了Home 头视图设置中
     self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 369);
-    
     // 2.布局collectionView
     
     // 创建对象并指定样式

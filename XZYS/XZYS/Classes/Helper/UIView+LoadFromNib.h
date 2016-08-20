@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface UIView (LoadFromNib)
-
++ (id)loadFromNib;
 @end

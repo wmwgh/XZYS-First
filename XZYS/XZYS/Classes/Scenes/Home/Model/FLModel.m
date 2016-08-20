@@ -9,5 +9,7 @@
 #import "FLModel.h"
 
 @implementation FLModel
-
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    
+}
 @end

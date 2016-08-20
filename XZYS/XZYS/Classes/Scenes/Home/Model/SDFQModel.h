@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface SDFQModel : NSObject
+@property (nonatomic, strong) NSString *ID;
+
+@property (nonatomic, strong) NSString *goods_id;
+
 /// 专区名称
 @property (nonatomic, strong) NSString *name;
 /// 专区描述
