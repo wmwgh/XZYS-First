@@ -36,8 +36,8 @@
 #define XZYS_FLZDH_URL @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/"
 /// 商品详情
 #define XZYS_SPXQ_URL @"http://www.xiezhongyunshang.com/App/Goods/goodsDetails/goods_id/17"
-//
-#define XZYS__URL @""
+/// 所有商品数据
+#define XZYSALL__URL @"http://www.xiezhongyunshang.com/App/Goods/goodsList"
 //
 #define XZYS__URL @""
 //

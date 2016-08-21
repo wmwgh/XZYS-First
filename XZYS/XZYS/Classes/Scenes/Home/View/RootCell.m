@@ -11,7 +11,6 @@
 #import "XZYS_URL.h"
 #import "XZYS_Other.h"
 
-
 @implementation RootCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -55,10 +54,24 @@
     
     _oneModel = oneModel;
     NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL,oneModel.goods_img];
-    NSString *numStr = [NSString stringWithFormat:@"销量：%@件", _oneModel.sales_num];
-    NSString *priceStr = [NSString stringWithFormat:@"￥ %@", _oneModel.price];
+    NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _oneModel.sales_num];
+    NSString *priceStr = [NSString stringWithFormat:@"￥%@", _oneModel.price];
     [_photoImage sd_setImageWithURL:[NSURL URLWithString:str]];
     _tittleLable.text = _oneModel.goods_name;
+    _priceLable.text = priceStr;
+    _priceLable.textColor = XZYSBlueColor;
+    _NumberLable.text = numStr;
+    _NumberLable.textColor = XZYSPinkColor;
+}
+
+-(void)setTwoModel:(SPXQModel *)twoModel{
+    
+    _twoModel = twoModel;
+    NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL,_twoModel.goods_img];
+    NSString *numStr = [NSString stringWithFormat:@"销量：%@件", _twoModel.sales_num];
+    NSString *priceStr = [NSString stringWithFormat:@"￥ %@", _twoModel.price];
+    [_photoImage sd_setImageWithURL:[NSURL URLWithString:str]];
+    _tittleLable.text = _twoModel.goods_name;
     _priceLable.text = priceStr;
     _priceLable.textColor = XZYSBlueColor;
     _NumberLable.text = numStr;

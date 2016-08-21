@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "SDFQModel.h"
+#import "SPXQModel.h"
 
 @interface RootCell : UICollectionViewCell
 
@@ -19,5 +20,5 @@
 
 @property (nonatomic,retain) SDFQModel *oneModel;
 
-
+@property (nonatomic,retain) SPXQModel *twoModel;
 @end

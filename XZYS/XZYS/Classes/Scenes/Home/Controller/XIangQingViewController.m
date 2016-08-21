@@ -19,7 +19,7 @@
 #import "GoodsTableViewCell.h"
 #import "DetailView.h"
 #import "GuiGeView.h"
-
+#import "ShoppingCartViewController.h"
 
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
 @interface XIangQingViewController ()<LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -108,10 +108,10 @@
     mainTable.dataSource = self;
     mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     [mainTable registerNib:[UINib nibWithNibName:NSStringFromClass([GoodsTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
-    
     [self addThreeView];
     [self.mainScrollView addSubview:mainTable];
 }
+
 - (void)addThreeView {
     DetailView *detailView = [DetailView loadFromNib];
     detailView.frame = CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 108);
@@ -142,7 +142,7 @@
     NSLog(@"==========%@", model.goods_img);
     [cell setModel:model];
     
- return cell;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -240,18 +240,21 @@ static NSInteger pageNumber = 0;
     gouwucheBT.titleLabel.font = [UIFont systemFontOfSize:14];
     gouwucheBT.frame = CGRectMake(btWidth * 3, 8, btWidth, 40);
     [gouwucheBT setImage:[UIImage imageNamed:@"gwc"] forState:UIControlStateNormal];
+    [gouwucheBT addTarget:self action:@selector(gouwuche:) forControlEvents:UIControlEventTouchUpInside];
     [bBackView addSubview:gouwucheBT];
-    
     [self.view addSubview:bBackView];
     [self.view addSubview:self.backView];
 }
-
+- (void)gouwuche:(UIButton *)dender {
+    ShoppingCartViewController *carVC = [[ShoppingCartViewController alloc] init];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:carVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
 
 - (void)backButton:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -267,8 +270,6 @@ static NSInteger pageNumber = 0;
     // Pass the selected object to the new view controller.
 }
 */
-
-
 
 
 

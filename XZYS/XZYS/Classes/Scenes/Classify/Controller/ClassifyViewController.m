@@ -39,7 +39,6 @@
     NSMutableArray *pushAllDetailsArray;
 }
 
-@property (nonatomic, strong) NSString *URLStr;
 @property (nonatomic, strong) UICollectionView *mianCollectionView;
 @property (nonatomic,retain) SMVerticalSegmentedControl *segmentedControl;
 /// 搜索
@@ -51,6 +50,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    ID = _abc;
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = XZYSBackBColor;
     self.mianCollectionView.backgroundColor = [UIColor clearColor];
@@ -63,14 +63,24 @@
     lab.textAlignment = NSTextAlignmentCenter;
     [pinView addSubview:lab];
     [self.view addSubview:pinView];
-    
     [self setNavigation];
+    NSLog(@"22222%@", _URLStr);
     // 获取数据
     [self loadDatas];
     //创建UICollectionView
     [self createCollectionView];
+    if (self.segmentedControl.selectedSegmentIndex != 0) {
+        
+        // 获取导航栏
+        [self loadsection];
+        [self.mianCollectionView reloadData];
+    }
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
+}
+
++ (void)requestPushData {
+
 }
 
 #pragma mark - 界面区
@@ -87,7 +97,7 @@
     [backImageView addSubview:BButton];
     
     UIButton *MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    MButton.frame = CGRectMake(SCREEN_WIDTH - 35, 10, 25, 25);
+    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
@@ -147,7 +157,7 @@
         [self indexChangeBlock:index];
     }];
     //设置默认的选中按钮
-    self.segmentedControl.selectedSegmentIndex = 0;
+    self.segmentedControl.selectedSegmentIndex = _abc;
 }
 
 //创建UICollectionView
@@ -186,7 +196,6 @@
 
 //设置头视图的大小
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
-    
     return CGSizeMake(SCREEN_WIDTH, 26);
 }
 
@@ -204,7 +213,6 @@
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = XZYSBlueColor;
     label.backgroundColor = XZYSBackBColor;
-    
     //添加到头视图上
     [headerCell addSubview:label];
     
@@ -217,6 +225,7 @@
     FLModel *model = [[FLModel alloc] init];
     model = FCidArray[index];
     _URLStr = [NSMutableString stringWithFormat:@"%@%@", XZYS_FLZDH_URL, model.cid];
+    NSLog(@"%@", _URLStr);
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
     // 获取导航栏
@@ -299,6 +308,7 @@
     [sectionTitleArray removeAllObjects];
     rowmodelArray = [NSMutableArray array];
     [rowmodelArray removeAllObjects];
+    NSLog(@"111111%@", _URLStr);
     [[AFHTTPSessionManager manager] GET:_URLStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *NVArray = responseObject[@"data"];
         NSString *flkey = [NSString string];
@@ -328,7 +338,6 @@
         [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
     }];
     
-
 }
 
 -(void)loadDatas{
@@ -366,8 +375,11 @@
         
     }];
     
+    if (_URLStr == nil) {
+        _URLStr = @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/1";
+    }
     
-    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/1" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[AFHTTPSessionManager manager] GET:_URLStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *NVArray = responseObject[@"data"];
         NSString *flkey = [NSString string];
         

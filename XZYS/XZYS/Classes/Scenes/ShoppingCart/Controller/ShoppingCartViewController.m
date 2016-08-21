@@ -16,10 +16,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    self.navigationController.navigationBarHidden = NO;
+    self.title = @"购物车";
+    
     // Do any additional setup after loading the view from its nib.
     self.view.backgroundColor = [UIColor cyanColor];
 
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

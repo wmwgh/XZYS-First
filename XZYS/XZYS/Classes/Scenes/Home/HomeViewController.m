@@ -273,6 +273,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     cell.oneModel = modelArray[indexPath.row];
     return cell;
 }
+
 // 返回头视图和尾视图
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
@@ -349,7 +350,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     [backImageView addSubview:SButton];
     
     UIButton *MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    MButton.frame = CGRectMake(SCREEN_WIDTH - 35, 10, 25, 25);
+    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
@@ -596,19 +597,31 @@ static NSString *const secondID = @"secondHeader";//字和线
     [collectionButtonView addSubview:childImageBT];
 }
 
-// 男鞋
-- (void)manImageBTClick:(UITapGestureRecognizer *)sender {
-    NSLog(@"nanxie");
-}
 // 女鞋
-- (void)womanImageBTClick:(UITapGestureRecognizer *)sender {
+- (void)manImageBTClick:(UITapGestureRecognizer *)sender {
+    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
+    classVC.abc = 0;
+    classVC.URLStr = [NSMutableString stringWithFormat:@"%@1", XZYS_FLZDH_URL];
     NSLog(@"nvxie");
-
+    [self.navigationController pushViewController:classVC animated:YES];
 }
+
+// 男鞋
+- (void)womanImageBTClick:(UITapGestureRecognizer *)sender {
+    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
+    classVC.abc = 1;
+    classVC.URLStr = [NSMutableString stringWithFormat:@"%@2", XZYS_FLZDH_URL];
+    NSLog(@"nanxie");
+    [self.navigationController pushViewController:classVC animated:YES];
+}
+
 // 童鞋
 - (void)childImageBTClick:(UITapGestureRecognizer *)sender {
+//    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
+//    classVC.abc = 2;
+//    classVC.URLStr = [NSMutableString stringWithFormat:@"%@3", XZYS_FLZDH_URL];
     NSLog(@"tongxie");
-
+//    [self.navigationController pushViewController:classVC animated:YES];
 }
 
 

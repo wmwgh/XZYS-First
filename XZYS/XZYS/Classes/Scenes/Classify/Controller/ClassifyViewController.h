@@ -10,4 +10,7 @@
 
 @interface ClassifyViewController : UIViewController
 
+@property (nonatomic, assign) int abc;
+@property (nonatomic, strong) NSString *URLStr;
+
 @end
