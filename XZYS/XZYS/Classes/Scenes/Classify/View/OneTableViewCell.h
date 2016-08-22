@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SPXQModel.h"
 
 @interface OneTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *picImageView;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *priceLabel;
 @property (strong, nonatomic) IBOutlet UILabel *numLabel;
+
+
 @end

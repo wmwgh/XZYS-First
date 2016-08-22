@@ -37,6 +37,7 @@
     NSInteger ID;
     NSInteger NVNum;
     NSMutableArray *pushAllDetailsArray;
+    UIButton *MButton;
 }
 
 @property (nonatomic, strong) UICollectionView *mianCollectionView;
@@ -96,7 +97,7 @@
     [BButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:BButton];
     
-    UIButton *MButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    MButton = [UIButton buttonWithType:UIButtonTypeCustom];
     MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -126,13 +127,12 @@
 
 - (void)backButtonClick:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
-//    HomeViewController *homeVC = [[HomeViewController alloc] init];
-//    [self.navigationController pushViewController:homeVC animated:NO];
-}
 
+}
 
 #pragma mark -  消息
 - (void)messageButtonClick:(UIButton *)sender {
+     MButton.selected = !MButton.selected;
     MessageViewController *messageVC = [[MessageViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }

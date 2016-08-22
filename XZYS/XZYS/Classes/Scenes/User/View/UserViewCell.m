@@ -1,16 +1,14 @@
 //
-//  OneTableViewCell.m
+//  UserViewCell.m
 //  XZYS
 //
-//  Created by 杨利 on 16/8/20.
+//  Created by 杨利 on 16/8/22.
 //  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
-#import "OneTableViewCell.h"
+#import "UserViewCell.h"
 
-
-
-@implementation OneTableViewCell
+@implementation UserViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];

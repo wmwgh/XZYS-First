@@ -27,7 +27,7 @@
     
     UIView *aView = [[UIView alloc] initWithFrame:self.bounds];
     // 创建对象
-    self.photoImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, 10, self.frame.size.width - 10, self.frame.size.width - 10)];
+    self.photoImage = [[UIImageView alloc] initWithFrame:CGRectMake(5, 5, self.frame.size.width - 10, self.frame.size.width - 10)];
     self.photoImage.layer.cornerRadius = 3;
     self.photoImage.layer.masksToBounds = YES;
     self.tittleLable = [[UILabel alloc]initWithFrame:CGRectMake(5, CGRectGetMaxY(self.photoImage.frame) + 3, CGRectGetWidth(self.frame) - 10, 36)];
@@ -68,8 +68,8 @@
     
     _twoModel = twoModel;
     NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL,_twoModel.goods_img];
-    NSString *numStr = [NSString stringWithFormat:@"销量：%@件", _twoModel.sales_num];
-    NSString *priceStr = [NSString stringWithFormat:@"￥ %@", _twoModel.price];
+    NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _twoModel.sales_num];
+    NSString *priceStr = [NSString stringWithFormat:@"￥%@", _twoModel.price];
     [_photoImage sd_setImageWithURL:[NSURL URLWithString:str]];
     _tittleLable.text = _twoModel.goods_name;
     _priceLable.text = priceStr;

@@ -39,10 +39,9 @@
     // 布局头视图尺寸  移到了Home 头视图设置中
 //    self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 369);
     
-    
     // 2.布局collectionView
     // 创建对象并指定样式
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 80, self.frame.size.width, self.frame.size.height - 80) collectionViewLayout:self.myFlowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height - 30) collectionViewLayout:self.myFlowLayout];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
     [self addSubview:self.collectionView];
