@@ -1,28 +1,17 @@
 //
 //  ShopModel.m
-//  商品列表
+//  XZYS
 //
-//  Created by mac on 16/1/19.
-//  Copyright © 2016年 YF_S. All rights reserved.
+//  Created by 杨利 on 16/8/29.
+//  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
 #import "ShopModel.h"
 
 @implementation ShopModel
-
--(void)setAtributes:(NSDictionary *)dic{
-
-    [super setAtributes:dic];
-    
-//    //获取oneModel的数据
-//    NSArray *subcategories = [dic objectForKey:@"subcategories"];
-//    
-//    for (NSDictionary *dic in subcategories) {
-//        
-//        //初始化oneModel
-//        _oneModel = [[OneModel alloc]initWithDic:dic];
-//    }
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key{
+    if ([key isEqualToString:@"id"]) {
+        self.ID = value;
+    }
 }
-
-
 @end

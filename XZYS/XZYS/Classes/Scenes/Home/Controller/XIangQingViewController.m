@@ -20,9 +20,14 @@
 #import "DetailView.h"
 #import "GuiGeView.h"
 #import "ShoppingCartViewController.h"
+#import <UIImageView+WebCache.h>
+#import "FzhScrollViewAndPageView.h"
+#import "ShopViewController.h"
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
-@interface XIangQingViewController ()<LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic , strong) UIScrollView *backView;
 /// 商品详情数组
@@ -35,14 +40,15 @@
 @property (nonatomic, strong) NSMutableArray *SpxqSizeArray;
 /// 商品详情季节数组
 @property (nonatomic, strong) NSMutableArray *SpxqSeasonArray;
-
-@property (nonatomic , strong) NSArray *array;
+@property (nonatomic , strong) UITableView *mainTable;
+@property (nonatomic , strong) UIScrollView *backScr;
 @property (nonatomic, assign) float cellHeight;
 @property (nonatomic, strong) NSArray *LFLarray;
 @property (nonatomic, strong) UIScrollView *mainScrollView; /**< 正文mainSV */
 @property (nonatomic ,strong) LFLUISegmentedControl * LFLuisement; /**< LFLuisement */
 @property (nonatomic, strong) SPXQModel *GuiGeModel;
-
+@property (nonatomic ,strong) GoodsTableViewCell *goodsScroll;
+@property (nonatomic, strong) FzhScrollViewAndPageView *fzhView;
 @end
 
 @implementation XIangQingViewController
@@ -54,6 +60,13 @@
     return _allDataArray;
 }
 
+- (NSMutableArray *)SpxqPicArray {
+    if (!_SpxqPicArray) {
+        _SpxqPicArray = [NSMutableArray array];
+    }
+    return _SpxqPicArray;
+}
+
 - (NSMutableArray *)SPXQArray {
     if (!_SPXQArray) {
         _SPXQArray = [NSMutableArray array];
@@ -63,11 +76,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _cellHeight = 500;
+    self.title = @"商品详情";
+    // 显示指示器
+    [SVProgressHUD showWithStatus:@"正在加载数据......"];
+    _cellHeight = 5;
     self.LFLarray = [NSArray array];
     // 请求数据
     [self requestData];
-    NSLog(@"%@", self.model.goods_id);
     // 详情按钮
     [self initXQView];
     // 导航
@@ -75,8 +90,6 @@
     // 主scrollView
     [self createMainScrollView];
 
-    // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
 
 - (void)initLayoutSegmt {
@@ -87,7 +100,6 @@
     LFLuisement.delegate = self;
     //   2.设置显示切换标题数组
     self.LFLarray = [NSArray arrayWithObjects:@"商 品",@"详 情",@"规 格",nil];
-    
     [LFLuisement AddSegumentArray:self.LFLarray];
     //   default Select the Button
     [LFLuisement selectTheSegument:0];
@@ -101,33 +113,158 @@
     [self.view addSubview:backBT];
     
 }
-
+//SCREEN_WIDTH + 64 + 7 + 40 + 80;
 - (void)createTableView {
-    UITableView *mainTable = [[UITableView alloc] initWithFrame:self.view.bounds];
-    mainTable.delegate = self;
-    mainTable.dataSource = self;
-    mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [mainTable registerNib:[UINib nibWithNibName:NSStringFromClass([GoodsTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
+    self.backScr = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.backScr.bounces = NO;
+    self.backScr.pagingEnabled = NO;
+    self.backScr.showsVerticalScrollIndicator = NO;
+    self.backScr.showsHorizontalScrollIndicator = NO;
+    self.backScr.contentSize = CGSizeMake(SCREEN_WIDTH , SCREEN_WIDTH + _cellHeight + 250);
+    //设置代理
+    self.backScr.delegate = self;
+    [self LBTView];
     [self addThreeView];
-    [self.mainScrollView addSubview:mainTable];
+    [self.mainScrollView addSubview:self.backScr];
+    
 }
 
 - (void)addThreeView {
+    SPXQModel *model = self.SPXQArray[0];
     DetailView *detailView = [DetailView loadFromNib];
     detailView.frame = CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 108);
+    detailView.xiangqingLabel.text = model.goods_datails;
     [self.mainScrollView addSubview:detailView];
     
     GuiGeView *guigeView = [GuiGeView loadFromNib];
     guigeView.frame = CGRectMake(SCREEN_WIDTH * 2, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 108);
-//    [guigeView setModel:model];
-    [self.view reloadInputViews];
+    NSString *sizeString = [NSString string];
+    for (NSString *sizeStr in self.SpxqSizeArray) {
+        sizeString = [sizeString stringByAppendingString:[NSString stringWithFormat:@"%@ ", sizeStr]];
+    }
+    NSString *colorString = [NSString string];
+    for (NSString *colorStr in self.SpxqColorArray) {
+        colorString = [colorString stringByAppendingString:[NSString stringWithFormat:@"%@ ", colorStr]];
+    }
+    guigeView.yanse.text = colorString;
+    guigeView.chicun.text = sizeString;
+    guigeView.xiemiancailiao.text = model.material;
+    guigeView.xiegenleixing.text = model.heel;
+    guigeView.gongneng.text = model.function;
+    guigeView.fengge.text = model.style;
+    guigeView.xietoukuanshi.text = model.topstyle;
+    guigeView.xiedicaizhi.text = model.solematerial;
+    guigeView.xielicaizhi.text = model.linmater;
+    guigeView.shiYong.text = model.audience;
     [self.mainScrollView addSubview:guigeView];
+}
+
+#pragma mark --- 轮播图
+- (void)LBTView {
+    //创建view（view中包含UIScrollView、UIPageControl，设置frame）
+    _fzhView = [[FzhScrollViewAndPageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH)];
+    
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (NSString *str in self.SpxqPicArray) {
+        NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, str];
+        UIImageView *imageView = [[UIImageView alloc]init];
+        [imageView sd_setImageWithURL:[NSURL URLWithString:urlStr]];
+        [tempArray addObject:imageView];
+    }
+    //把imageView数组存到fzhView里
+    [_fzhView setImageViewAry:tempArray];
+    //开启自动翻页
+    [_fzhView shouldAutoShow:YES];
+    //遵守协议
+    _fzhView.delegate = self;
+    //把图片展示的view加到当前页面
+    [self.backScr addSubview:_fzhView];
+#pragma mark - 商品信息
+    SPXQModel *model = self.SPXQArray[0];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(_fzhView.frame) + 3, SCREEN_WIDTH - 10, 35)];
+    titleLabel.text = model.goods_name;
+    titleLabel.numberOfLines = 2;
+    titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.backScr addSubview:titleLabel];
+    
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(titleLabel.frame) + 3, 80, 20)];
+    priceLabel.text = [NSString stringWithFormat:@"￥%@", model.price];
+    priceLabel.textColor = XZYSBlueColor;
+    priceLabel.font = [UIFont systemFontOfSize:16];
+    [self.backScr addSubview:priceLabel];
+    
+    UILabel *zheluLab = [[UILabel alloc] initWithFrame:CGRectMake(90, CGRectGetMaxY(titleLabel.frame) + 3, SCREEN_WIDTH - 95, 20)];
+    zheluLab.textColor = XZYSPinkColor;
+    zheluLab.text = [NSString stringWithFormat:@"注:%@", model.goods_desc];
+    zheluLab.font = [UIFont systemFontOfSize:11];
+    zheluLab.textAlignment = NSTextAlignmentRight;
+    [self.backScr addSubview:zheluLab];
+
+    UILabel *beforePriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(priceLabel.frame) + 3, 80, 18)];
+    beforePriceLabel.text = [NSString stringWithFormat:@"价格￥%@", model.ori_price];
+    beforePriceLabel.textColor = XZYSRGBColor(232, 184, 66);
+    beforePriceLabel.font = [UIFont systemFontOfSize:12];
+    [self.backScr addSubview:beforePriceLabel];
+    
+    UIView *elineView = [[UIView alloc] initWithFrame:CGRectMake(30, CGRectGetMinY(beforePriceLabel.frame) + 9, 46, 1)];
+    elineView.backgroundColor = XZYSRGBColor(232, 184, 66);
+    [self.backScr addSubview:elineView];
+    UILabel *numLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, CGRectGetMaxY(priceLabel.frame) + 3, SCREEN_WIDTH - 95, 18)];
+    
+    numLabel.textColor = XZYSPinkColor;
+    numLabel.text = [NSString stringWithFormat:@"销量:%@件", model.sales_num];
+    numLabel.textAlignment = NSTextAlignmentRight;
+    numLabel.font = [UIFont systemFontOfSize:11];
+    [self.backScr addSubview:numLabel];
+    
+    UIView *alineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(beforePriceLabel.frame) + 3, SCREEN_WIDTH - 10, 1)];
+    alineView.backgroundColor = XZYSLightDarkColor;
+    [self.backScr addSubview:alineView];
+    
+    self.mainTable = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(alineView.frame), SCREEN_WIDTH, _cellHeight)];
+    self.mainTable.delegate = self;
+    self.mainTable.dataSource = self;
+    self.mainTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.mainTable registerNib:[UINib nibWithNibName:NSStringFromClass([GoodsTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
+    [self.backScr addSubview:self.mainTable];
+    
+    UIView *blineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(self.mainTable.frame), SCREEN_WIDTH - 10, 1)];
+    blineView.backgroundColor = XZYSLightDarkColor;
+    [self.backScr addSubview:blineView];
+    UILabel *picklabel = [[UILabel alloc] initWithFrame:CGRectMake(20, CGRectGetMaxY(blineView.frame), SCREEN_WIDTH - 70, 40)];
+    picklabel.text = @"选择   颜色   尺码";
+    picklabel.font = [UIFont systemFontOfSize:15];
+    [self.backScr addSubview:picklabel];
+    
+    UIImageView *imagea = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 33, CGRectGetMaxY(blineView.frame) + 11, 15, 20)];
+    imagea.image = [UIImage imageNamed:@"bz_22"];
+    [self.backScr addSubview:imagea];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(blineView.frame), SCREEN_WIDTH, 40)];
+    imageView.backgroundColor = [UIColor clearColor];
+    [self.backScr bringSubviewToFront:imageView];
+    [self.backScr addSubview:imageView];
+    
+    UIView *clineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(imageView.frame) + 1, SCREEN_WIDTH - 10, 1)];
+    clineView.backgroundColor = XZYSLightDarkColor;
+    [self.backScr addSubview:clineView];
+    
+    UIView *dlineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(clineView.frame) + 5, SCREEN_WIDTH - 10, 1)];
+    dlineView.backgroundColor = XZYSLightDarkColor;
+    [self.backScr addSubview:dlineView];
+    // 隐藏指示器
+    [SVProgressHUD dismiss];
+}
+
+#pragma mark --- 协议里面方法，点击某一页
+-(void)didClickPage:(FzhScrollViewAndPageView *)view atIndex:(NSInteger)index
+{
+    NSLog(@"点击了第%ld页",index);
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSLog(@"%ld", self.SPXQArray.count);
     return self.SPXQArray.count;
 }
 
@@ -137,12 +274,12 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     GoodsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-    cell.changeHeight.constant = _cellHeight;
-    SPXQModel *model = self.SPXQArray[indexPath.row];
-    NSLog(@"==========%@", model.goods_img);
-    [cell setModel:model];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.mainTable deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -151,25 +288,37 @@
 
 - (void)requestData {
     __weak typeof(self) weakSelf = self;
-    [[AFHTTPSessionManager manager] GET:XZYS_SPXQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+    [weakSelf.SpxqPicArray removeAllObjects];
+    weakSelf.SpxqSizeArray = [NSMutableArray array];
+    [weakSelf.SpxqSizeArray removeAllObjects];
+    weakSelf.SpxqColorArray = [NSMutableArray array];
+    [weakSelf.SpxqColorArray removeAllObjects];
+    
+    NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_SPXQ_URL, weakSelf.passID];
+    [[AFHTTPSessionManager manager] GET:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 请求成功，解析数据
         NSDictionary *THQDic = responseObject[@"data"];
-        //        NSArray *THQAr = THQDic[@"goods_list"];
+        NSDictionary *sizeDic = THQDic[@"size"];
+        NSDictionary *colorDic = THQDic[@"color_remark"];
+        weakSelf.SpxqPicArray = THQDic[@"goods_img_list"];
+        
+        [sizeDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            NSString *str = obj;
+            [weakSelf.SpxqSizeArray addObject:str];
+        }];
+        [colorDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            NSString *str = obj;
+            [weakSelf.SpxqColorArray addObject:str];
+        }];
         weakSelf.GuiGeModel = [[SPXQModel alloc] init];
         [weakSelf.GuiGeModel setValuesForKeysWithDictionary:THQDic];
-        NSLog(@"%@", weakSelf.GuiGeModel.goods_name);
         [weakSelf.SPXQArray addObject:weakSelf.GuiGeModel];
-        NSLog(@"asd%@", weakSelf.SPXQArray);
         [self createTableView];
-
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         // 显示加载错误信息
         [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+        NSLog(@"%@", error);
     }];
 }
 
@@ -227,6 +376,7 @@ static NSInteger pageNumber = 0;
     UIButton *shoucangBT = [UIButton buttonWithType:UIButtonTypeCustom];
     shoucangBT.titleLabel.font = [UIFont systemFontOfSize:14];
     shoucangBT.frame = CGRectMake(btWidth, 8, btWidth, 40);
+    [shoucangBT addTarget:self action:@selector(shoucangAction:) forControlEvents:UIControlEventTouchUpInside];
     [shoucangBT setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
     [bBackView addSubview:shoucangBT];
     
@@ -234,6 +384,7 @@ static NSInteger pageNumber = 0;
     dianpuBT.titleLabel.font = [UIFont systemFontOfSize:14];
     dianpuBT.frame = CGRectMake(btWidth * 2, 8, btWidth, 40);
     [dianpuBT setImage:[UIImage imageNamed:@"dp"] forState:UIControlStateNormal];
+    [dianpuBT addTarget:self action:@selector(dianpuClick:) forControlEvents:UIControlEventTouchUpInside];
     [bBackView addSubview:dianpuBT];
     
     UIButton *gouwucheBT = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -245,16 +396,44 @@ static NSInteger pageNumber = 0;
     [self.view addSubview:bBackView];
     [self.view addSubview:self.backView];
 }
-- (void)gouwuche:(UIButton *)dender {
-    ShoppingCartViewController *carVC = [[ShoppingCartViewController alloc] init];
-    self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:carVC animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
+
+- (void)shoucangAction:(UIButton *)esnder {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if ([appDelegate.isLogin isEqualToString:@"Yes"]) {
+        NSLog(@"shoucang");
+    } else {
+        LoginViewController *loginVC = [[LoginViewController alloc] init];
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:loginVC animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
+    }
+    
 }
 
+- (void)dianpuClick:(UIButton *)sender {
+    ShopViewController *dianpuVC = [[ShopViewController alloc] init];
+    NSLog(@"%@", self.spID);
+    dianpuVC.shopID = self.spID;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:dianpuVC animated:YES];
+    self.hidesBottomBarWhenPushed = YES;
+}
+
+- (void)gouwuche:(UIButton *)dender {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if ([appDelegate.isLogin isEqualToString:@"Yes"]) {
+        NSLog(@"gouwuche");
+    } else {
+        ShoppingCartViewController *carVC = [[ShoppingCartViewController alloc] init];
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:carVC animated:YES];
+        self.hidesBottomBarWhenPushed = YES;
+    }
+}
 - (void)backButton:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

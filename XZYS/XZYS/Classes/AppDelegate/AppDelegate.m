@@ -17,12 +17,12 @@
 
 @end
 
-@implementation AppDelegate
 
+@implementation AppDelegate
+@synthesize isLogin = No;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -38,7 +38,7 @@
     // 控制器
     UINavigationController *homeNVC = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
     // 设置图片
-    homeNVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tb_08"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tb_04"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    homeNVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"首页" image:[[UIImage imageNamed:@"tb_08"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tb_09"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     UINavigationController *classNVC = [[UINavigationController alloc] initWithRootViewController:[[ClassifyViewController alloc] init]];
     // 设置图片

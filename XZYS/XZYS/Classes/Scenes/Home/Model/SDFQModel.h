@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface SDFQModel : NSObject
+
 @property (nonatomic, copy) NSString *ID;
 
 @property (nonatomic, copy) NSString *goods_id;
-
+/// 商店ID
+@property (nonatomic , copy) NSString *shop_id;
 /// 专区名称
 @property (nonatomic, copy) NSString *name;
 /// 专区描述
@@ -25,6 +27,7 @@
 @property (nonatomic, copy) NSString *price;
 /// 商品销量
 @property (nonatomic, copy) NSString *sales_num;
+@property (nonatomic, copy) NSString *goods_album;
 
 
 @end

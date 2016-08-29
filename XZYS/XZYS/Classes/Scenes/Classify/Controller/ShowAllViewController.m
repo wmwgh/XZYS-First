@@ -19,6 +19,8 @@
 #import <SVProgressHUD.h>
 #import "OneTableViewCell.h"
 #import <UIImageView+WebCache.h>
+#import "XIangQingViewController.h"
+#import "SDFQModel.h"
 
 @interface ShowAllViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -27,9 +29,13 @@
 @property (nonatomic , strong) ShowAllDoubleView *rootView;
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
 @property (nonatomic , strong) UIButton *MButton;
+@property (nonatomic , strong) UIButton *priceButton;
+@property (nonatomic , strong) UIButton *timeButton;
+@property (nonatomic , strong) UIButton *numButton;
 @property (nonatomic , copy) NSString *picStr;
 @property (nonatomic , strong) UIView *cellView;
 @property (nonatomic , strong) UITableView *mainTableView;
+@property (nonatomic , strong) NSMutableDictionary *param;
 //@property (nonatomic ,strong) NSMutableArray *priceArray;
 //@property (nonatomic ,strong) NSMutableArray *zhuanchengArray;
 //@property (nonatomic ,strong) NSMutableArray *zhuanquArray;
@@ -52,6 +58,12 @@ static NSString *const identifier_cell = @"identifier_cell";
     return _allDataArray;
 }
 
+- (NSMutableDictionary *)param {
+    if (!_param) {
+        _param = [NSMutableDictionary dictionary];
+    }
+    return _param;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -88,7 +100,7 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     OneTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-    SPXQModel *model = [[SPXQModel alloc] init];
+    SDFQModel *model = [[SDFQModel alloc] init];
     model = self.allDataArray[indexPath.row];
     cell.titleLabel.text = model.goods_name;
     
@@ -100,7 +112,6 @@ static NSString *const identifier_cell = @"identifier_cell";
     cell.priceLabel.text = priceStr;
     cell.priceLabel.textColor = XZYSBlueColor;
     cell.numLabel.text = numStr;
-    NSLog(@"%@", numStr);
     cell.numLabel.textColor = XZYSPinkColor;
     // Configure the cell...
     
@@ -160,16 +171,19 @@ static NSString *const identifier_cell = @"identifier_cell";
 - (void)requestAllData {
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
-    [[AFHTTPSessionManager manager] GET:XZYSALL__URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    __weak typeof(self) weakSelf = self;
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //        NSLog(@"%@", responseObject);
         NSArray *dataArray = [responseObject objectForKey:@"data"];
-       
+        
         for (NSDictionary *dic in dataArray) {
-            SPXQModel *model = [[SPXQModel alloc] init];
+            SDFQModel *model = [[SDFQModel alloc] init];
             [model setValuesForKeysWithDictionary:dic];
-            [self.allDataArray addObject:model];
+            [weakSelf.allDataArray addObject:model];
         }
         
         [self.rootView.collectionView reloadData];
+        [self.mainTableView reloadData];
         // 隐藏指示器
         [SVProgressHUD dismiss];
         
@@ -207,33 +221,34 @@ static NSString *const identifier_cell = @"identifier_cell";
 
     /// 添加选择按钮
     UIView *pickBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 36)];
+    pickBackView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:pickBackView];
-    UIButton *numButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    numButton.frame = CGRectMake(0, 0, SCREEN_WIDTH / 4, 36);
-    [numButton setTitle:@"销 量" forState:UIControlStateNormal];
-    numButton.titleLabel.font = [UIFont systemFontOfSize: 16];
-    [numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [numButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
-    [numButton addTarget:self action:@selector(numButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [pickBackView addSubview:numButton];
+    self.numButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.numButton.frame = CGRectMake(0, 0, SCREEN_WIDTH / 4, 36);
+    [self.numButton setTitle:@"销 量" forState:UIControlStateNormal];
+    self.numButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+//    [numButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    [self.numButton addTarget:self action:@selector(numButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.numButton];
     
-    UIButton *priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    priceButton.frame = CGRectMake(SCREEN_WIDTH / 4, 0, SCREEN_WIDTH / 4, 36);
-    [priceButton setTitle:@"价 格" forState:UIControlStateNormal];
-    priceButton.titleLabel.font = [UIFont systemFontOfSize: 16];
-    [priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [priceButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
-    [priceButton addTarget:self action:@selector(priceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [pickBackView addSubview:priceButton];
+    self.priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4, 0, SCREEN_WIDTH / 4, 36);
+    [self.priceButton setTitle:@"价 格" forState:UIControlStateNormal];
+    self.priceButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+//    [priceButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    [self.priceButton addTarget:self action:@selector(priceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.priceButton];
     
-    UIButton *timeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    timeButton.frame = CGRectMake(SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 4, 36);
-    [timeButton setTitle:@"时 间" forState:UIControlStateNormal];
-    [timeButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
-    timeButton.titleLabel.font = [UIFont systemFontOfSize: 16];
-    [timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [timeButton addTarget:self action:@selector(timeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [pickBackView addSubview:timeButton];
+    self.timeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.timeButton.frame = CGRectMake(SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 4, 36);
+    [self.timeButton setTitle:@"时 间" forState:UIControlStateNormal];
+//    [timeButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    self.timeButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton addTarget:self action:@selector(timeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.timeButton];
     
     UIButton *sxButton = [UIButton buttonWithType:UIButtonTypeCustom];
     sxButton.frame = CGRectMake(SCREEN_WIDTH * 3 / 4, 0, SCREEN_WIDTH / 4, 36);
@@ -281,17 +296,46 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 }
 
-- (void)numButtonClick:(UIButton *)sender {
+// 点击item
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    SDFQModel *model = [[SDFQModel alloc] init];
+    model = self.allDataArray[indexPath.row];
+    XXVC.model = model;
+    XXVC.passID = model.goods_id;
+    XXVC.spID = model.shop_id;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:XXVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+    
+}
+
+- (void)numButtonClick:(UIButton *)sender {
+    self.param[@"order"] = @"sales";
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self requestAllData];
 }
 - (void)priceButtonClick:(UIButton *)sender {
-    
+    self.param[@"order"] = @"down_price";
+    self.param[@"order"] = @"up_price";
+    [self.priceButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+
+    [self requestAllData];
 }
 - (void)timeButtonClick:(UIButton *)sender {
-    
+    self.param[@"order"] = @"create_time";
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self requestAllData];
 }
 - (void)sxButtonClick:(UIButton *)sender {
-    
+    self.param[@"order"] = @"create_time";
 }
 
 - (void)didReceiveMemoryWarning {

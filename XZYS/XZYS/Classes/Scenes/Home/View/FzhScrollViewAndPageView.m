@@ -32,23 +32,22 @@
     self = [super initWithFrame:frame];
     if (self) {
         viewWidth = [UIScreen mainScreen].bounds.size.width;
-        viewHeight = 135;
+        viewHeight = self.frame.size.height;
         
         //设置scrollView
-        _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, viewHeight)];
+        _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, viewWidth, self.frame.size.height)];
         _scrollView.delegate = self;
         _scrollView.contentSize = CGSizeMake(viewWidth * 3, viewHeight);
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.bounces = NO;
-        _scrollView.backgroundColor = [UIColor cyanColor];
         _scrollView.delegate = self;
         [self addSubview:_scrollView];
         
         //设置分页
         _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(viewWidth / 2 - 30, viewHeight-20, 60, 20)];
         _pageControl.userInteractionEnabled = NO;
-        _pageControl.pageIndicatorTintColor = [UIColor orangeColor];
+        _pageControl.pageIndicatorTintColor = XZYSRGBColor(217, 186, 166);
         [self addSubview:_pageControl];
         
         //设置单击手势
@@ -156,7 +155,7 @@
 {
     if (shouldStart) {//开启自动翻页
         if (!autoScrollTimer) {
-            autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(autoShowNextImage) userInfo:nil repeats:YES];
+            autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoShowNextImage) userInfo:nil repeats:YES];
         }
     }else{//关闭自动翻页
         if (autoScrollTimer.isValid) {

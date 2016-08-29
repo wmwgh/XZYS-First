@@ -19,7 +19,7 @@
 #import "LBTModel.h"
 #import "SDZCModel.h"
 #import "SDFQModel.h"
-#import "MessageViewController.h"
+#import "XiTongViewController.h"
 #import "ScanningViewController.h"
 #import "FzhScrollViewAndPageView.h"
 #import "SearchViewController.h"
@@ -29,6 +29,7 @@
 #import "RootView.h"
 #import "XIangQingViewController.h"
 #import "ClassifyViewController.h"
+#import "UserViewController.h"
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
@@ -89,6 +90,7 @@
     }
     return _SPTTittleArray;
 }
+
 // 定义全局的重用标识符
 static NSString *const identifier_cell = @"identifier_cell";
 static NSString *const firatID = @"firstHeader";//图和字和线
@@ -96,6 +98,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"首页";
 //    self.tabBarController.selectedIndex = 0;
     self.navigationController.navigationBarHidden = YES;
     self.headerBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 338)];
@@ -143,79 +146,90 @@ static NSString *const secondID = @"secondHeader";//字和线
     [self.SPTArray removeAllObjects];
     [weakSelf.SPTTittleArray removeAllObjects];
     
-    [[AFHTTPSessionManager manager] GET:XZYS_SDQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"app_model_id"] = @"1";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
         // 请求成功，解析数据
         NSArray *dataArray = responseObject[@"data"];
-        NSDictionary *dict = [NSDictionary dictionary];
-        NSMutableArray *listArray = [NSMutableArray array];
-        
-        if (dataArray.count > 0) {
-            for (int i = 0; i < 3; i++) {
-                dict = dataArray[i];
-                listArray = dict[@"goods_list"];
-                if ([listArray isEqual:[NSNull null]]) {
-                } else {
-                    SDFQModel *model = [[SDFQModel alloc] init];
-                    [model setValuesForKeysWithDictionary:dict];
-                    [weakSelf.SPTTittleArray addObject:model];
-                }
-                
-                NSMutableArray *sectionArray= [NSMutableArray array];
-                if ([listArray isEqual:[NSNull null]]) {
-//                    NSLog(@"22222---%d空", i);
-                } else {
-                    
-                    for (NSDictionary *dic in listArray) {
-                    SDFQModel *model = [[SDFQModel alloc] init];
-                    
-                        [model setValuesForKeysWithDictionary:dic];
-                        [sectionArray addObject:model];
-//                        NSLog(@"id=%@", model.goods_id);
-                    }
-                    [weakSelf.SPTArray addObject:sectionArray];
-                }
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTTittleArray addObject:@"新品区"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
             }
+            [weakSelf.SPTArray addObject:arr];
+        } else {
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+
+    NSMutableDictionary *param1 = [NSMutableDictionary dictionary];
+    param1[@"app_model_id"] = @"2";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param1 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        // 请求成功，解析数据
+        NSArray *dataArray = responseObject[@"data"];
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTTittleArray addObject:@"爆款区"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
+            }
+            [weakSelf.SPTArray addObject:arr];
+        } else {
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+    
+    
+    NSMutableDictionary *param2 = [NSMutableDictionary dictionary];
+    param2[@"app_model_id"] = @"3";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param2 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        // 请求成功，解析数据
+        NSArray *dataArray = responseObject[@"data"];
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTTittleArray addObject:@"现货区"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
+            }
+            [weakSelf.SPTArray addObject:arr];
+        } else {
         }
         // 请求调货区数据
         [self requestTHQData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
     }];
     
 }
 
 - (void)requestTHQData {
     __weak typeof(self) weakSelf = self;
-    [[AFHTTPSessionManager manager] GET:XZYS_THQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"app_model_id"] = @"4";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 请求成功，解析数据
-        NSDictionary *THQDic = responseObject[@"data"];
-        NSMutableArray *sectionArray= [NSMutableArray array];
-        NSArray *THQAr = THQDic[@"goods_list"];
+        NSArray *dataArray = responseObject[@"data"];
         
-        if (THQDic.count > 0) {
-            
-            if ([THQAr isEqual:[NSNull null]]) {
-//                NSLog(@"tiaohuoqu11111--空");
-            } else {
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTTittleArray addObject:@"调货区"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
                 SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:THQDic];
-                [weakSelf.SPTTittleArray addObject:model];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
             }
-            
-
-            if ([THQAr isEqual:[NSNull null]]) {
-//                NSLog(@"tiaohuoqu22222--空");
-            } else {
-                for (NSDictionary *dic in THQAr) {
-                    SDFQModel *model = [[SDFQModel alloc] init];
-                    [model setValuesForKeysWithDictionary:dic];
-                    [sectionArray addObject:model];
-                }
-                [weakSelf.SPTArray addObject:sectionArray];
-            }
+            [weakSelf.SPTArray addObject:arr];
+        } else {
         }
-        
         [self.rootView.collectionView.mj_header endRefreshing];
         [self.rootView.collectionView reloadData];
         // 隐藏指示器
@@ -250,13 +264,13 @@ static NSString *const secondID = @"secondHeader";//字和线
         }
     
     if (section == 2) {
-        if (!self.SPTArray[2]) {
+        if (self.SPTArray[2] != nil) {
             NSArray *itemArr = self.SPTArray[2];
             return itemArr.count;
         }
     }
     if (section == 3) {
-        if (!self.SPTArray[3]) {
+        if (self.SPTArray[3] != nil) {
             NSArray *itemArr = self.SPTArray[3];
             return itemArr.count;
         }
@@ -276,19 +290,16 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 // 返回头视图和尾视图
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
-    SDFQModel *model = [SDFQModel new];
-    
     // 判断是头视图还是尾视图
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         if (indexPath.section == 0){
-            model = self.SPTTittleArray[0];
+            NSString *str = self.SPTTittleArray[0];
             
             FirstHeaderReusableView *firstHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
             // 布局头视图尺寸
             self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 369);
             [firstHeaderView addSubview:self.headerBackView];
-            firstHeaderView.headerLabel.text = model.name;
+            firstHeaderView.headerLabel.text = str;
             [self.rootView.collectionView bringSubviewToFront:firstHeaderView];
             return firstHeaderView;
         }
@@ -296,27 +307,27 @@ static NSString *const secondID = @"secondHeader";//字和线
         HeaderReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:secondID forIndexPath:indexPath];
         
         if (indexPath.section == 1){
-            model = self.SPTTittleArray[1];
+            NSString *str = self.SPTTittleArray[1];
 
             // 布局头视图尺寸
             self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
-            headerView.headerLabel.text = model.name;
+            headerView.headerLabel.text = str;
             return headerView;
         }
         
         if (indexPath.section == 2){
-            model = self.SPTTittleArray[2];
+            NSString *str = self.SPTTittleArray[2];
             // 布局头视图尺寸
             self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
-            headerView.headerLabel.text = model.name;
+            headerView.headerLabel.text = str;
             return headerView;
         }
         
         if (indexPath.section == 3){
-            model = self.SPTTittleArray[3];
+            NSString *str = self.SPTTittleArray[3];
             // 布局头视图尺寸
             self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
-            headerView.headerLabel.text = model.name;
+            headerView.headerLabel.text = str;
             return headerView;
         }
         return headerView;
@@ -330,7 +341,11 @@ static NSString *const secondID = @"secondHeader";//字和线
     
     XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
     NSArray *ar = self.SPTArray[indexPath.section];
-    XXVC.model = ar[indexPath.row];
+    SDFQModel *model = [[SDFQModel alloc] init];
+    model = ar[indexPath.row];
+    XXVC.model = model;
+    XXVC.passID = model.goods_id;
+    XXVC.spID = model.shop_id;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -371,7 +386,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 #pragma mark -  消息
 - (void)messageButtonClick:(UIButton *)sender {
-    MessageViewController *messageVC = [[MessageViewController alloc] init];
+    XiTongViewController *messageVC = [[XiTongViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }
 
@@ -447,7 +462,6 @@ static NSString *const secondID = @"secondHeader";//字和线
                 [weakSelf.SDQArray addObject:model];
             }
         }
-        
         // collection按钮和展示
         [weakSelf showCollection];
         
@@ -540,8 +554,8 @@ static NSString *const secondID = @"secondHeader";//字和线
 }
 // 个人中心按钮点击事件
 - (void)button4Click {
-    NSLog(@"444");
-
+    UserViewController *userVC = [[UserViewController alloc] init];
+    [self.navigationController pushViewController:userVC animated:YES];
 }
 
 #pragma mark -  三个分区按钮

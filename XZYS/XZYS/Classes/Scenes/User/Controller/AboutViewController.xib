@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AboutViewController">
+            <connections>
+                <outlet property="gongsiJJ" destination="eNP-Jp-cak" id="jDS-KX-6Hl"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gyxz.png" translatesAutoresizingMaskIntoConstraints="NO" id="G4L-bG-YdR">
+                    <rect key="frame" x="87" y="150" width="200" height="200"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="200" id="UCG-H6-hDg"/>
+                        <constraint firstAttribute="height" constant="200" id="hTl-Tk-fWI"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="版本：0.1.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eNP-Jp-cak">
+                    <rect key="frame" x="137" y="370" width="100" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="kK1-27-h8m"/>
+                        <constraint firstAttribute="width" constant="100" id="xrn-QF-ghx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copynight(c)2015-2016xiezhongyunshang all right reserverd" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MY0-5n-ZtE">
+                    <rect key="frame" x="20" y="627" width="335" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="5g1-zj-8Lv"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="鞋众云商有限公司" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gCp-SU-Sbb">
+                    <rect key="frame" x="20" y="602" width="335" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="Wl0-gU-Ve1"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="MY0-5n-ZtE" secondAttribute="bottom" constant="20" id="25r-A2-jhf"/>
+                <constraint firstAttribute="trailing" secondItem="MY0-5n-ZtE" secondAttribute="trailing" constant="20" id="2mO-bs-2Ta"/>
+                <constraint firstItem="MY0-5n-ZtE" firstAttribute="top" secondItem="gCp-SU-Sbb" secondAttribute="bottom" constant="5" id="6CT-Se-wXN"/>
+                <constraint firstItem="gCp-SU-Sbb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Amo-Zv-O5G"/>
+                <constraint firstAttribute="trailing" secondItem="gCp-SU-Sbb" secondAttribute="trailing" constant="20" id="KxA-wd-xev"/>
+                <constraint firstItem="eNP-Jp-cak" firstAttribute="top" secondItem="G4L-bG-YdR" secondAttribute="bottom" constant="20" id="M1w-rJ-PAo"/>
+                <constraint firstItem="MY0-5n-ZtE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="cHs-je-8K2"/>
+                <constraint firstItem="eNP-Jp-cak" firstAttribute="centerX" secondItem="G4L-bG-YdR" secondAttribute="centerX" id="cmS-3w-h3c"/>
+                <constraint firstItem="G4L-bG-YdR" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="150" id="dMo-L7-ITM"/>
+                <constraint firstItem="G4L-bG-YdR" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="nty-97-4Bn"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+            <point key="canvasLocation" x="92.5" y="353.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="gyxz.png" width="320" height="320"/>
+    </resources>
+</document>

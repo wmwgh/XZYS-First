@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SDFQModel.h"
 #import "SPXQModel.h"
-
+#import "ShopModel.h"
 @interface RootCell : UICollectionViewCell
 
 // 声明imageView的子控件
@@ -21,4 +21,6 @@
 @property (nonatomic ,retain) SDFQModel *oneModel;
 
 @property (nonatomic ,retain) SPXQModel *twoModel;
+@property (nonatomic ,retain) ShopModel *shopModel;
+
 @end

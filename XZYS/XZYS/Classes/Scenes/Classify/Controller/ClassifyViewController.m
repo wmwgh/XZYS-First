@@ -8,19 +8,19 @@
 
 #import "ClassifyViewController.h"
 #import "SMVerticalSegmentedControl.h"
-#import "ShopModel.h"
 #import "FLModel.h"
 #import "ShopCollectionViewCell.h"
-#import <AFHTTPSessionManager.h>
-#import <AFNetworking/AFNetworking.h>
 #import "XZYS_Other.h"
 #import "XZYS_URL.h"
-#import "MessageViewController.h"
+#import "XiTongViewController.h"
 #import "SearchViewController.h"
 #import <SVProgressHUD.h>
+#import <AFHTTPSessionManager.h>
+#import <AFNetworking/AFNetworking.h>
 #import <MJRefresh.h>
 #import "ShowAllViewController.h"
 #import "HomeViewController.h"
+#import "XIangQingViewController.h"
 
 @interface ClassifyViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UIScrollViewDelegate>
 {
@@ -40,6 +40,8 @@
     UIButton *MButton;
 }
 
+@property (nonatomic , strong) NSMutableArray *spArray;
+@property (nonatomic , strong) NSMutableArray *SPTitleArray;
 @property (nonatomic, strong) UICollectionView *mianCollectionView;
 @property (nonatomic,retain) SMVerticalSegmentedControl *segmentedControl;
 /// 搜索
@@ -51,6 +53,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"分类";
     ID = _abc;
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = XZYSBackBColor;
@@ -71,18 +74,99 @@
     //创建UICollectionView
     [self createCollectionView];
     if (self.segmentedControl.selectedSegmentIndex != 0) {
-        
         // 获取导航栏
         [self loadsection];
         [self.mianCollectionView reloadData];
     }
+    [self requestPushData];
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
 
-+ (void)requestPushData {
 
+//////////////////////////////////////////////////////////////////
+
+- (void)requestPushData {
+    self.spArray = [NSMutableArray array];
+    [self.spArray removeAllObjects];
+    self.SPTitleArray = [NSMutableArray array];
+    [self.SPTitleArray removeAllObjects];
+    
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"goods_type_id"] = @"2";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"%@",responseObject);
+        // 请求成功，解析数据
+        NSArray *dataArray = responseObject[@"data"];
+        
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTitleArray addObject:@"女鞋"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
+            }
+            [weakSelf.spArray addObject:arr];
+        } else {
+        }
+        [self requsetNan];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
 }
+- (void)requsetNan {
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *param1 = [NSMutableDictionary dictionary];
+    param1[@"goods_type_id"] = @"1";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param1 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 请求成功，解析数据
+        NSArray *dataArray = responseObject[@"data"];
+        
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTitleArray addObject:@"男鞋"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
+            }
+            [weakSelf.spArray addObject:arr];
+        } else {
+        }
+        [self requsetTong];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+- (void)requsetTong {
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *param2 = [NSMutableDictionary dictionary];
+    param2[@"goods_type_id"] = @"3";
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param2 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 请求成功，解析数据
+        NSArray *dataArray = responseObject[@"data"];
+        
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            [weakSelf.SPTitleArray addObject:@"童鞋"];
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [arr addObject:model];
+            }
+            [weakSelf.spArray addObject:arr];
+        } else {
+        }
+//        NSLog(@":::::%@", weakSelf.SPTitleArray);
+//        NSLog(@"+++++%@", weakSelf.spArray);
+        // 隐藏指示器
+//        [self.mianCollectionView reloadData];
+        [SVProgressHUD dismiss];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+
+//////////////////////////////////////////////////////////////////
 
 #pragma mark - 界面区
 - (void)setNavigation {
@@ -133,7 +217,7 @@
 #pragma mark -  消息
 - (void)messageButtonClick:(UIButton *)sender {
      MButton.selected = !MButton.selected;
-    MessageViewController *messageVC = [[MessageViewController alloc] init];
+    XiTongViewController *messageVC = [[XiTongViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }
 
@@ -290,7 +374,6 @@
                 [rowmodelArray addObject:arr];
             }
         }
-        [self.mianCollectionView reloadData];
         // 隐藏指示器
         [SVProgressHUD dismiss];
 
@@ -369,7 +452,6 @@
         
         //创建segment
         [self loadSegment];
-        [self.mianCollectionView reloadData];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -419,7 +501,19 @@
     
     NSLog(@"dianji:%ld", (long)indexPath.row);
     
+    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    FLModel *model = [[FLModel alloc] init];
+    NSArray *arr = rowmodelArray[indexPath.section];
+    model = arr[indexPath.row];
+    XXVC.passID = model.cid;
+    XXVC.spID = model.pid;
+    NSLog(@"cid:%@", model.cid);
+    NSLog(@"pid:%@", model.pid);
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:XXVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
+
 
 /// 查看全部
 - (void)qweClock:(UIButton *)sender {
@@ -428,6 +522,8 @@
     [self.navigationController pushViewController:showVC animated:YES];
     
 }
+
+
 
 /*
 #pragma mark - Navigation

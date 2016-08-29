@@ -10,7 +10,10 @@
 #import <CoreData/CoreData.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
+{
+    NSString *isLogin;
+}
+@property (strong,nonatomic) NSString *isLogin;
 @property (strong, nonatomic) UIWindow *window;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

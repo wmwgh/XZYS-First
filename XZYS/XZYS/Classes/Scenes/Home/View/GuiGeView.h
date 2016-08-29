@@ -22,6 +22,4 @@
 @property (strong, nonatomic) IBOutlet UILabel *xielicaizhi;
 @property (strong, nonatomic) IBOutlet UILabel *shiYong;
 
-@property (nonatomic ,strong) SPXQModel *model;
-
 @end

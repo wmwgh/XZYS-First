@@ -16,11 +16,13 @@
 #define NSLog(FORMAT, ...) nil
 #endif
 
+
 // 颜色
 #define XZYSRGBColor(r, g, b) [UIColor colorWithRed:(r) / 255.0 green:(g) / 255.0 blue:(b) / 255.0 alpha:1.0]
 
 #define XZYSBlueColor XZYSRGBColor(45, 190, 250)
 #define XZYSRANDOMCOLOR [UIColor colorWithRed:arc4random()%256 / 255.0 green:arc4random()%256 / 255.0 blue:arc4random()%256 / 255.0 alpha:1]
+#define XZYSLightDarkColor XZYSRGBColor(213, 213, 213)
 #define XZYSDarkColor XZYSRGBColor(51, 51, 51)
 #define XZYSBackBColor XZYSRGBColor(232, 244, 249)
 #define XZYSPinkColor XZYSRGBColor(250, 120, 175)
