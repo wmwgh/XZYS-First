@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="U6b-Vx-4bR">
-            <rect key="frame" x="0.0" y="0.0" width="388" height="262"/>
+            <rect key="frame" x="0.0" y="0.0" width="388" height="367"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lad-Of-FtR">
@@ -157,7 +157,7 @@
                 <constraint firstItem="lad-Of-FtR" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" id="xM5-vH-dBZ"/>
                 <constraint firstItem="P5V-Eg-qEv" firstAttribute="leading" secondItem="CWC-wq-fbL" secondAttribute="trailing" id="yhL-om-uPH"/>
             </constraints>
-            <point key="canvasLocation" x="264" y="133"/>
+            <point key="canvasLocation" x="264" y="185.5"/>
         </collectionReusableView>
     </objects>
     <resources>

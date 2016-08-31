@@ -13,7 +13,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="UserHeaderView">
-            <rect key="frame" x="0.0" y="0.0" width="369" height="343"/>
+            <rect key="frame" x="0.0" y="0.0" width="369" height="239"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LJy-zY-oci">
@@ -30,7 +30,7 @@
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="allDingDan:" destination="iN0-l3-epB" eventType="touchUpInside" id="2qe-Yb-N8j"/>
+                                <action selector="allDingDan:" destination="iN0-l3-epB" eventType="touchUpInside" id="1bd-5H-pCi"/>
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mXT-2M-fEz">
@@ -123,7 +123,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="changeMessage:" destination="iN0-l3-epB" eventType="touchUpInside" id="8gF-ww-K1V"/>
+                        <action selector="changeMessage:" destination="iN0-l3-epB" eventType="touchUpInside" id="K3W-mm-4Yg"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vQW-Wf-N7J">
@@ -137,7 +137,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="changePassWord:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZmM-7K-lVb"/>
+                        <action selector="changePassWord:" destination="iN0-l3-epB" eventType="touchUpInside" id="YBE-eH-3V5"/>
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6ed-de-RZL">
@@ -154,7 +154,7 @@
                                     </constraints>
                                     <state key="normal" title="Button" image="info_37.png"/>
                                     <connections>
-                                        <action selector="allDingDan:" destination="iN0-l3-epB" eventType="touchUpInside" id="JwV-WZ-2VH"/>
+                                        <action selector="allDingDan:" destination="iN0-l3-epB" eventType="touchUpInside" id="1dV-rj-EtB"/>
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="全部订单" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JAA-Dw-kCZ">
@@ -187,7 +187,7 @@
                                     </constraints>
                                     <state key="normal" title="Button" image="info_41.png"/>
                                     <connections>
-                                        <action selector="daiShouHuo:" destination="iN0-l3-epB" eventType="touchUpInside" id="kfm-ev-D4r"/>
+                                        <action selector="daiShouHuo:" destination="iN0-l3-epB" eventType="touchUpInside" id="tXG-B5-ysy"/>
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="待收货" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMs-hv-dXi">
@@ -220,7 +220,7 @@
                                     </constraints>
                                     <state key="normal" title="Button" image="info_39.png"/>
                                     <connections>
-                                        <action selector="daiFukuan:" destination="iN0-l3-epB" eventType="touchUpInside" id="ilb-2T-UbG"/>
+                                        <action selector="daiFukuan:" destination="iN0-l3-epB" eventType="touchUpInside" id="gyB-bv-2dQ"/>
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="待付款" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ugo-LD-mCn">
@@ -253,7 +253,7 @@
                                     </constraints>
                                     <state key="normal" title="Button" image="info_43.png"/>
                                     <connections>
-                                        <action selector="yiZhiFu:" destination="iN0-l3-epB" eventType="touchUpInside" id="isz-zt-N8n"/>
+                                        <action selector="yiZhiFu:" destination="iN0-l3-epB" eventType="touchUpInside" id="5mH-EX-fWk"/>
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已支付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVe-LQ-1fd">
@@ -286,7 +286,7 @@
                                     </constraints>
                                     <state key="normal" title="Button" image="info_45.png"/>
                                     <connections>
-                                        <action selector="yiWanCheng:" destination="iN0-l3-epB" eventType="touchUpInside" id="bF8-Cc-RUY"/>
+                                        <action selector="yiWanCheng:" destination="iN0-l3-epB" eventType="touchUpInside" id="jiw-Ty-5YT"/>
                                     </connections>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已完成" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nyZ-pF-xNJ">
@@ -364,11 +364,18 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="allListButton" destination="MRx-gE-aHd" id="tAX-u5-sv0"/>
+                <outlet property="changeInfo" destination="my2-hg-fmi" id="fXx-oL-s74"/>
+                <outlet property="changePassWord" destination="vQW-Wf-N7J" id="9g5-Hj-XGd"/>
+                <outlet property="daiPayButton" destination="vCo-WZ-GTm" id="UAq-cO-sNg"/>
+                <outlet property="daiReceiveButton" destination="RK3-5X-hHx" id="kXz-GB-0Mv"/>
                 <outlet property="headerImg" destination="mS5-rW-tUM" id="6Kp-Oi-BcA"/>
                 <outlet property="jifen" destination="cRn-Az-QqC" id="3lY-Fn-Cpi"/>
                 <outlet property="nameLabel" destination="ihL-6i-nLr" id="8Zn-DG-AHi"/>
+                <outlet property="yiComplateButton" destination="qI1-Vd-lsK" id="IFi-9u-KDR"/>
+                <outlet property="yiPayButton" destination="ONh-Bk-pSE" id="M4K-Sx-UMb"/>
             </connections>
-            <point key="canvasLocation" x="225.5" y="100.5"/>
+            <point key="canvasLocation" x="225.5" y="48.5"/>
         </view>
     </objects>
     <resources>

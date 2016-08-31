@@ -68,7 +68,6 @@
     [pinView addSubview:lab];
     [self.view addSubview:pinView];
     [self setNavigation];
-    NSLog(@"22222%@", _URLStr);
     // 获取数据
     [self loadDatas];
     //创建UICollectionView
@@ -78,95 +77,9 @@
         [self loadsection];
         [self.mianCollectionView reloadData];
     }
-    [self requestPushData];
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
-
-
-//////////////////////////////////////////////////////////////////
-
-- (void)requestPushData {
-    self.spArray = [NSMutableArray array];
-    [self.spArray removeAllObjects];
-    self.SPTitleArray = [NSMutableArray array];
-    [self.SPTitleArray removeAllObjects];
-    
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"goods_type_id"] = @"2";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"%@",responseObject);
-        // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        
-        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTitleArray addObject:@"女鞋"];
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
-            }
-            [weakSelf.spArray addObject:arr];
-        } else {
-        }
-        [self requsetNan];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
-}
-- (void)requsetNan {
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *param1 = [NSMutableDictionary dictionary];
-    param1[@"goods_type_id"] = @"1";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param1 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        
-        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTitleArray addObject:@"男鞋"];
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
-            }
-            [weakSelf.spArray addObject:arr];
-        } else {
-        }
-        [self requsetTong];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
-}
-- (void)requsetTong {
-    __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *param2 = [NSMutableDictionary dictionary];
-    param2[@"goods_type_id"] = @"3";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param2 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        
-        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTitleArray addObject:@"童鞋"];
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
-            }
-            [weakSelf.spArray addObject:arr];
-        } else {
-        }
-//        NSLog(@":::::%@", weakSelf.SPTitleArray);
-//        NSLog(@"+++++%@", weakSelf.spArray);
-        // 隐藏指示器
-//        [self.mianCollectionView reloadData];
-        [SVProgressHUD dismiss];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
-}
-
-//////////////////////////////////////////////////////////////////
 
 #pragma mark - 界面区
 - (void)setNavigation {
@@ -391,7 +304,6 @@
     [sectionTitleArray removeAllObjects];
     rowmodelArray = [NSMutableArray array];
     [rowmodelArray removeAllObjects];
-    NSLog(@"111111%@", _URLStr);
     [[AFHTTPSessionManager manager] GET:_URLStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *NVArray = responseObject[@"data"];
         NSString *flkey = [NSString string];
@@ -506,9 +418,6 @@
     NSArray *arr = rowmodelArray[indexPath.section];
     model = arr[indexPath.row];
     XXVC.passID = model.cid;
-    XXVC.spID = model.pid;
-    NSLog(@"cid:%@", model.cid);
-    NSLog(@"pid:%@", model.pid);
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;

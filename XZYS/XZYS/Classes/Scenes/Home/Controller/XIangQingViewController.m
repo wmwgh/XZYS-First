@@ -19,7 +19,7 @@
 #import "GoodsTableViewCell.h"
 #import "DetailView.h"
 #import "GuiGeView.h"
-#import "ShoppingCartViewController.h"
+#import "ShoppingCarViewController.h"
 #import <UIImageView+WebCache.h>
 #import "FzhScrollViewAndPageView.h"
 #import "ShopViewController.h"
@@ -29,6 +29,7 @@
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
 @interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic , strong) NSMutableDictionary *dict;
 @property (nonatomic , strong) UIScrollView *backView;
 /// 商品详情数组
 @property (nonatomic, strong) NSMutableArray *SPXQArray;
@@ -72,6 +73,13 @@
         _SPXQArray = [NSMutableArray array];
     }
     return _SPXQArray;
+}
+
+- (NSMutableDictionary *)dict {
+    if (!_dict) {
+        _dict = [NSMutableDictionary dictionary];
+    }
+    return _dict;
 }
 
 - (void)viewDidLoad {
@@ -297,10 +305,10 @@
     NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_SPXQ_URL, weakSelf.passID];
     [[AFHTTPSessionManager manager] GET:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 请求成功，解析数据
-        NSDictionary *THQDic = responseObject[@"data"];
-        NSDictionary *sizeDic = THQDic[@"size"];
-        NSDictionary *colorDic = THQDic[@"color_remark"];
-        weakSelf.SpxqPicArray = THQDic[@"goods_img_list"];
+        _dict = responseObject[@"data"];
+        NSDictionary *sizeDic = _dict[@"size"];
+        NSDictionary *colorDic = _dict[@"color_remark"];
+        weakSelf.SpxqPicArray = _dict[@"goods_img_list"];
         
         [sizeDic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             NSString *str = obj;
@@ -311,7 +319,7 @@
             [weakSelf.SpxqColorArray addObject:str];
         }];
         weakSelf.GuiGeModel = [[SPXQModel alloc] init];
-        [weakSelf.GuiGeModel setValuesForKeysWithDictionary:THQDic];
+        [weakSelf.GuiGeModel setValuesForKeysWithDictionary:_dict];
         [weakSelf.SPXQArray addObject:weakSelf.GuiGeModel];
         [self createTableView];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -412,8 +420,7 @@ static NSInteger pageNumber = 0;
 
 - (void)dianpuClick:(UIButton *)sender {
     ShopViewController *dianpuVC = [[ShopViewController alloc] init];
-    NSLog(@"%@", self.spID);
-    dianpuVC.shopID = self.spID;
+    dianpuVC.shopID = _dict[@"shop_id"];
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:dianpuVC animated:YES];
     self.hidesBottomBarWhenPushed = YES;
@@ -424,7 +431,7 @@ static NSInteger pageNumber = 0;
     if ([appDelegate.isLogin isEqualToString:@"Yes"]) {
         NSLog(@"gouwuche");
     } else {
-        ShoppingCartViewController *carVC = [[ShoppingCartViewController alloc] init];
+        ShoppingCarViewController *carVC = [[ShoppingCarViewController alloc] init];
         self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:carVC animated:YES];
         self.hidesBottomBarWhenPushed = YES;

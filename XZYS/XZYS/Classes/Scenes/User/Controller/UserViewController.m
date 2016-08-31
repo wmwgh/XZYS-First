@@ -23,6 +23,8 @@
 #import "XiTongViewController.h"
 #import "AboutViewController.h"
 #import "LoginViewController.h"
+#import "OrderListViewController.h"
+#import "YiJianViewController.h"
 
 @interface UserViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -64,14 +66,60 @@
     // Do any additional setup after loading the view from its nib.
     self.title = @"个人中心";
     self.navigationController.navigationBarHidden = YES;
-    self.tableArray = @[@"我的收藏", @"收货地址", @"调货", @"售后", @"系统消息", @"关于我们"];
+    self.tableArray = @[@"我的收藏", @"收货地址", @"调货", @"售后", @"系统消息",  @"意见反馈", @"关于我们"];
     [self createTableView];
     [self setInfoMessage];
     [self resqusetInfoData];
+    // 按钮设置
+//    [self setButton];
 }
+
+//- (void)setButton {
+//    [self.headerView.changeInfo addTarget:self action:@selector(changeInfo:) forControlEvents:UIControlEventTouchUpInside];
+//    self.headerView.changeInfo.userInteractionEnabled = YES;
+//    [self.headerView.changePassWord addTarget:self action:@selector(changePassWord:) forControlEvents:UIControlEventTouchUpInside];
+//    self.headerView.allListButton.userInteractionEnabled = YES;
+//    [self.headerView.allListButton addTarget:self action:@selector(allListButton:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.headerView.daiPayButton addTarget:self action:@selector(daiPayButton:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.headerView.daiReceiveButton addTarget:self action:@selector(daiReceiveButton:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.headerView.yiPayButton addTarget:self action:@selector(yiPayButton:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.headerView.yiComplateButton addTarget:self action:@selector(yiComplateButton:) forControlEvents:UIControlEventTouchUpInside];
+//}
+
+- (void)changeInfo:(UIButton *)sender {
+    NSLog(@"asdasdasd");
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+- (void)changePassWord:(UIButton *)sender {
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+- (void)allListButton:(UIButton *)sender {
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+- (void)daiPayButton:(UIButton *)sender {
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+- (void)daiReceiveButton:(UIButton *)sender {
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+- (void)yiPayButton:(UIButton *)sender {
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+- (void)yiComplateButton:(UIButton *)sender {
+    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:listVC animated:YES];
+}
+
 
 - (void)setInfoMessage {
     UserHeaderView *headerView = [UserHeaderView loadFromNib];
+    headerView.owner = self;
     headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 222);
     self.tableView.tableHeaderView = headerView;
     headerView.headerImg.layer.cornerRadius = 55 / 2;
@@ -145,6 +193,9 @@
         case 5:
             cell.titleImg.image = [UIImage imageNamed:@"info_76"];
             break;
+        case 6:
+            cell.titleImg.image = [UIImage imageNamed:@"info_76"];
+            break;
         default:
             break;
     }
@@ -193,6 +244,11 @@
         [self.navigationController pushViewController:mlvc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
     } else if (indexPath.row == 5) {
+        self.hidesBottomBarWhenPushed = YES;
+        YiJianViewController *mlvc = [[YiJianViewController alloc] init];
+        [self.navigationController pushViewController:mlvc animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
+    } else if (indexPath.row == 6) {
         self.hidesBottomBarWhenPushed = YES;
         AboutViewController *mlvc = [[AboutViewController alloc] init];
         mlvc.str = self.gongsijianjie;

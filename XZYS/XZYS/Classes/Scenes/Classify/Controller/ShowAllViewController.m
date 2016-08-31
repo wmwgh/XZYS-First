@@ -304,7 +304,6 @@ static NSString *const identifier_cell = @"identifier_cell";
     model = self.allDataArray[indexPath.row];
     XXVC.model = model;
     XXVC.passID = model.goods_id;
-    XXVC.spID = model.shop_id;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;

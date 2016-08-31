@@ -345,7 +345,6 @@ static NSString *const secondID = @"secondHeader";//字和线
     model = ar[indexPath.row];
     XXVC.model = model;
     XXVC.passID = model.goods_id;
-    XXVC.spID = model.shop_id;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;

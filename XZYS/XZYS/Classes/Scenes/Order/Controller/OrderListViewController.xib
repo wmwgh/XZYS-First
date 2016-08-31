@@ -3,18 +3,150 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OrderListViewController">
             <connections>
+                <outlet property="allButton" destination="5Ld-IT-Opf" id="7yK-lj-G9u"/>
+                <outlet property="complateButton" destination="XaS-xE-WyL" id="5g5-LN-7eV"/>
+                <outlet property="daiPay" destination="3QX-fi-Vw4" id="nHN-rs-grY"/>
+                <outlet property="daiReceive" destination="Env-F4-82Q" id="Ndr-CT-RLd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="yiPay" destination="GrV-tf-TaI" id="ka5-ih-LGq"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mtu-2A-ZNg">
+                    <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ld-IT-Opf">
+                            <rect key="frame" x="0.0" y="0.0" width="64" height="44"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="全部订单">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="allOrder:" destination="-1" eventType="touchUpInside" id="S4a-AM-LGz"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aUf-jW-sNT">
+                            <rect key="frame" x="64" y="8" width="1" height="28"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="XBb-K4-NN0"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3QX-fi-Vw4">
+                            <rect key="frame" x="65" y="0.0" width="64" height="44"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="待付款">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="daiPay:" destination="-1" eventType="touchUpInside" id="Zeb-Af-Sm2"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCM-x8-JGO">
+                            <rect key="frame" x="129" y="8" width="1" height="28"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="w90-YY-lR3"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Env-F4-82Q">
+                            <rect key="frame" x="130" y="0.0" width="64" height="44"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="待收货">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="daiReceive:" destination="-1" eventType="touchUpInside" id="9qF-FS-9VR"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AtK-2r-wvI">
+                            <rect key="frame" x="194" y="8" width="1" height="28"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="mbt-Mf-ljv"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GrV-tf-TaI">
+                            <rect key="frame" x="194" y="0.0" width="64" height="44"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="已付款">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="yiPay:" destination="-1" eventType="touchUpInside" id="Kop-nl-y7U"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cIt-sF-t9y">
+                            <rect key="frame" x="258" y="8" width="1" height="28"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="1" id="ZR2-Eb-FcQ"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XaS-xE-WyL">
+                            <rect key="frame" x="258" y="0.0" width="62" height="44"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal" title="已完成">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="yiComplate:" destination="-1" eventType="touchUpInside" id="fFn-aw-WIc"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.93725490199999995" alpha="1" colorSpace="deviceRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="BCM-x8-JGO" secondAttribute="bottom" constant="8" id="0kz-8G-2N6"/>
+                        <constraint firstAttribute="trailing" secondItem="XaS-xE-WyL" secondAttribute="trailing" id="2VE-l7-MkS"/>
+                        <constraint firstAttribute="bottom" secondItem="AtK-2r-wvI" secondAttribute="bottom" constant="8" id="6iC-OA-UPT"/>
+                        <constraint firstAttribute="bottom" secondItem="Env-F4-82Q" secondAttribute="bottom" id="AIO-ru-Mha"/>
+                        <constraint firstItem="5Ld-IT-Opf" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" id="AKF-Yq-6df"/>
+                        <constraint firstAttribute="bottom" secondItem="XaS-xE-WyL" secondAttribute="bottom" id="AaL-Ej-jnM"/>
+                        <constraint firstItem="GrV-tf-TaI" firstAttribute="width" secondItem="5Ld-IT-Opf" secondAttribute="width" id="Hdu-ok-yQ1"/>
+                        <constraint firstItem="3QX-fi-Vw4" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" id="I1Z-6j-D3n"/>
+                        <constraint firstItem="XaS-xE-WyL" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" id="Iag-Qu-KIf"/>
+                        <constraint firstItem="aUf-jW-sNT" firstAttribute="leading" secondItem="5Ld-IT-Opf" secondAttribute="trailing" id="K8f-yv-o17"/>
+                        <constraint firstItem="3QX-fi-Vw4" firstAttribute="leading" secondItem="aUf-jW-sNT" secondAttribute="trailing" id="SQu-UP-pQC"/>
+                        <constraint firstItem="5Ld-IT-Opf" firstAttribute="width" secondItem="mtu-2A-ZNg" secondAttribute="width" multiplier="1:5" id="Sig-ge-Qhb"/>
+                        <constraint firstItem="AtK-2r-wvI" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" constant="8" id="UnD-oA-X69"/>
+                        <constraint firstAttribute="bottom" secondItem="aUf-jW-sNT" secondAttribute="bottom" constant="8" id="V4K-gb-Ebr"/>
+                        <constraint firstItem="Env-F4-82Q" firstAttribute="leading" secondItem="BCM-x8-JGO" secondAttribute="trailing" id="VGm-hl-oTk"/>
+                        <constraint firstItem="AtK-2r-wvI" firstAttribute="leading" secondItem="Env-F4-82Q" secondAttribute="trailing" id="VeB-9t-uGc"/>
+                        <constraint firstItem="5Ld-IT-Opf" firstAttribute="leading" secondItem="mtu-2A-ZNg" secondAttribute="leading" id="XuY-kc-Pb9"/>
+                        <constraint firstItem="3QX-fi-Vw4" firstAttribute="height" secondItem="5Ld-IT-Opf" secondAttribute="height" id="Zzh-fX-rwx"/>
+                        <constraint firstItem="GrV-tf-TaI" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" id="chV-cB-KSU"/>
+                        <constraint firstAttribute="bottom" secondItem="5Ld-IT-Opf" secondAttribute="bottom" id="dgu-At-B8n"/>
+                        <constraint firstItem="XaS-xE-WyL" firstAttribute="leading" secondItem="GrV-tf-TaI" secondAttribute="trailing" id="do4-Fg-MDl"/>
+                        <constraint firstItem="Env-F4-82Q" firstAttribute="width" secondItem="5Ld-IT-Opf" secondAttribute="width" id="gHx-Ef-GK5"/>
+                        <constraint firstItem="BCM-x8-JGO" firstAttribute="leading" secondItem="3QX-fi-Vw4" secondAttribute="trailing" id="iqu-5f-W9k"/>
+                        <constraint firstAttribute="height" constant="44" id="nQM-Ot-y0H"/>
+                        <constraint firstItem="GrV-tf-TaI" firstAttribute="leading" secondItem="Env-F4-82Q" secondAttribute="trailing" id="oho-aA-F3y"/>
+                        <constraint firstItem="aUf-jW-sNT" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" constant="8" id="t1D-tD-ig8"/>
+                        <constraint firstItem="BCM-x8-JGO" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" constant="8" id="u1j-ic-SUo"/>
+                        <constraint firstAttribute="bottom" secondItem="cIt-sF-t9y" secondAttribute="bottom" constant="8" id="utC-dl-pk8"/>
+                        <constraint firstAttribute="bottom" secondItem="GrV-tf-TaI" secondAttribute="bottom" id="vQt-h3-ipv"/>
+                        <constraint firstItem="cIt-sF-t9y" firstAttribute="leading" secondItem="GrV-tf-TaI" secondAttribute="trailing" id="vnH-rx-Uwq"/>
+                        <constraint firstItem="cIt-sF-t9y" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" constant="8" id="yMU-OG-qWX"/>
+                        <constraint firstItem="3QX-fi-Vw4" firstAttribute="width" secondItem="5Ld-IT-Opf" secondAttribute="width" id="yb1-Pt-2OW"/>
+                        <constraint firstItem="Env-F4-82Q" firstAttribute="top" secondItem="mtu-2A-ZNg" secondAttribute="top" id="ylO-f6-dkq"/>
+                    </constraints>
+                </view>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="mtu-2A-ZNg" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="Mg2-yx-1P6"/>
+                <constraint firstAttribute="trailing" secondItem="mtu-2A-ZNg" secondAttribute="trailing" id="gEJ-ht-YJi"/>
+                <constraint firstItem="mtu-2A-ZNg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="wkf-0U-HIG"/>
+            </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>

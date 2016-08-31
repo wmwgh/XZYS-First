@@ -9,5 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface OrderListViewController : UIViewController
+@property (strong, nonatomic) IBOutlet UIButton *allButton;
+@property (strong, nonatomic) IBOutlet UIButton *daiPay;
+@property (strong, nonatomic) IBOutlet UIButton *yiPay;
 
+@property (strong, nonatomic) IBOutlet UIButton *daiReceive;
+@property (strong, nonatomic) IBOutlet UIButton *complateButton;
+@property (strong, nonatomic) UIView *lineView;
+@property (nonatomic , assign) int aaaa;
 @end

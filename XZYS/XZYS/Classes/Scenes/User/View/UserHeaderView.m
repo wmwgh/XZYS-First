@@ -7,6 +7,7 @@
 //
 
 #import "UserHeaderView.h"
+#import "OrderListViewController.h"
 
 @implementation UserHeaderView
 
@@ -14,42 +15,60 @@
     
     if (self = [super initWithFrame:frame]) {
         // 添加子视图
-        [self initLayout];
+//        [self initLayout];
     }
     return self;
 }
 
-- (void)initLayout {
-    self.nameLabel.text = @"qsdcnssnodvbojefnefqvosjbvsojvbojevbwe";
-}
+//- (void)initLayout {
+//    self.nameLabel.text = @"qsdcnssnodvbojefnefqvosjbvsojvbojevbwe";
+//}
 
 // 修改个人信息
 - (IBAction)changeMessage:(id)sender {
     NSLog(@"1");
+    [self.owner.navigationController  pushViewController:[OrderListViewController new] animated:YES];
 }
 // 修改密码
 - (IBAction)changePassWord:(id)sender {
     NSLog(@"2");
+    [self.owner.navigationController  pushViewController:[OrderListViewController new] animated:YES];
+
 }
 // 查看全部订单
 - (IBAction)allDingDan:(id)sender {
-    NSLog(@"3");
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.aaaa = 0;
+    [self.owner.navigationController  pushViewController:order animated:YES];
+
 }
 // 待付款
 - (IBAction)daiFukuan:(id)sender {
-    NSLog(@"4");
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.aaaa = 1;
+    [self.owner.navigationController  pushViewController:order animated:YES];
+
 }
 // 待收货
 - (IBAction)daiShouHuo:(id)sender {
-    NSLog(@"5");
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.aaaa = 2;
+    [self.owner.navigationController  pushViewController:order animated:YES];
+
 }
 // 已支付
 - (IBAction)yiZhiFu:(id)sender {
-    NSLog(@"6");
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.aaaa = 3;
+    [self.owner.navigationController  pushViewController:order animated:YES];
+
 }
 // 已完成
 - (IBAction)yiWanCheng:(id)sender {
-    NSLog(@"7");
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.aaaa = 4;
+    [self.owner.navigationController  pushViewController:order animated:YES];
+
 }
 
 

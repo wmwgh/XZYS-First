@@ -1,14 +1,16 @@
 //
-//  InfoHeaderView.m
+//  ShopHeadView.m
 //  XZYS
 //
-//  Created by 杨利 on 16/8/24.
+//  Created by 杨利 on 16/8/30.
 //  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
-#import "InfoHeaderView.h"
+#import "ShopHeadView.h"
 
-@implementation InfoHeaderView
+@implementation ShopHeadView
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -10,7 +10,7 @@
 #import "MainViewController.h"
 #import "ClassifyViewController.h"
 #import "HomeViewController.h"
-#import "ShoppingCartViewController.h"
+#import "ShoppingCarViewController.h"
 #import "UserViewController.h"
 
 @interface AppDelegate ()
@@ -44,7 +44,7 @@
     // 设置图片
     classNVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"分类" image:[[UIImage imageNamed:@"tb_05"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tb_03"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    UINavigationController *shoppingNVC = [[UINavigationController alloc] initWithRootViewController:[[ShoppingCartViewController alloc] init]];
+    UINavigationController *shoppingNVC = [[UINavigationController alloc] initWithRootViewController:[[ShoppingCarViewController alloc] init]];
     // 设置图片
     shoppingNVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"购物车" image:[[UIImage imageNamed:@"tb_06"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tb_01"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     

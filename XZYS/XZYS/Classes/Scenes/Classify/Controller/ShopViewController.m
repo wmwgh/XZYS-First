@@ -16,10 +16,12 @@
 #import "ShopModel.h"
 #import "ShopView.h"
 #import "RootCell.h"
-#import "ShopHeaderView.h"
 #import "XiTongViewController.h"
 #import "SearchViewController.h"
 #import "SDFQModel.h"
+#import "ShopHeadView.h"
+#import "UIView+LoadFromNib.h"
+
 
 static NSString *const identifier_cell = @"identifier_cell";
 static NSString *const firatID = @"firstHeader";//图和字和线
@@ -30,6 +32,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 /// 搜索
 @property (strong, nonatomic) UIImageView *searchIamgeView;
 @property (nonatomic , strong) ShopView *rootView;
+@property (nonatomic , strong) ShopHeadView *headView;
 @property (nonatomic ,strong) NSMutableArray *dataArray;
 @property (nonatomic ,strong) NSMutableArray *collectionArray;
 @end
@@ -44,7 +47,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self requestData];
     [self setCollection];
     [self setNavigation];
-
+    
 }
 
 - (void)setCollection {
@@ -57,21 +60,32 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     // 第一步：注册cell
     [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
     
+    self.headView = [[ShopHeadView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
+    _headView.backgroundColor = [UIColor redColor];
+    self.headView = [ShopHeadView loadFromNib];
+    self.headView.titleLabel.text = @"1234567890-plknbvcxcl6to7yoihawszxch897t8der5678i";
+    self.headView.baclImageView.image = [UIImage imageNamed:@"head.jpg"];
+    self.headView.headImageView.image = [UIImage imageNamed:@"head.jpg"];
+    self.headView.numLabel.text = @"128i";
+    self.headView.dianPuCollect.text = @"12sd";
+    self.headView.goodsCollect.text = @"12345";
+    [self.rootView.collectionView addSubview:self.headView];
+    
     // 注册头视图
-    [self.rootView.collectionView registerNib:[UINib nibWithNibName:@"ShopHeaderView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID];
+//    [self.rootView.collectionView registerNib:[UINib nibWithNibName:@"ShopHeaderView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID];
     
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        ShopHeaderView *hview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
-        
-        hview.backgroundColor = [UIColor orangeColor];
-        return hview;
-    }
-    return nil;
-}
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+//        ShopHeaderView *hview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
+//        
+//        hview.backgroundColor = [UIColor orangeColor];
+//        return hview;
+//    }
+//    return nil;
+//}
 
 
 - (void)requestData {
@@ -102,15 +116,16 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         /// collection 数据请求
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setValue:weakSelf.shopID forKey:@"shop_id"];
-        
         [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 请求成功，解析数据
+            NSLog(@"%@", responseObject);
             NSArray *dataArr = responseObject[@"data"];
-            
-            for (NSDictionary *dic in dataArr) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [weakSelf.collectionArray addObject:model];
+            if (dataArr != nil && ![dataArr isKindOfClass:[NSNull class]] && dataArr.count != 0) {
+                for (NSDictionary *dic in dataArr) {
+                    SDFQModel *model = [[SDFQModel alloc] init];
+                    [model setValuesForKeysWithDictionary:dic];
+                    [weakSelf.collectionArray addObject:model];
+                }
             }
             [self.rootView.collectionView reloadData];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
