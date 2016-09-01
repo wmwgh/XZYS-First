@@ -12,5 +12,5 @@
 @interface LoginViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UITextField *phoneNum;
 @property (strong, nonatomic) IBOutlet UITextField *passWord;
-
+@property (nonatomic , copy) NSString *userId;
 @end

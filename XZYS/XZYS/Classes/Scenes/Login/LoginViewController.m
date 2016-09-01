@@ -43,33 +43,34 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"username"] = self.phoneNum.text;
     params[@"password"] = self.passWord.text;
-    [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调.
         NSError *error;
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        NSDictionary *dataDic = dic[@"data"];
+        if (![dataDic isEqual:@""]) {
+            self.userId = dataDic[@"uid"];
+        } else {
+            NSLog(@"userId = nil");
+        }
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        if([result isEqualToString:@"-523"]){
+        if([result isEqualToString:@"-106"]){
             hud.labelText = dic[@"msg"];
-            NSLog(@"111");
-        }else if([result isEqualToString:@"-524"]){
-            hud.labelText = dic[@"msg"];
-            NSLog(@"111");
-        }else{
-            hud.labelText = dic[@"msg"];
-            NSLog(@"登陆成功");
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             appDelegate.isLogin = @"Yes";
+            appDelegate.userIdTag = self.userId;
             [self.navigationController popViewControllerAnimated:NO];
-        };
+        } else {
+            hud.labelText = dic[@"msg"];
+        }
+        NSLog(@"request:%@", self.userId);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
-       
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 数据加载失败回调.
         NSLog(@"登录失败: %@",error);

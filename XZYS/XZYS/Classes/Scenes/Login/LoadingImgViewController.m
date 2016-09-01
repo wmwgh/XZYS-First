@@ -1,36 +1,27 @@
 //
-//  AllListViewController.m
+//  LoadingImgViewController.m
 //  XZYS
 //
-//  Created by 杨利 on 16/8/24.
+//  Created by 杨利 on 16/9/1.
 //  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
-#import "AllListViewController.h"
+#import "LoadingImgViewController.h"
 
-@interface AllListViewController ()
+@interface LoadingImgViewController ()@end
 
-@end
-
-@implementation AllListViewController
+@implementation LoadingImgViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view from its nib.
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    self.navigationController.navigationBarHidden = YES;
-    [super viewWillDisappear:animated];
 }
 
 /*

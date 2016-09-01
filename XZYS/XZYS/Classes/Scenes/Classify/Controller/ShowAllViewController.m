@@ -21,6 +21,7 @@
 #import <UIImageView+WebCache.h>
 #import "XIangQingViewController.h"
 #import "SDFQModel.h"
+#import "AF_MainScreeningViewController.h"
 
 @interface ShowAllViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -334,7 +335,14 @@ static NSString *const identifier_cell = @"identifier_cell";
     [self requestAllData];
 }
 - (void)sxButtonClick:(UIButton *)sender {
-    self.param[@"order"] = @"create_time";
+    AF_MainScreeningViewController * testVC = [AF_MainScreeningViewController new];
+    //这两句必须有
+    self.definesPresentationContext = YES; //self is presenting view controller
+    testVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    /** 设置半透明度 */
+    testVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5];
+    
+    [self presentViewController:testVC animated:NO completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

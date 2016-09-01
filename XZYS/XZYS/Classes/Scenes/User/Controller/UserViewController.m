@@ -25,6 +25,8 @@
 #import "LoginViewController.h"
 #import "OrderListViewController.h"
 #import "YiJianViewController.h"
+#import "PassWordViewController.h"
+#import "AppDelegate.h"
 
 @interface UserViewController ()<UITableViewDataSource, UITableViewDelegate>
 
@@ -86,35 +88,35 @@
 //    [self.headerView.yiComplateButton addTarget:self action:@selector(yiComplateButton:) forControlEvents:UIControlEventTouchUpInside];
 //}
 
-- (void)changeInfo:(UIButton *)sender {
-    NSLog(@"asdasdasd");
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
-- (void)changePassWord:(UIButton *)sender {
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
-- (void)allListButton:(UIButton *)sender {
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
-- (void)daiPayButton:(UIButton *)sender {
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
-- (void)daiReceiveButton:(UIButton *)sender {
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
-- (void)yiPayButton:(UIButton *)sender {
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
-- (void)yiComplateButton:(UIButton *)sender {
-    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-    [self.navigationController pushViewController:listVC animated:YES];
-}
+//- (void)changeInfo:(UIButton *)sender {
+//    NSLog(@"asdasdasd");
+//    PassWordViewController *listVC = [[PassWordViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
+//- (void)changePassWord:(UIButton *)sender {
+//    PassWordViewController *listVC = [[PassWordViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
+//- (void)allListButton:(UIButton *)sender {
+//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
+//- (void)daiPayButton:(UIButton *)sender {
+//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
+//- (void)daiReceiveButton:(UIButton *)sender {
+//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
+//- (void)yiPayButton:(UIButton *)sender {
+//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
+//- (void)yiComplateButton:(UIButton *)sender {
+//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
+//    [self.navigationController pushViewController:listVC animated:YES];
+//}
 
 
 - (void)setInfoMessage {
@@ -133,13 +135,27 @@
 }
 
 - (void)resqusetInfoData {
-    [[AFHTTPSessionManager manager] GET:XZYS_Info_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    NSLog(@"ID:%@", appDelegate.userIdTag);
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    // 默认的方式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appDelegate.userIdTag;
+    NSLog(@"zidian:%@", params);
+    [manager POST:XZYS_Info_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSError *error;
+        NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
+        NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        NSLog(@"dic:%@", dic);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
     
-    [[AFHTTPSessionManager manager] GET:XZYS_GSJJ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[AFHTTPSessionManager manager] POST:XZYS_GSJJ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         self.infoDic = responseObject[@"data"];
         self.gongsijianjie = responseObject[@"data"];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -191,7 +207,7 @@
             cell.titleImg.image = [UIImage imageNamed:@"info_72"];
             break;
         case 5:
-            cell.titleImg.image = [UIImage imageNamed:@"info_76"];
+            cell.titleImg.image = [UIImage imageNamed:@"info_07"];
             break;
         case 6:
             cell.titleImg.image = [UIImage imageNamed:@"info_76"];

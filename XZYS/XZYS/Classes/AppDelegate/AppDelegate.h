@@ -13,7 +13,8 @@
 {
     NSString *isLogin;
 }
-@property (strong,nonatomic) NSString *isLogin;
+@property (copy,nonatomic) NSString *isLogin;
+@property (nonatomic , copy) NSString *userIdTag;
 @property (strong, nonatomic) UIWindow *window;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

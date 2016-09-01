@@ -15,8 +15,10 @@
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 #import "AppDelegate.h"
+#import "BDImagePicker.h"
 
-@interface RegiestViewController ()<UIScrollViewDelegate>
+
+@interface RegiestViewController ()<UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate>
 @property (nonatomic , strong) RegiestView *regiestView;
 
 @end
@@ -46,12 +48,41 @@
     // 判断手机号
     [self.regiestView.phoneNum addTarget:self action:@selector(checkPhone) forControlEvents:UIControlEventEditingDidEnd];
     
+    // 上传照片
+    [self.regiestView.zhizhao addTarget:self action:@selector(zhengjianImg:) forControlEvents:UIControlEventTouchUpInside];
+    [self.regiestView.sfzBefore addTarget:self action:@selector(sfzBeforeImg:) forControlEvents:UIControlEventTouchUpInside];
+    [self.regiestView.sfzAfter addTarget:self action:@selector(sfzAfterImg:) forControlEvents:UIControlEventTouchUpInside];
+    
     // 验证按钮
     [self.regiestView.yanZhengMaButton addTarget:self action:@selector(yanzhengClick) forControlEvents:UIControlEventTouchUpInside];
     
     // 注册按钮
     [self.regiestView.regiestButton addTarget:self action:@selector(registeBtnAction) forControlEvents:UIControlEventTouchUpInside];
 }
+
+- (void)zhengjianImg:(UIButton *)sender {
+    [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
+        if (self.regiestView.zhizhao) {
+            [sender setBackgroundImage:image forState:UIControlStateNormal];
+        }
+    }];
+}
+
+- (void)sfzBeforeImg:(UIButton *)sender {
+    [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
+        if (self.regiestView.sfzBefore) {
+            [sender setBackgroundImage:image forState:UIControlStateNormal];
+        }
+    }];
+}
+- (void)sfzAfterImg:(UIButton *)sender {
+    [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
+        if (self.regiestView.sfzAfter) {
+            [sender setBackgroundImage:image forState:UIControlStateNormal];
+        }
+    }];
+}
+
 
 - (void)yanzhengClick {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -66,7 +97,7 @@
 //    [params setObject:[NSNumber numberWithInt:a] forKey:@"username"];
     [params setObject:self.regiestView.phoneNum.text forKey:@"username"];
     NSLog(@"%@", params);
-    [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调
         NSError *error;
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
@@ -144,7 +175,7 @@
 //        parms[@"legal_img_b"] = self.regiestView.passWordAgain.text;
 //        parms[@"business_img"] = self.regiestView.yanZhengMa.text;
 
-        [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 数据加载完后回调.
             NSError *error;
             NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
@@ -153,18 +184,17 @@
             NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            if ([result isEqualToString:@"-509"]) {
-                hud.labelText = dic[@"msg"];
-                hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
-            } else if ([result isEqualToString:@"-526"]) {
+            if ([result isEqualToString:@"-526"]) {
                 hud.labelText = dic[@"msg"];
                 hud.removeFromSuperViewOnHide = YES;
                 [hud hide:YES afterDelay:1.5];
                 //注册成功后调用
                 [self registerSuccess];
+            } else {
+                hud.labelText = dic[@"msg"];
+                hud.removeFromSuperViewOnHide = YES;
+                [hud hide:YES afterDelay:1.5];
             }
-
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             //数据加载失败回调.
             NSLog(@"注册失败: %@",error);
@@ -197,7 +227,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"username"] = self.regiestView.phoneNum.text;
     params[@"password"] = self.regiestView.passWord.text;
-    [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调.
         NSError *error;
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
@@ -206,20 +236,14 @@
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
-        if([result isEqualToString:@"-523"]){
-            hud.labelText = dic[@"msg"];
-       
-        }else if([result isEqualToString:@"-524"]){
-            hud.labelText = dic[@"msg"];
-
-        }else{
+        if([result isEqualToString:@"-106"]){
             hud.labelText = dic[@"msg"];
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            
             appDelegate.isLogin = @"Yes";
             [self.navigationController popViewControllerAnimated:NO];
-            
-        };
+        }else {
+            hud.labelText = dic[@"msg"];
+        }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
@@ -230,6 +254,7 @@
     }];
 }
 
+#warning  数据持久化
 -(void)delayMethod{
     NSDictionary *resultDiction = [NSDictionary dictionaryWithObjectsAndKeys:@"1",@"loginState", nil];
     [[NSUserDefaults standardUserDefaults] setObject:resultDiction forKey:@"ResultAuthData"];
@@ -243,10 +268,6 @@
 - (void)checkPhone {
     
     if (![YHRegular checkTelNumber:self.regiestView.phoneNum.text]) {
-//        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"手机号格式不正确，请输入正确的手机号" preferredStyle:UIAlertControllerStyleAlert];
-//        UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
-//        [alert addAction:action];
-//        [self presentViewController:alert animated:YES completion:nil];
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.labelText = @"请输入正确的手机号码";

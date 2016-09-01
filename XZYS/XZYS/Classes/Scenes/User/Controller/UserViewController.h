@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UserViewController : UIViewController
+@property (nonatomic , copy) NSString *userId;
 
 @end

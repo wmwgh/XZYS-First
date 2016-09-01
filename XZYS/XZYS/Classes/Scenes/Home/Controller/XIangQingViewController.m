@@ -26,6 +26,7 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 
+
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
 @interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 

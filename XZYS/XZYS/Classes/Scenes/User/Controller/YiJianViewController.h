@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface YiJianViewController : UIViewController
+@property (strong, nonatomic) IBOutlet UITextView *yjtextView;
+@property (strong, nonatomic) IBOutlet UIButton *complateButton;
 
 @end

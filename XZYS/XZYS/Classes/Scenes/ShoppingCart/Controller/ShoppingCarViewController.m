@@ -45,6 +45,7 @@ static NSString * indentifier = @"shopCarCell";
     [self.view addSubview:self.baseTable];
     
     BottomView * bottomView = [[BottomView alloc] initWithFrame:CGRectMake(0, kHeight - 100, kWidth, 50)];
+    bottomView.backgroundColor = [UIColor whiteColor];
     bottomView.delegate = self;
     self.bottomView = bottomView;
     [self.view addSubview:self.bottomView];

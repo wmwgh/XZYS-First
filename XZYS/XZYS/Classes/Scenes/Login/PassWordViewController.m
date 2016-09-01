@@ -22,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.title = @"修改密码";
     // 判断密码
     [self.passWord addTarget:self action:@selector(checkPasswordAction) forControlEvents:UIControlEventEditingDidEnd];
@@ -32,6 +33,79 @@
     // Do any additional setup after loading the view from its nib.
 }
 
+- (void)requestData {
+    if (![YHRegular checkTelNumber:self.phoneNum.text]) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"手机号码格式有误,请重新填写";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        // 1秒之后再消失
+        [hud hide:YES afterDelay:1.5];
+        
+    } else if (self.yanZhengMa.text.length != 6){
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"验证码不正确";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        // 1秒之后再消失
+        [hud hide:YES afterDelay:1.5];
+    } else if (self.passWord.text.length < 6){
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"请输入不少于6位的密码";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        // 1秒之后再消失
+        [hud hide:YES afterDelay:1.5];
+    } else if (![self.passWordAgain.text isEqualToString:self.passWord.text]) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"密码不一致,请重新输入";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        // 1秒之后再消失
+        [hud hide:YES afterDelay:1.5];
+    } else {
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/resetPassword";
+        manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+        // 默认的方式
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"verify"] = self.yanZhengMa.text;
+        params[@"username"] = self.phoneNum.text;
+        params[@"password"] = self.passWord.text;
+        params[@"repassword"] = self.passWordAgain.text;
+        [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            // 数据加载完后回调.
+            NSError *error;
+            NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
+            NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+            NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            if([result isEqualToString:@"-108"]){
+                hud.labelText = dic[@"msg"];
+                NSLog(@"success");
+                [self.navigationController popViewControllerAnimated:NO];
+            } else {
+                hud.labelText = dic[@"msg"];
+                NSLog(@"faile");
+            }
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+            
+            
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            // 数据加载失败回调.
+            NSLog(@"登录失败: %@",error);
+        }];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -43,6 +117,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 - (IBAction)yanzhengmaClick:(id)sender {
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/sendResVerify";
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -54,7 +129,7 @@
     //    NSLog(@"%d", a);
     //    [params setObject:[NSNumber numberWithInt:a] forKey:@"username"];
     [params setObject:self.phoneNum.text forKey:@"username"];
-    [manager GET:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调
         NSError *error;
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
@@ -65,8 +140,8 @@
         hud.mode = MBProgressHUDModeText;
         if([result isEqualToString:@"-501"]){
             hud.labelText = dic[@"msg"];
-        } else {
-            hud.labelText = @"验证码发送成功";
+        } else if([result isEqualToString:@"-717"]){
+            hud.labelText = dic[@"msg"];
         };
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
@@ -77,10 +152,7 @@
     }];
 }
 - (IBAction)changeClick:(id)sender {
-    LoginViewController *loginVC = [[LoginViewController alloc] init];
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    appDelegate.isLogin = @"No";
-    [self.navigationController pushViewController:loginVC animated:YES];
+    [self requestData];
     
 }
 
@@ -106,6 +178,7 @@
         [hud hide:YES afterDelay:1.5];
     }
 }
+
 - (void)checkAgainPasswordAction {
     NSString *passWord = [NSString stringWithFormat:@"%@", self.passWord.text];
     NSString *passWordAgain = [NSString stringWithFormat:@"%@", self.passWordAgain.text];
@@ -123,6 +196,11 @@
     self.navigationController.navigationBarHidden = YES;
     [super viewWillDisappear:animated];
 }
+
+
+
+
+
 
 /*
 #pragma mark - Navigation
