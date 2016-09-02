@@ -20,7 +20,8 @@
 
 @implementation AppDelegate
 @synthesize isLogin = No;
-
+@synthesize selectId;
+@synthesize userIdTag;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -30,11 +31,11 @@
 
     
     // 第二步：创建UITabBarController对象
-    UITabBarController *mainTab = [[UITabBarController alloc] init];
+    self.mainTab = [[UITabBarController alloc] init];
     
     
     // 第三步：设置window的根视图控制器
-    self.window.rootViewController = mainTab;
+    self.window.rootViewController = self.mainTab;
 
     // 控制器
     UINavigationController *homeNVC = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
@@ -54,10 +55,11 @@
     userNVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"个人中心" image:[[UIImage imageNamed:@"tb_07"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tb_02"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
     // 将导航控制器对象添加到数组中
-    mainTab.viewControllers = @[homeNVC,classNVC,shoppingNVC,userNVC];
+    self.mainTab.viewControllers = @[homeNVC,classNVC,shoppingNVC,userNVC];
     
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

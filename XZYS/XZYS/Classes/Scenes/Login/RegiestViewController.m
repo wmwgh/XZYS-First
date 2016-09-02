@@ -48,36 +48,45 @@
     // 判断手机号
     [self.regiestView.phoneNum addTarget:self action:@selector(checkPhone) forControlEvents:UIControlEventEditingDidEnd];
     
-    // 上传照片
-    [self.regiestView.zhizhao addTarget:self action:@selector(zhengjianImg:) forControlEvents:UIControlEventTouchUpInside];
-    [self.regiestView.sfzBefore addTarget:self action:@selector(sfzBeforeImg:) forControlEvents:UIControlEventTouchUpInside];
-    [self.regiestView.sfzAfter addTarget:self action:@selector(sfzAfterImg:) forControlEvents:UIControlEventTouchUpInside];
-    
     // 验证按钮
     [self.regiestView.yanZhengMaButton addTarget:self action:@selector(yanzhengClick) forControlEvents:UIControlEventTouchUpInside];
     
     // 注册按钮
     [self.regiestView.regiestButton addTarget:self action:@selector(registeBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self setTap];
+}
+
+#pragma mark --- 手势设置
+
+- (void)setTap {
+    //设置搜索单击手势
+    [self.regiestView.zhizhaoImg setUserInteractionEnabled:YES];
+    [self.regiestView.zhizhaoImg addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zhengjianImg:)]];
+    [self.regiestView.sfzImgBefore setUserInteractionEnabled:YES];
+    [self.regiestView.sfzImgBefore addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sfzBeforeImg:)]];
+    [self.regiestView.sfzImgAfter setUserInteractionEnabled:YES];
+    [self.regiestView.sfzImgAfter addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sfzAfterImg:)]];
+    
 }
 
 - (void)zhengjianImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
-        if (self.regiestView.zhizhao) {
+        if (self.regiestView.zhizhaoImg.image) {
             [sender setBackgroundImage:image forState:UIControlStateNormal];
         }
     }];
 }
-
 - (void)sfzBeforeImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
-        if (self.regiestView.sfzBefore) {
+        if (self.regiestView.sfzImgBefore.image) {
             [sender setBackgroundImage:image forState:UIControlStateNormal];
         }
     }];
 }
 - (void)sfzAfterImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
-        if (self.regiestView.sfzAfter) {
+        if (self.regiestView.sfzImgAfter.image) {
             [sender setBackgroundImage:image forState:UIControlStateNormal];
         }
     }];

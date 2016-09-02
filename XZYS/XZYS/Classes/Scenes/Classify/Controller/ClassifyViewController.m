@@ -22,24 +22,23 @@
 #import "HomeViewController.h"
 #import "XIangQingViewController.h"
 
+
+
+
 @interface ClassifyViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UIScrollViewDelegate>
 {
-    
     //数据源数组
     NSMutableArray *dataArr;
-    
     //数组字典
     NSMutableDictionary *dataDic;
     NSMutableArray *allkeys;
     NSMutableArray *sectionTitleArray;
     NSMutableArray *rowmodelArray;
     NSMutableArray *FCidArray;
-    NSInteger ID;
     NSInteger NVNum;
     NSMutableArray *pushAllDetailsArray;
     UIButton *MButton;
 }
-
 @property (nonatomic , strong) NSMutableArray *spArray;
 @property (nonatomic , strong) NSMutableArray *SPTitleArray;
 @property (nonatomic, strong) UICollectionView *mianCollectionView;
@@ -51,10 +50,22 @@
 
 @implementation ClassifyViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if (self.abc == 0) {
+        NSLog(@"%d", self.abc);
+    } else if (self.abc == 1) {
+        NSLog(@"%d", self.abc);
+    } else if (self.abc == 2) {
+        NSLog(@"%d", self.abc);
+    }
+    NSLog(@"%@", _URLStr);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"分类";
-    ID = _abc;
+    NSLog(@"::::::::%d", self.abc);
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = XZYSBackBColor;
     self.mianCollectionView.backgroundColor = [UIColor clearColor];
@@ -79,28 +90,29 @@
     }
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
+    self.tabBarController.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark - 界面区
 - (void)setNavigation {
     
-    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 44)];
+    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 50)];
     backImageView.image = [UIImage imageNamed:@"index_01.jpg"];
     backImageView.userInteractionEnabled = YES;
     
     UIButton *BButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    BButton.frame = CGRectMake(5, 4, 30, 40);
+    BButton.frame = CGRectMake(5, 7, 30, 40);
     [BButton setImage:[UIImage imageNamed:@"back_white"] forState:UIControlStateNormal];
     [BButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:BButton];
     
     MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
+    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 15, 20, 20);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
     
-    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 5, SCREEN_WIDTH - 90, 34)];
+    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 8, SCREEN_WIDTH - 90, 34)];
     self.searchIamgeView.image = [UIImage imageNamed:@"index_04.png"];
     [backImageView addSubview:self.searchIamgeView];
     [self.view addSubview:backImageView];
@@ -123,8 +135,10 @@
 }
 
 - (void)backButtonClick:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-
+//     HomeViewController *classVC = [[HomeViewController alloc] init];
+    [self.navigationController popToRootViewControllerAnimated:NO];
+//     [self.tabBarController setSelectedIndex:0];
+//     [self.tabBarController.navigationController pushViewController:classVC animated:YES];
 }
 
 #pragma mark -  消息
@@ -154,7 +168,7 @@
         [self indexChangeBlock:index];
     }];
     //设置默认的选中按钮
-    self.segmentedControl.selectedSegmentIndex = _abc;
+    self.segmentedControl.selectedSegmentIndex = self.abc;
 }
 
 //创建UICollectionView
@@ -167,7 +181,7 @@
     //设置滚动方向
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     //创建UICollectionView
-    self.mianCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(76, 64, SCREEN_WIDTH - 76, SCREEN_HEIGHT-117) collectionViewLayout:layout];
+    self.mianCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(76, 70, SCREEN_WIDTH - 76, SCREEN_HEIGHT-123) collectionViewLayout:layout];
     //设置代理和数据源协议
     self.mianCollectionView.dataSource = self;
     self.mianCollectionView.delegate = self;
@@ -176,10 +190,10 @@
     //添加到视图控制器上
     [self.view addSubview:self.mianCollectionView];
     UIButton *qweButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    qweButton.frame = CGRectMake(SCREEN_WIDTH - 145, 8, 60, 20);
+    qweButton.frame = CGRectMake(SCREEN_WIDTH - 160, 8, 80, 20);
     [qweButton setTitle:@"查看全部>>" forState:UIControlStateNormal];
     [qweButton setTitleColor:XZYSRGBColor(239, 124, 180) forState:UIControlStateNormal];
-    qweButton.titleLabel.font = [UIFont systemFontOfSize:10];
+    qweButton.titleLabel.font = [UIFont systemFontOfSize:12];
     [qweButton addTarget:self action:@selector(qweClock:) forControlEvents:UIControlEventTouchUpInside];
     [self.mianCollectionView addSubview:qweButton];
     
@@ -218,7 +232,6 @@
 
 //按钮改变时调用
 -(void)indexChangeBlock:(NSInteger)index{
-    ID = index;
     FLModel *model = [[FLModel alloc] init];
     model = FCidArray[index];
     _URLStr = [NSMutableString stringWithFormat:@"%@%@", XZYS_FLZDH_URL, model.cid];
@@ -431,8 +444,6 @@
     [self.navigationController pushViewController:showVC animated:YES];
     
 }
-
-
 
 /*
 #pragma mark - Navigation

@@ -338,4 +338,15 @@ static NSString * indentifier = @"shopCarCell";
     self.bottomView.model = self.bottomModel;
 }
 
+
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = YES;
+    [super viewWillDisappear:animated];
+}
 @end

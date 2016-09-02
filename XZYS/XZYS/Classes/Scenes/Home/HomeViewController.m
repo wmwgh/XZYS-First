@@ -30,6 +30,9 @@
 #import "XIangQingViewController.h"
 #import "ClassifyViewController.h"
 #import "UserViewController.h"
+#import "OrderListViewController.h"
+#import "TiaoHuoViewController.h"
+#import "AppDelegate.h"
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
@@ -333,7 +336,6 @@ static NSString *const secondID = @"secondHeader";//字和线
         return headerView;
     }
     return nil;
-    
 }
 
 // 点击item
@@ -352,24 +354,23 @@ static NSString *const secondID = @"secondHeader";//字和线
 }
 
 - (void)setNavigation {
-    
-    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 44)];
+    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 50)];
     backImageView.image = [UIImage imageNamed:@"index_01.jpg"];
     backImageView.userInteractionEnabled = YES;
     
     UIButton *SButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    SButton.frame = CGRectMake(10, 10, 25, 25);
+    SButton.frame = CGRectMake(10, 13, 25, 25);
     [SButton setImage:[UIImage imageNamed:@"index_07.png"] forState:UIControlStateNormal];
     [SButton addTarget:self action:@selector(saoButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:SButton];
     
     UIButton *MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
+    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 15, 20, 20);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
     
-    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 5, SCREEN_WIDTH - 90, 34)];
+    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 8, SCREEN_WIDTH - 90, 34)];
     self.searchIamgeView.image = [UIImage imageNamed:@"index_04.png"];
     [backImageView addSubview:self.searchIamgeView];
     [self.view addSubview:backImageView];
@@ -529,7 +530,6 @@ static NSString *const secondID = @"secondHeader";//字和线
     button4.backgroundColor = [UIColor clearColor];
     [button4 setImage:[UIImage imageNamed:@"index_25.png"] forState:UIControlStateNormal];
     [button4 addTarget:self action:@selector(button4Click) forControlEvents:UIControlEventTouchUpInside];
-    
     [backView addSubview:button1];
     [backView addSubview:button2];
     [backView addSubview:button3];
@@ -539,22 +539,29 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 // 订单按钮点击事件
 - (void)button1Click {
-    NSLog(@"111");
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    [self.navigationController pushViewController:order animated:YES];
 }
 // 分类按钮点击事件
 - (void)button2Click {
     ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
-    [self.navigationController pushViewController:classVC animated:YES];
+    [self.tabBarController setSelectedIndex:1];
+    [self.tabBarController.navigationController pushViewController:classVC animated:YES];
 }
 // 调货区按钮点击事件
 - (void)button3Click {
-    NSLog(@"333");
-
+    TiaoHuoViewController *order = [[TiaoHuoViewController alloc] init];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:order animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 // 个人中心按钮点击事件
 - (void)button4Click {
     UserViewController *userVC = [[UserViewController alloc] init];
-    [self.navigationController pushViewController:userVC animated:YES];
+    //根据下标选择
+    [self.tabBarController setSelectedIndex:3];
+    //根据视图控制器来选择    
+    [self.tabBarController.navigationController pushViewController:userVC animated:YES];
 }
 
 #pragma mark -  三个分区按钮
@@ -612,11 +619,13 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 // 女鞋
 - (void)manImageBTClick:(UITapGestureRecognizer *)sender {
+    [self.tabBarController setSelectedIndex:1];
     ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
     classVC.abc = 0;
     classVC.URLStr = [NSMutableString stringWithFormat:@"%@1", XZYS_FLZDH_URL];
     NSLog(@"nvxie");
-    [self.navigationController pushViewController:classVC animated:YES];
+    [self.tabBarController.navigationController
+     pushViewController:classVC animated:YES];
 }
 
 // 男鞋
@@ -625,7 +634,9 @@ static NSString *const secondID = @"secondHeader";//字和线
     classVC.abc = 1;
     classVC.URLStr = [NSMutableString stringWithFormat:@"%@2", XZYS_FLZDH_URL];
     NSLog(@"nanxie");
-    [self.navigationController pushViewController:classVC animated:YES];
+    self.tabBarController.selectedIndex = 1;
+    [self.tabBarController.navigationController
+     pushViewController:classVC animated:YES];
 }
 
 // 童鞋
@@ -634,7 +645,8 @@ static NSString *const secondID = @"secondHeader";//字和线
 //    classVC.abc = 2;
 //    classVC.URLStr = [NSMutableString stringWithFormat:@"%@3", XZYS_FLZDH_URL];
     NSLog(@"tongxie");
-//    [self.navigationController pushViewController:classVC animated:YES];
+//    [self.tabBarController setSelectedIndex:1];
+//    [self.tabBarController.navigationController pushViewController:classVC animated:YES];
 }
 
 

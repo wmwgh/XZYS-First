@@ -82,7 +82,7 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 - (void)setTableView {
     [self.rootView.collectionView removeFromSuperview];
-    self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 149)];
+    self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 6, SCREEN_WIDTH, SCREEN_HEIGHT - 155)];
     [self.mainTableView registerNib:[UINib nibWithNibName:NSStringFromClass([OneTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
     self.mainTableView.delegate = self;
     self.mainTableView.dataSource = self;
@@ -117,6 +117,17 @@ static NSString *const identifier_cell = @"identifier_cell";
     // Configure the cell...
     
     return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    SDFQModel *model = [[SDFQModel alloc] init];
+    model = self.allDataArray[indexPath.row];
+    XXVC.model = model;
+    XXVC.passID = model.goods_id;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:XXVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+    [self.mainTableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
 - (void)setCollectionView {
@@ -197,31 +208,31 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 - (void)setNavigation {
     
-    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 44)];
+    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, 50)];
     backImageView.image = [UIImage imageNamed:@"index_01.jpg"];
     backImageView.userInteractionEnabled = YES;
     
     UIButton *BButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    BButton.frame = CGRectMake(5, 4, 30, 40);
+    BButton.frame = CGRectMake(5, 6, 30, 40);
     [BButton setImage:[UIImage imageNamed:@"back_white"] forState:UIControlStateNormal];
     [BButton addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:BButton];
     
     self.MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
+    self.MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 15, 20, 20);
     [self.MButton setImage:[UIImage imageNamed:_picStr] forState:UIControlStateNormal];
     
     [self.MButton addTarget:self action:@selector(cellButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:self.MButton];
     
-    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 5, SCREEN_WIDTH - 90, 34)];
+    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 7, SCREEN_WIDTH - 90, 34)];
     self.searchIamgeView.image = [UIImage imageNamed:@"index_04.png"];
     [backImageView addSubview:self.searchIamgeView];
     [self.view addSubview:backImageView];
     [self setTap];
 
     /// 添加选择按钮
-    UIView *pickBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 64, SCREEN_WIDTH, 36)];
+    UIView *pickBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 70, SCREEN_WIDTH, 36)];
     pickBackView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:pickBackView];
     self.numButton = [UIButton buttonWithType:UIButtonTypeCustom];

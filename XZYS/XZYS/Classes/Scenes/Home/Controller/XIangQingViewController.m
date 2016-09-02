@@ -26,7 +26,6 @@
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 
-
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
 @interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 
@@ -414,7 +413,7 @@ static NSInteger pageNumber = 0;
         LoginViewController *loginVC = [[LoginViewController alloc] init];
         self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:loginVC animated:YES];
-        self.hidesBottomBarWhenPushed = NO;
+        self.hidesBottomBarWhenPushed = YES;
     }
     
 }
@@ -433,7 +432,7 @@ static NSInteger pageNumber = 0;
         NSLog(@"gouwuche");
     } else {
         ShoppingCarViewController *carVC = [[ShoppingCarViewController alloc] init];
-        self.hidesBottomBarWhenPushed = YES;
+        self.hidesBottomBarWhenPushed = NO;
         [self.navigationController pushViewController:carVC animated:YES];
         self.hidesBottomBarWhenPushed = YES;
     }

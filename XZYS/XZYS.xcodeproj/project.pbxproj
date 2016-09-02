@@ -74,6 +74,8 @@
 		8FAA831E1D780BE800F05542 /* LoadingImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAA831C1D780BE800F05542 /* LoadingImgViewController.m */; };
 		8FAA831F1D780BE800F05542 /* LoadingImgViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FAA831D1D780BE800F05542 /* LoadingImgViewController.xib */; };
 		8FAA83221D78176300F05542 /* BDImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAA83201D78176300F05542 /* BDImagePicker.m */; };
+		8FAA83241D78222A00F05542 /* sfz_zm.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FAA83231D78222A00F05542 /* sfz_zm.png */; };
+		8FAA83261D792ABA00F05542 /* open.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FAA83251D792ABA00F05542 /* open.jpg */; };
 		8FAF551E1D6FD361000666A6 /* YHRegular.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF551D1D6FD361000666A6 /* YHRegular.m */; };
 		8FAF555F1D712909000666A6 /* AllOrderListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF554E1D712909000666A6 /* AllOrderListCell.m */; };
 		8FAF55601D712909000666A6 /* AllOrderListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FAF554F1D712909000666A6 /* AllOrderListCell.xib */; };
@@ -136,10 +138,6 @@
 		8FB3B1501D6BE55B00064C2C /* info_68.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B1421D6BE55B00064C2C /* info_68.png */; };
 		8FB3B1511D6BE55B00064C2C /* info_72.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B1431D6BE55B00064C2C /* info_72.png */; };
 		8FB3B1521D6BE55B00064C2C /* info_76.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B1441D6BE55B00064C2C /* info_76.png */; };
-		8FB3B1631D6C47C900064C2C /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B15F1D6C47C900064C2C /* 1.jpg */; };
-		8FB3B1641D6C47C900064C2C /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B1601D6C47C900064C2C /* 2.jpg */; };
-		8FB3B1651D6C47C900064C2C /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B1611D6C47C900064C2C /* 3.jpg */; };
-		8FB3B1661D6C47C900064C2C /* 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B1621D6C47C900064C2C /* 4.jpg */; };
 		8FB3B1721D6D676000064C2C /* InfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB3B1711D6D676000064C2C /* InfoModel.m */; };
 		8FB3B17E1D6D88A000064C2C /* head.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8FB3B17D1D6D88A000064C2C /* head.jpg */; };
 		8FB3B1821D6D8AD600064C2C /* AddressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB3B1801D6D8AD600064C2C /* AddressViewController.m */; };
@@ -293,6 +291,8 @@
 		8FAA831D1D780BE800F05542 /* LoadingImgViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingImgViewController.xib; sourceTree = "<group>"; };
 		8FAA83201D78176300F05542 /* BDImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDImagePicker.m; sourceTree = "<group>"; };
 		8FAA83211D78176300F05542 /* BDImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDImagePicker.h; sourceTree = "<group>"; };
+		8FAA83231D78222A00F05542 /* sfz_zm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sfz_zm.png; sourceTree = "<group>"; };
+		8FAA83251D792ABA00F05542 /* open.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = open.jpg; sourceTree = "<group>"; };
 		8FAF551C1D6FD361000666A6 /* YHRegular.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHRegular.h; sourceTree = "<group>"; };
 		8FAF551D1D6FD361000666A6 /* YHRegular.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHRegular.m; sourceTree = "<group>"; };
 		8FAF554D1D712909000666A6 /* AllOrderListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllOrderListCell.h; sourceTree = "<group>"; };
@@ -381,10 +381,6 @@
 		8FB3B1421D6BE55B00064C2C /* info_68.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_68.png; path = ../../Helper/info_68.png; sourceTree = "<group>"; };
 		8FB3B1431D6BE55B00064C2C /* info_72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_72.png; path = ../../Helper/info_72.png; sourceTree = "<group>"; };
 		8FB3B1441D6BE55B00064C2C /* info_76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = info_76.png; path = ../../Helper/info_76.png; sourceTree = "<group>"; };
-		8FB3B15F1D6C47C900064C2C /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
-		8FB3B1601D6C47C900064C2C /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
-		8FB3B1611D6C47C900064C2C /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
-		8FB3B1621D6C47C900064C2C /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpg; sourceTree = "<group>"; };
 		8FB3B1701D6D676000064C2C /* InfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoModel.h; sourceTree = "<group>"; };
 		8FB3B1711D6D676000064C2C /* InfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoModel.m; sourceTree = "<group>"; };
 		8FB3B17D1D6D88A000064C2C /* head.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = head.jpg; path = ../Scenes/head.jpg; sourceTree = "<group>"; };
@@ -622,6 +618,8 @@
 		8FA925501D582FF500112FFD /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8FAA83251D792ABA00F05542 /* open.jpg */,
+				8FAA83231D78222A00F05542 /* sfz_zm.png */,
 				8FAA83191D77BCA300F05542 /* info_07.png */,
 				8FAA83131D77B72600F05542 /* sx_sjta.png */,
 				8FAA83141D77B72600F05542 /* sx_xjtb.png */,
@@ -675,10 +673,6 @@
 		8FA925531D582FF500112FFD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				8FB3B15F1D6C47C900064C2C /* 1.jpg */,
-				8FB3B1601D6C47C900064C2C /* 2.jpg */,
-				8FB3B1611D6C47C900064C2C /* 3.jpg */,
-				8FB3B1621D6C47C900064C2C /* 4.jpg */,
 				8FA925661D5845F900112FFD /* ClassifyViewController.h */,
 				8FA925671D5845F900112FFD /* ClassifyViewController.m */,
 				8FA925681D5845F900112FFD /* ClassifyViewController.xib */,
@@ -1113,6 +1107,7 @@
 				TargetAttributes = {
 					8FA9252A1D582D5100112FFD = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 5P74EZ36V3;
 					};
 				};
 			};
@@ -1141,12 +1136,13 @@
 			files = (
 				8FD7268A1D5B09480030E04B /* scanscanBg.png in Resources */,
 				8FA6F5871D6998CE00C62CC8 /* UserViewController.xib in Resources */,
+				8FAA83241D78222A00F05542 /* sfz_zm.png in Resources */,
+				8FAA83261D792ABA00F05542 /* open.jpg in Resources */,
 				8FAA83151D77B72600F05542 /* sx_sjta.png in Resources */,
 				8F84211E1D6AEE3D007CE935 /* UserViewCell.xib in Resources */,
 				8FA926501D5968B600112FFD /* tb_02.png in Resources */,
 				8FAF559D1D757F44000666A6 /* YiJianViewController.xib in Resources */,
 				8FA6F4EE1D62F22000C62CC8 /* XIangQingViewController.xib in Resources */,
-				8FB3B1631D6C47C900064C2C /* 1.jpg in Resources */,
 				8FB3B1161D6BDD9E00064C2C /* bj_01.jpg in Resources */,
 				8FB3B1181D6BE14500064C2C /* djb.png in Resources */,
 				8FAF55981D754DAB000666A6 /* ShopHeadView.xib in Resources */,
@@ -1167,10 +1163,8 @@
 				8FA6F5811D685A4100C62CC8 /* qh_01.png in Resources */,
 				8FA925411D582D5200112FFD /* LaunchScreen.storyboard in Resources */,
 				8F84212F1D6B1DC5007CE935 /* UserHeaderView.xib in Resources */,
-				8FB3B1641D6C47C900064C2C /* 2.jpg in Resources */,
 				8FAF56181D76C3B8000666A6 /* gw_17.png in Resources */,
 				8FD726891D5B09480030E04B /* scanLine@3x.png in Resources */,
-				8FB3B1661D6C47C900064C2C /* 4.jpg in Resources */,
 				8FB3B14D1D6BE55B00064C2C /* info_56.png in Resources */,
 				8FAF56141D76C3B8000666A6 /* gw_03.png in Resources */,
 				8FB3B1D51D6ECEDA00064C2C /* PassWordViewController.xib in Resources */,
@@ -1184,7 +1178,6 @@
 				8FA6F5611D654E6700C62CC8 /* kf.png in Resources */,
 				8FA925E81D58B2A300112FFD /* index_20.png in Resources */,
 				8FB3B14C1D6BE55B00064C2C /* info_53.png in Resources */,
-				8FB3B1651D6C47C900064C2C /* 3.jpg in Resources */,
 				8FB3B1D71D6ED1CF00064C2C /* RegiestViewController.xib in Resources */,
 				8FA926521D5968B600112FFD /* tb_09.png in Resources */,
 				8FB3B1451D6BE55B00064C2C /* info_04.png in Resources */,
@@ -1431,6 +1424,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1478,6 +1472,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1505,6 +1500,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XZYS/Classes/Marco/PrefixHeader.pch";
 				INFOPLIST_FILE = XZYS/Info.plist;
@@ -1601,6 +1597,7 @@
 					"\"TwitterKit\"",
 					"-framework",
 					"\"UIKit\"",
+					"-all_load",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wmw.XZYS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1615,6 +1612,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/XZYS/Classes/Marco/PrefixHeader.pch";
 				INFOPLIST_FILE = XZYS/Info.plist;
@@ -1711,6 +1709,7 @@
 					"\"TwitterKit\"",
 					"-framework",
 					"\"UIKit\"",
+					"-all_load",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wmw.XZYS;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -40,7 +40,7 @@
     // 2.布局collectionView
     
     // 创建对象并指定样式
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 44, self.frame.size.width, self.frame.size.height - 44) collectionViewLayout:self.myFlowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, self.frame.size.width, self.frame.size.height - 50) collectionViewLayout:self.myFlowLayout];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
     [self addSubview:self.collectionView];

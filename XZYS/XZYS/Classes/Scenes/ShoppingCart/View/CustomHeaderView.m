@@ -51,7 +51,7 @@
 -(UIButton *)leftBtn{
     if (_leftBtn == nil) {
         self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _leftBtn.frame = CGRectMake(10, 16, 18, 18);
+        _leftBtn.frame = CGRectMake(10, 14, 22, 22);
         [_leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
         [_leftBtn addTarget:self action:@selector(clicked) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -60,7 +60,7 @@
 
 -(UILabel *)titleLable{
     if (_titleLable == nil) {
-        _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(35, 15, 120, 20)];
+        _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(45, 15, 120, 20)];
         _titleLable.text = @"店铺名称";
         _titleLable.font = [UIFont systemFontOfSize:16];
     }
