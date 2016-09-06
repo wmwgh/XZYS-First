@@ -9,6 +9,7 @@
 #import "UserHeaderView.h"
 #import "OrderListViewController.h"
 #import "PassWordViewController.h"
+#import "ChangeInfoViewController.h"
 
 @implementation UserHeaderView
 
@@ -27,8 +28,7 @@
 
 // 修改个人信息
 - (IBAction)changeMessage:(id)sender {
-    NSLog(@"1");
-    [self.owner.navigationController  pushViewController:[PassWordViewController new] animated:YES];
+    [self.owner.navigationController  pushViewController:[ChangeInfoViewController new] animated:YES];
 }
 // 修改密码
 - (IBAction)changePassWord:(id)sender {

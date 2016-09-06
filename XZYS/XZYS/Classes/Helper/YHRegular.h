@@ -22,5 +22,6 @@
 + (BOOL)checkURL:(NSString *)url;
 #pragma 正则匹配IP地址
 + (BOOL)checkIP:(NSString *)ip;
-
+#pragma 邮箱
++ (BOOL)checkEmail:(NSString *)email;
 @end

@@ -73,21 +73,21 @@
 - (void)zhengjianImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.zhizhaoImg.image) {
-            [sender setBackgroundImage:image forState:UIControlStateNormal];
+            self.regiestView.zhizhaoImg.image = image;
         }
     }];
 }
 - (void)sfzBeforeImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.sfzImgBefore.image) {
-            [sender setBackgroundImage:image forState:UIControlStateNormal];
+            self.regiestView.sfzImgBefore.image = image;
         }
     }];
 }
 - (void)sfzAfterImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.sfzImgAfter.image) {
-            [sender setBackgroundImage:image forState:UIControlStateNormal];
+            self.regiestView.sfzImgAfter.image = image;
         }
     }];
 }

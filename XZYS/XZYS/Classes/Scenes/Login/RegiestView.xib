@@ -194,7 +194,7 @@
                         <constraint firstAttribute="width" secondItem="hAi-AV-5dN" secondAttribute="height" multiplier="1.5:1" id="RmJ-vn-POG"/>
                     </constraints>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4zM-05-bo8">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sfz_fm.png" translatesAutoresizingMaskIntoConstraints="NO" id="4zM-05-bo8">
                     <rect key="frame" x="172" y="246" width="141.5" height="94.5"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </imageView>
@@ -239,7 +239,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="g9F-4k-GF8">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yyzz.png" translatesAutoresizingMaskIntoConstraints="NO" id="g9F-4k-GF8">
                     <rect key="frame" x="42" y="391" width="240" height="140"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
@@ -339,6 +339,8 @@
     </objects>
     <resources>
         <image name="loginButton.png" width="483" height="77"/>
+        <image name="sfz_fm.png" width="139" height="102"/>
         <image name="sfz_zm.png" width="139" height="102"/>
+        <image name="yyzz.png" width="180" height="100"/>
     </resources>
 </document>

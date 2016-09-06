@@ -19,6 +19,13 @@
     return isMatch;
 }
 
+#pragma 邮箱
++ (BOOL)checkEmail:(NSString *)email
+{
+    NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:email];
+}
 
 #pragma 正则匹配用户密码6-18位数字和字母组合
 + (BOOL)checkPassword:(NSString *)password

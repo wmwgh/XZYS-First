@@ -98,8 +98,6 @@
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:1.5];
-            
-            
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             // 数据加载失败回调.
             NSLog(@"登录失败: %@",error);
@@ -116,8 +114,8 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
+
 - (IBAction)yanzhengmaClick:(id)sender {
-    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/sendResVerify";
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -153,12 +151,10 @@
 }
 - (IBAction)changeClick:(id)sender {
     [self requestData];
-    
 }
 
 // 判断手机号
 - (void)checkPhone {
-    
     if (![YHRegular checkTelNumber:self.phoneNum.text]) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -169,7 +165,6 @@
 }
 // 判断密码
 - (void)checkPasswordAction {
-    
     if (self.passWord.text.length < 6 || self.passWord.text.length > 30) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -182,7 +177,6 @@
 - (void)checkAgainPasswordAction {
     NSString *passWord = [NSString stringWithFormat:@"%@", self.passWord.text];
     NSString *passWordAgain = [NSString stringWithFormat:@"%@", self.passWordAgain.text];
-    
     if (![passWordAgain isEqualToString:passWord]) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -196,11 +190,6 @@
     self.navigationController.navigationBarHidden = YES;
     [super viewWillDisappear:animated];
 }
-
-
-
-
-
 
 /*
 #pragma mark - Navigation

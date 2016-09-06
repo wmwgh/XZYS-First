@@ -11,7 +11,7 @@
 #import "XZYS_URL.h"
 #import <Masonry.h>
 #import <SVProgressHUD.h>
-
+#import <MBProgressHUD.h>
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
 #import <UIImageView+WebCache.h>
@@ -619,34 +619,69 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 // 女鞋
 - (void)manImageBTClick:(UITapGestureRecognizer *)sender {
+    
+    UINavigationController *secVC = self.tabBarController.viewControllers[1];
+    UIViewController *secrootvc = secVC.viewControllers[0];
+    if ([secrootvc isKindOfClass:NSClassFromString(@"ClassifyViewController")]) {
+        ClassifyViewController *classVC = (ClassifyViewController *)secrootvc;
+        classVC.abc = 0;
+        classVC.URLStr = [NSMutableString stringWithFormat:@"%@1", XZYS_FLZDH_URL];
+        [classVC.view setNeedsDisplay];
+        [self.tabBarController.navigationController
+         pushViewController:classVC animated:YES];
+    }
     [self.tabBarController setSelectedIndex:1];
-    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
-    classVC.abc = 0;
-    classVC.URLStr = [NSMutableString stringWithFormat:@"%@1", XZYS_FLZDH_URL];
-    NSLog(@"nvxie");
-    [self.tabBarController.navigationController
-     pushViewController:classVC animated:YES];
 }
-
-// 男鞋
 - (void)womanImageBTClick:(UITapGestureRecognizer *)sender {
-    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
-    classVC.abc = 1;
-    classVC.URLStr = [NSMutableString stringWithFormat:@"%@2", XZYS_FLZDH_URL];
-    NSLog(@"nanxie");
-    self.tabBarController.selectedIndex = 1;
-    [self.tabBarController.navigationController
-     pushViewController:classVC animated:YES];
+    
+    UINavigationController *secVC = self.tabBarController.viewControllers[1];
+    UIViewController *secrootvc = secVC.viewControllers[0];
+    if ([secrootvc isKindOfClass:NSClassFromString(@"ClassifyViewController")]) {
+        ClassifyViewController *classVC = (ClassifyViewController *)secrootvc;
+        classVC.abc = 1;
+        classVC.URLStr = [NSMutableString stringWithFormat:@"%@2", XZYS_FLZDH_URL];
+        [classVC.view setNeedsDisplay];
+        [self.tabBarController.navigationController
+         pushViewController:classVC animated:YES];
+    }
+    [self.tabBarController setSelectedIndex:1];
 }
 
 // 童鞋
 - (void)childImageBTClick:(UITapGestureRecognizer *)sender {
-//    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
-//    classVC.abc = 2;
-//    classVC.URLStr = [NSMutableString stringWithFormat:@"%@3", XZYS_FLZDH_URL];
-    NSLog(@"tongxie");
-//    [self.tabBarController setSelectedIndex:1];
-//    [self.tabBarController.navigationController pushViewController:classVC animated:YES];
+    [[AFHTTPSessionManager manager] GET:[NSMutableString stringWithFormat:@"%@3", XZYS_FLZDH_URL] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSMutableArray *dataArray = [NSMutableArray array];
+        NSArray *NVArray = responseObject[@"data"];
+        //获取数据源
+        for (NSDictionary *dic1 in NVArray) {
+            dataArray = [dic1 objectForKey:@"cate_list"];
+        }
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            UINavigationController *secVC = self.tabBarController.viewControllers[1];
+            UIViewController *secrootvc = secVC.viewControllers[0];
+            ClassifyViewController *classVC = (ClassifyViewController *)secrootvc;
+            classVC.abc = 2;
+            classVC.URLStr = [NSMutableString stringWithFormat:@"%@3", XZYS_FLZDH_URL];
+            
+            if ([secrootvc isKindOfClass:NSClassFromString(@"ClassifyViewController")]) {
+                
+                [classVC.view setNeedsDisplay];
+                [self.tabBarController.navigationController
+                 pushViewController:classVC animated:YES];
+            }
+            [self.tabBarController setSelectedIndex:1];
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"该类商品尚未上架，敬请期待";
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            // 1秒之后再消失
+            [hud hide:YES afterDelay:1.5];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+    
 }
 
 

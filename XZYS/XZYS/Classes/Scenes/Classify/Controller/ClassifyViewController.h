@@ -8,10 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface ClassifyViewController : UIViewController
 @property (nonatomic, assign) int abc;
 @property (nonatomic, copy) NSString *URLStr;
-
 
 @end

@@ -78,9 +78,9 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYy-9G-KyS" customClass="CountView">
-                        <rect key="frame" x="333" y="45" width="80" height="20"/>
+                        <rect key="frame" x="333" y="40" width="80" height="25"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="20" id="Das-Oz-CsD"/>
+                            <constraint firstAttribute="height" constant="25" id="Das-Oz-CsD"/>
                             <constraint firstAttribute="width" constant="80" id="G0R-gx-rNE"/>
                         </constraints>
                     </view>

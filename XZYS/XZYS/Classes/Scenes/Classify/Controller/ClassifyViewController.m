@@ -52,20 +52,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.abc == 0) {
-        NSLog(@"%d", self.abc);
-    } else if (self.abc == 1) {
-        NSLog(@"%d", self.abc);
-    } else if (self.abc == 2) {
-        NSLog(@"%d", self.abc);
-    }
-    NSLog(@"%@", _URLStr);
+    // 获取导航栏
+    [self loadsection];
+    //设置默认的选中按钮
+    self.segmentedControl.selectedSegmentIndex = self.abc;
+    [self.mianCollectionView reloadData];
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"分类";
-    NSLog(@"::::::::%d", self.abc);
     self.navigationController.navigationBarHidden = YES;
     self.view.backgroundColor = XZYSBackBColor;
     self.mianCollectionView.backgroundColor = [UIColor clearColor];
@@ -83,11 +80,6 @@
     [self loadDatas];
     //创建UICollectionView
     [self createCollectionView];
-    if (self.segmentedControl.selectedSegmentIndex != 0) {
-        // 获取导航栏
-        [self loadsection];
-        [self.mianCollectionView reloadData];
-    }
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
     self.tabBarController.hidesBottomBarWhenPushed = NO;
@@ -135,10 +127,10 @@
 }
 
 - (void)backButtonClick:(UIButton *)sender {
-//     HomeViewController *classVC = [[HomeViewController alloc] init];
-    [self.navigationController popToRootViewControllerAnimated:NO];
-//     [self.tabBarController setSelectedIndex:0];
-//     [self.tabBarController.navigationController pushViewController:classVC animated:YES];
+     HomeViewController *classVC = [[HomeViewController alloc] init];
+//    [self.navigationController popToRootViewControllerAnimated:NO];
+     [self.tabBarController setSelectedIndex:0];
+     [self.tabBarController.navigationController pushViewController:classVC animated:YES];
 }
 
 #pragma mark -  消息
@@ -312,7 +304,9 @@
 
 //获取数据
 - (void)loadsection {
-    
+    if (_URLStr == nil) {
+        _URLStr = @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/1";
+    }
     sectionTitleArray = [NSMutableArray array];
     [sectionTitleArray removeAllObjects];
     rowmodelArray = [NSMutableArray array];
@@ -381,39 +375,6 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
-    
-    if (_URLStr == nil) {
-        _URLStr = @"http://www.xiezhongyunshang.com/App/GoodsCate/goodsCateSon/cid/1";
-    }
-    
-    [[AFHTTPSessionManager manager] GET:_URLStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSArray *NVArray = responseObject[@"data"];
-        NSString *flkey = [NSString string];
-        
-        //获取数据源
-        for (NSDictionary *dic1 in NVArray) {
-            NSMutableArray *arr = [NSMutableArray array];
-            flkey = [dic1 objectForKey:@"title"];
-            // 底层的字典数组
-            NSArray *subcategories1 = [dic1 objectForKey:@"cate_list"];
-            for (NSDictionary *dicti in subcategories1) {
-                //初始化Model
-                FLModel *oneModel = [[FLModel alloc] init];
-                [oneModel setValuesForKeysWithDictionary:dicti];
-                [arr addObject:oneModel];
-            }
-            [sectionTitleArray addObject:flkey];
-            [rowmodelArray addObject:arr];
-            
-        }
-        
-        [self.mianCollectionView reloadData];
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
-    
 }
 
 - (void)didReceiveMemoryWarning {

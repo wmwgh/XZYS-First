@@ -49,6 +49,7 @@
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        NSLog(@"%@", dic);
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
         NSDictionary *dataDic = dic[@"data"];
         if (![dataDic isEqual:@""]) {
@@ -67,7 +68,7 @@
         } else {
             hud.labelText = dic[@"msg"];
         }
-        NSLog(@"request:%@", self.userId);
+        NSLog(@"request:%@", dic[@"msg"]);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
