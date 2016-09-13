@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface RegiestViewController : UIViewController
-
+@property (nonatomic , copy) NSString *userId;
 @end

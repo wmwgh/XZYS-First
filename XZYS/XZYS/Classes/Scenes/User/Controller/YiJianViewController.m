@@ -7,6 +7,11 @@
 //
 
 #import "YiJianViewController.h"
+#import <AFNetworking.h>
+#import <AFHTTPSessionManager.h>
+#import "AppDelegate.h"
+#import <MBProgressHUD.h>
+
 
 @interface YiJianViewController ()
 
@@ -21,6 +26,39 @@
     self.complateButton.layer.cornerRadius = 5;
     self.yjtextView.layer.cornerRadius = 5;
 }
+- (IBAction)sendMessage:(id)sender {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSString *urlString = @"http://www.xiezhongyunshang.com/App/Msg/feedbackMsg";
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    // 默认的方式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appDelegate.userIdTag;
+    params[@"content"] = self.yjtextView.text;
+    [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSError *error;
+        NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
+        NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        if([result isEqualToString:@"-800"]){
+            hud.labelText = dic[@"msg"];
+            NSLog(@"success");
+        } else {
+            hud.labelText = dic[@"msg"];
+            NSLog(@"faile");
+        }
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

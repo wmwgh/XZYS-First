@@ -18,6 +18,10 @@
 #import "YHRegular.h"
 #import "GPDateView.h"
 #import "XZYS_Other.h"
+#import <AFNetworking.h>
+#import <AFHTTPSessionManager.h>
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 
 @interface ChangeInfoViewController ()
 @property (nonatomic , strong) NSMutableDictionary *params;
@@ -39,6 +43,8 @@
     self.addressLabel.layer.borderWidth = 1;
     self.addressLabel.layer.masksToBounds = YES;
     [self setIcornButton];
+    //默认头像
+    [_iconBtn setImage:[UIImage imageNamed:@"info_04"] forState:UIControlStateNormal];
     // Do any additional setup after loading the view from its nib.
     
 }
@@ -64,7 +70,8 @@
 }
 
 - (void)setDict {
-    self.params[@"id"] = @"1";
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    self.params[@"id"] = appDelegate.userIdTag;;
     if (self.params[@"id"] != nil && ![self.params[@"id"] isKindOfClass:[NSNull class]]) {
         [self setImg];
     } else {
@@ -159,10 +166,86 @@
 }
 
 - (IBAction)sureButtonClick:(id)sender {
+    
     [self setDict];
+    [self changeInfo];
+}
+- (void)changeInfo {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    // 默认的方式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [manager POST:urlString parameters:_params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSError *error;
+        NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
+        NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = dic[@"msg"];
+        NSLog(@"修改成功 success");
+        [self.navigationController popViewControllerAnimated:NO];
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
 }
 - (IBAction)outButtonClick:(id)sender {
-    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/logout";
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    // 默认的方式
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appDelegate.userIdTag;
+    NSLog(@"%@", params);
+    if (!params) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"您还没有登录";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    } else {
+        [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            // 数据加载完后回调.
+            NSError *error;
+            NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
+            NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+            NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            if([result isEqualToString:@"-107"]){
+                hud.labelText = dic[@"msg"];
+                NSLog(@"out----success");
+                appDelegate.isLogin = @"No";
+                appDelegate.userIdTag = @"0";
+                [self getNotofocation];
+                UINavigationController *loginVC = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+                loginVC.navigationBarHidden = YES;
+                self.tabBarController.selectedIndex = 0;
+                
+                [self.navigationController presentViewController:loginVC animated:NO completion:nil];
+            } else {
+                hud.labelText = dic[@"msg"];
+                NSLog(@"faile");
+            }
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        }];
+    }
+}
+
+- (void)getNotofocation{
+    //发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"退出登录刷新UI" object:self];
 }
 
 - (IBAction)manClick:(id)sender {
@@ -181,18 +264,18 @@
 - (void)setIcornButton {
     //初始化Button
     _iconBtn = [[UIButton alloc] initWithFrame:CGRectMake(SW / 2 - 35, 70, 70, 70)];
-    //加载首先访问本地沙盒是否存在相关图片
-    NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"currentImage.png"];
-    UIImage *savedImage = [UIImage imageWithContentsOfFile:fullPath];
-    if (!savedImage)
-    {
-        //默认头像
-        [_iconBtn setImage:[UIImage imageNamed:@"info_04"] forState:UIControlStateNormal];
-    }
-    else
-    {
-        [_iconBtn setImage:savedImage forState:UIControlStateNormal];
-    }
+//    //加载首先访问本地沙盒是否存在相关图片
+//    NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"headerImage.png"];
+//    UIImage *savedImage = [UIImage imageWithContentsOfFile:fullPath];
+//    if (!savedImage)
+//    {
+//        //默认头像
+//        [_iconBtn setImage:[UIImage imageNamed:@"info_04"] forState:UIControlStateNormal];
+//    }
+//    else
+//    {
+//        [_iconBtn setImage:savedImage forState:UIControlStateNormal];
+//    }
     _iconBtn.layer.masksToBounds = YES;
     _iconBtn.layer.cornerRadius = _iconBtn.frame.size.height / 2;
     [_iconBtn addTarget:self action:@selector(changeIcon) forControlEvents:UIControlEventTouchUpInside];
@@ -282,7 +365,7 @@
      * UIImagePickerControllerMediaMetadata    // an NSDictionary containing metadata from a captured photo
      */
     [_iconBtn setImage:image forState:UIControlStateNormal];
-    [self saveImage:image withName:@"currentImage.png"];
+    [self setInfoImg:image];
 }
 
 #pragma mark - 保存图片至本地沙盒
@@ -298,6 +381,26 @@
     [imageData writeToFile:fullPath atomically:NO];
 }
 
+#warning tyui++++++++++++++++++
+
+- (void)setInfoImg:(UIImage *)image {
+    NSString *strin = [NSString string];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"yyyyMMddHHmmss";
+    
+    NSDate *currentDate = [NSDate date];//获取当前时间，日期
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd"];
+    NSString *dateString = [dateFormatter stringFromDate:currentDate];
+    NSLog(@"dateString:%@",dateString);
+    
+    NSString *str = [formatter stringFromDate:[NSDate date]];
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", str];
+    
+    strin = [NSString stringWithFormat:@"/Uploads/MemberPicture/%@/%@", dateString, fileName];
+    NSLog(@"%@", strin);
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -21,7 +21,9 @@
 #import "SDFQModel.h"
 #import "ShopHeadView.h"
 #import "UIView+LoadFromNib.h"
-
+#import "AF_MainScreeningViewController.h"
+#import "LoginViewController.h"
+#import "AppDelegate.h"
 
 static NSString *const identifier_cell = @"identifier_cell";
 static NSString *const firatID = @"firstHeader";//图和字和线
@@ -29,6 +31,10 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 {
     UIButton *MButton;
 }
+@property (nonatomic , strong) NSMutableDictionary *param;
+@property (nonatomic , strong) UIButton *priceButton;
+@property (nonatomic , strong) UIButton *timeButton;
+@property (nonatomic , strong) UIButton *numButton;
 /// 搜索
 @property (strong, nonatomic) UIImageView *searchIamgeView;
 @property (nonatomic , strong) ShopView *rootView;
@@ -38,6 +44,12 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 @end
 
 @implementation ShopViewController
+- (NSMutableDictionary *)param {
+    if (!_param) {
+        _param = [NSMutableDictionary dictionary];
+    }
+    return _param;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -59,34 +71,110 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     
     // 第一步：注册cell
     [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
-    
     self.headView = [[ShopHeadView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
-    _headView.backgroundColor = [UIColor redColor];
     self.headView = [ShopHeadView loadFromNib];
-    self.headView.titleLabel.text = @"1234567890-plknbvcxcl6to7yoihawszxch897t8der5678i";
-    self.headView.baclImageView.image = [UIImage imageNamed:@"head.jpg"];
-    self.headView.headImageView.image = [UIImage imageNamed:@"head.jpg"];
-    self.headView.numLabel.text = @"128i";
-    self.headView.dianPuCollect.text = @"12sd";
-    self.headView.goodsCollect.text = @"12345";
     [self.rootView.collectionView addSubview:self.headView];
+    /// 添加选择按钮
+    UIView *pickBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 215, SCREEN_WIDTH, 42)];
+    pickBackView.backgroundColor = [UIColor whiteColor];
+    [_headView addSubview:pickBackView];
+    self.numButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.numButton.frame = CGRectMake(0, 0, SCREEN_WIDTH / 4, 42);
+    [self.numButton setTitle:@"销 量" forState:UIControlStateNormal];
+    self.numButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    //    [numButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    [self.numButton addTarget:self action:@selector(numButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.numButton];
     
-    // 注册头视图
-//    [self.rootView.collectionView registerNib:[UINib nibWithNibName:@"ShopHeaderView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID];
+    self.priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4, 0, SCREEN_WIDTH / 4, 42);
+    [self.priceButton setTitle:@"价 格" forState:UIControlStateNormal];
+    self.priceButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    //    [priceButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    [self.priceButton addTarget:self action:@selector(priceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.priceButton];
     
+    self.timeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.timeButton.frame = CGRectMake(SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 4, 42);
+    [self.timeButton setTitle:@"时 间" forState:UIControlStateNormal];
+    //    [timeButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    self.timeButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton addTarget:self action:@selector(timeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.timeButton];
+    
+    UIButton *sxButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sxButton.frame = CGRectMake(SCREEN_WIDTH * 3 / 4, 0, SCREEN_WIDTH / 4, 42);
+    [sxButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
+    sxButton.titleLabel.font = [UIFont systemFontOfSize: 16];
+    [sxButton setTitle:@"筛 选" forState:UIControlStateNormal];
+    [sxButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [sxButton addTarget:self action:@selector(sxButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:sxButton];
+
 }
 
-//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-//{
-//    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-//        ShopHeaderView *hview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
-//        
-//        hview.backgroundColor = [UIColor orangeColor];
-//        return hview;
-//    }
-//    return nil;
-//}
-
+- (void)numButtonClick:(UIButton *)sender {
+    self.param[@"order"] = @"sales";
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self requestAllData];
+}
+- (void)priceButtonClick:(UIButton *)sender {
+    self.param[@"order"] = @"down_price";
+    self.param[@"order"] = @"up_price";
+    [self.priceButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self requestAllData];
+}
+- (void)timeButtonClick:(UIButton *)sender {
+    self.param[@"order"] = @"create_time";
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self requestAllData];
+}
+- (void)sxButtonClick:(UIButton *)sender {
+    AF_MainScreeningViewController * testVC = [AF_MainScreeningViewController new];
+    //这两句必须有
+    self.definesPresentationContext = YES; //self is presenting view controller
+    testVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    /** 设置半透明度 */
+    testVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5];
+    [self presentViewController:testVC animated:NO completion:nil];
+}
+#pragma mark - 数据区
+// 获取全部数据
+- (void)requestAllData {
+    _collectionArray = [NSMutableArray array];
+    [_collectionArray removeAllObjects];
+    __weak typeof(self) weakSelf = self;
+    [weakSelf.param setValue:weakSelf.shopID forKey:@"shop_id"];
+    NSLog(@"%@", weakSelf.param);
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"%@", responseObject);
+        NSArray *dataArray = [responseObject objectForKey:@"data"];
+        
+        for (NSDictionary *dic in dataArray) {
+            SDFQModel *model = [[SDFQModel alloc] init];
+            [model setValuesForKeysWithDictionary:dic];
+            [weakSelf.collectionArray addObject:model];
+        }
+        
+        [self.rootView.collectionView reloadData];
+        // 隐藏指示器
+        [SVProgressHUD dismiss];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        // 显示加载错误信息
+        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+    }];
+}
 
 - (void)requestData {
     __weak typeof(self) weakSelf = self;
@@ -95,16 +183,22 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [weakSelf.collectionArray removeAllObjects];
     weakSelf.collectionArray = [NSMutableArray array];
     
-    
     if (weakSelf.shopID != nil) {
         NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_DP_URL, weakSelf.shopID];
-        NSLog(@"%@", weakSelf.shopID);
         [[AFHTTPSessionManager manager] GET:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 请求成功，解析数据
             NSDictionary *dataDic = responseObject[@"data"];
             ShopModel *model = [[ShopModel alloc] init];
             [model setValuesForKeysWithDictionary:dataDic];
             [weakSelf.dataArray addObject:model];
+            
+            self.headView.titleLabel.text = model.shop_name;
+            self.headView.baclImageView.image = [UIImage imageNamed:@"daji.jpg"];
+            [self.headView.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.shop_logo]]];
+            self.headView.numLabel.text = model.goods_num;
+            self.headView.dianPuCollect.text = model.sales_num;
+            self.headView.goodsCollect.text = model.collect_num;
+            
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             // 请求失败
             // 显示加载错误信息
@@ -114,9 +208,9 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         
         
         /// collection 数据请求
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        [params setValue:weakSelf.shopID forKey:@"shop_id"];
-        [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [weakSelf.param setValue:weakSelf.shopID forKey:@"shop_id"];
+        NSLog(@"%@", weakSelf.param);
+        [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 请求成功，解析数据
             NSLog(@"%@", responseObject);
             NSArray *dataArr = responseObject[@"data"];
@@ -134,15 +228,10 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
             NSLog(@"%@", error);
         }];
-        
-        
-        
     } else {
         // 显示加载错误信息
         [SVProgressHUD showErrorWithStatus:@"无法找到该店铺"];
     }
-
-    
 }
 
 
@@ -221,7 +310,6 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 
 #pragma mark -  消息
 - (void)messageButtonClick:(UIButton *)sender {
-    MButton.selected = !MButton.selected;
     XiTongViewController *messageVC = [[XiTongViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }

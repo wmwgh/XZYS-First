@@ -21,9 +21,9 @@
 #import "ShowAllViewController.h"
 #import "HomeViewController.h"
 #import "XIangQingViewController.h"
-
-
-
+#import "AppDelegate.h"
+#import "LoginViewController.h"
+#import <MBProgressHUD.h>
 
 @interface ClassifyViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UIScrollViewDelegate>
 {
@@ -68,13 +68,16 @@
     self.mianCollectionView.backgroundColor = [UIColor clearColor];
     self.segmentedControl.backgroundColor = [UIColor clearColor];
     //添加导航栏品牌
-    UIView *pinView = [[UIView alloc] initWithFrame:CGRectMake(1, 64, 77, 45)];
-    UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(1, 1, 75, 43)];
-    lab.backgroundColor = [UIColor whiteColor];
-    lab.text = @"品牌";
-    lab.textAlignment = NSTextAlignmentCenter;
-    [pinView addSubview:lab];
-    [self.view addSubview:pinView];
+//    UIView *pinView = [[UIView alloc] initWithFrame:CGRectMake(1, 64, 77, 45)];
+    UIButton *labt = [UIButton buttonWithType:UIButtonTypeCustom];
+    labt.frame = CGRectMake(1, 70, 76, 45);
+    labt.backgroundColor = [UIColor whiteColor];
+    [labt setTitle:@"品牌" forState:UIControlStateNormal];
+    [labt setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    labt.titleLabel.font = [UIFont systemFontOfSize:14];
+    [labt addTarget:self action:@selector(pinPai) forControlEvents:UIControlEventTouchUpInside];
+//    [pinView addSubview:labt];
+    [self.view addSubview:labt];
     [self setNavigation];
     // 获取数据
     [self loadDatas];
@@ -83,6 +86,15 @@
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
     self.tabBarController.hidesBottomBarWhenPushed = NO;
+}
+- (void)pinPai {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"该类商品尚未上架，敬请期待";
+    // 隐藏时候从父控件中移除
+    hud.removeFromSuperViewOnHide = YES;
+    // 1秒之后再消失
+    [hud hide:YES afterDelay:1.5];
 }
 
 #pragma mark - 界面区
@@ -135,7 +147,6 @@
 
 #pragma mark -  消息
 - (void)messageButtonClick:(UIButton *)sender {
-     MButton.selected = !MButton.selected;
     XiTongViewController *messageVC = [[XiTongViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }
@@ -152,7 +163,7 @@
     self.segmentedControl.selectionStyle = SMVerticalSegmentedControlSelectionStyleBox;
     self.segmentedControl.selectionIndicatorThickness = 4;
     //  左侧 设置frame
-    [self.segmentedControl setFrame:CGRectMake(1, 109, 76, NVNum * 45)];
+    [self.segmentedControl setFrame:CGRectMake(1, 115, 76, NVNum * 45)];
     //添加segment
     [self.view addSubview:self.segmentedControl];
     //调用block
@@ -402,6 +413,7 @@
 - (void)qweClock:(UIButton *)sender {
     [self requestAllData];
     ShowAllViewController *showVC = [[ShowAllViewController alloc] init];
+    showVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:showVC animated:YES];
     
 }

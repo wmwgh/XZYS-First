@@ -8,6 +8,7 @@
 
 #import "ScanningViewController.h"
 #import <SVProgressHUD.h>
+#import "XIangQingViewController.h"
 
 #define Height [UIScreen mainScreen].bounds.size.height
 #define Width [UIScreen mainScreen].bounds.size.width
@@ -34,9 +35,9 @@
     
     UILabel *labIntroudction= [[UILabel alloc] initWithFrame:CGRectMake(30,100, self.view.frame.size.width - 60, 50)];
     labIntroudction.backgroundColor = [UIColor clearColor];
-    labIntroudction.font = [UIFont systemFontOfSize:12];
+    labIntroudction.font = [UIFont systemFontOfSize:17];
     labIntroudction.textAlignment = NSTextAlignmentCenter;
-    labIntroudction.textColor = [UIColor blueColor];
+    labIntroudction.textColor = [UIColor whiteColor];
     labIntroudction.text = @"对准二维码/条形码在框内即可扫描";
     [self.view addSubview:labIntroudction];
     
@@ -53,12 +54,6 @@
     
     timer = [NSTimer scheduledTimerWithTimeInterval:.02 target:self selector:@selector(animation1) userInfo:nil repeats:YES];
     
-    // 返回按钮
-    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(20, 30, 15, 25);
-    [backButton setImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
 }
 
 - (void)backClick {
@@ -163,18 +158,24 @@
     if ([metadataObjects count] >0)
     {
         AVMetadataMachineReadableCodeObject * metadataObject = [metadataObjects objectAtIndex:0];
-        /**
-         *  获取扫描结果
-         */
+       
+#warning 获取扫描结果
         stringValue = metadataObject.stringValue;
     }
-    
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"扫描结果：%@", stringValue] preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [_session startRunning];
-    }]];
-    [self presentViewController:alert animated:true completion:nil];
-    
+    NSString *astr = [stringValue substringFromIndex:9];
+    NSString *bstr = [stringValue substringToIndex:9];
+    NSLog(@"%@, %@", astr,bstr);
+    if ([bstr isEqualToString:@"goods_id:"]) {
+        XIangQingViewController *searchVC = [[XIangQingViewController alloc] init];
+        searchVC.passID = astr;
+        [self.navigationController pushViewController:searchVC animated:YES];
+    } else {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"无法识别：%@", stringValue] preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [_session startRunning];
+        }]];
+        [self presentViewController:alert animated:true completion:nil];
+    }
     
     [_session stopRunning];
 //    [self dismissViewControllerAnimated:YES completion:^
@@ -223,6 +224,14 @@
     view.backgroundColor = backColor;
     view.alpha = alpha;
     [self.view addSubview:view];
+    
+    // 返回按钮
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(20, 30, 15, 25);
+    [backButton setImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:backButton];
+    [self.view bringSubviewToFront:backButton];
 }
 
 

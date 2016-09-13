@@ -14,14 +14,15 @@
 #import "XZYS_URL.h"
 #import "XZYS_Other.h"
 #import <SVProgressHUD.h>
+#import "AppDelegate.h"
+#import "TiaoHuoOrderCell.h"
+#import <MBProgressHUD.h>
+#import "TiaoHuoDetailController.h"
 
-
-
-@interface TiaoHuoViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
-
+@interface TiaoHuoViewController ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic , strong) UITableView *mainTab;
 @property (nonatomic , strong) ShowAllDoubleView *rootView;
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
-@property (nonatomic , strong) NSMutableDictionary *param;
 
 
 @end
@@ -35,79 +36,101 @@
     return _allDataArray;
 }
 
-- (NSMutableDictionary *)param {
-    if (!_param) {
-        _param = [NSMutableDictionary dictionary];
-    }
-    return _param;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"调货区";
-    [self setCollectionView];
-//    [self requestAllData];
+    [self setTab];
+    [self requestAllData];
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(callBack)
+                                                 name: @"取消调货刷新UI"
+                                               object: nil];
     // Do any additional setup after loading the view from its nib.
 }
 
-- (void)setCollectionView {
-    self.rootView = [[ShowAllDoubleView alloc] initWithFrame:CGRectMake(0, -20, SCREEN_WIDTH, SCREEN_HEIGHT - 44)];
-    [self.view addSubview:self.rootView];
-    // 设置代理
-    self.rootView.collectionView.dataSource = self;
-    self.rootView.collectionView.delegate = self;
-    
-    // 第一步：注册cell
-    [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:@"cell"];
+- (void)callBack{
+    [self requestAllData];
+    NSLog(@"取消调货 get it");
 }
 
-#pragma mark UICollectionViewDataSource Method----
+- (void)setTab {
+    self.mainTab = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStylePlain];
+    [self.mainTab registerNib:[UINib nibWithNibName:NSStringFromClass([TiaoHuoOrderCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
+    self.mainTab.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.mainTab.backgroundColor = [UIColor whiteColor];
+    self.mainTab.delegate = self;
+    self.mainTab.dataSource = self;
+    [self.view addSubview:self.mainTab];
+}
+#pragma mark - Table view data source
 
-// 设置多少个分区
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-// 设置每个分区里面有几个item
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     return self.allDataArray.count;
 }
 
-// 返回每一个item的cell对象
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    // 第二步：重用cell
-    RootCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.twoModel = self.allDataArray[indexPath.row];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    SonLislModel *model = [[SonLislModel alloc] init];
+    model = self.allDataArray[indexPath.section];
+    TiaoHuoOrderCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    [cell setModel:model];
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 130;
+    return 95;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    TiaoHuoDetailController *thVC = [[TiaoHuoDetailController alloc] init];
+    SonLislModel *model = [[SonLislModel alloc] init];
+    model = self.allDataArray[indexPath.row];
+    thVC.orderID = model.ID;
+    [self.mainTab deselectRowAtIndexPath:indexPath animated:NO];
+    [self.navigationController pushViewController:thVC animated:YES];
+}
+
+
 #pragma mark - 数据区
 // 获取全部数据
 - (void)requestAllData {
+    __weak typeof(self) weakSelf = self;
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
-    __weak typeof(self) weakSelf = self;
-    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsList.html" parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@", responseObject);
-        NSArray *dataArray = [responseObject objectForKey:@"data"];
-        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    params[@"uid"] = appDelegate.userIdTag;;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsList.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *order = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+        if ([order isEqualToString:@"-101"]) {
+            NSArray *dataArray = [responseObject objectForKey:@"data"];
             for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
+                SonLislModel *model = [[SonLislModel alloc] init];
                 [model setValuesForKeysWithDictionary:dic];
                 [weakSelf.allDataArray addObject:model];
             }
-            [self.rootView.collectionView reloadData];
+            [self.mainTab reloadData];
             // 隐藏指示器
             [SVProgressHUD dismiss];
+
         } else {
-            NSLog(@"12341失败");
+            UILabel *aview = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, SCREEN_WIDTH, 50)];
+            aview.text = @"暂无任何调货商品";
+            aview.textAlignment = NSTextAlignmentCenter;
+            [self.mainTab addSubview:aview];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:2];
+            [self.mainTab reloadData];
         }
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         // 显示加载错误信息

@@ -36,6 +36,7 @@
 @property (nonatomic , strong) NSMutableArray *infoArray;
 @property (nonatomic , strong) NSMutableDictionary *infoDic;
 @property (nonatomic , copy) NSString *gongsijianjie;
+@property (nonatomic , strong) NSMutableDictionary *params;
 //@property (nonatomic ,strong) NSMutableArray *infoArray;
 
 @end
@@ -62,6 +63,12 @@
     }
     return _infoDic;
 }
+- (NSMutableDictionary *)params {
+    if (!_params) {
+        _params = [NSMutableDictionary dictionary];
+    }
+    return _params;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -70,8 +77,18 @@
     self.navigationController.navigationBarHidden = YES;
     self.tableArray = @[@"我的收藏", @"收货地址", @"调货", @"售后", @"系统消息",  @"意见反馈", @"关于我们"];
     [self createTableView];
-    [self setInfoMessage];
-    [self resqusetInfoData];
+    self.headerView = [UserHeaderView loadFromNib];
+    self.headerView.owner = self;
+    self.headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 222);
+    self.tableView.tableHeaderView = self.headerView;
+    self.headerView.headerImg.layer.cornerRadius = 55 / 2;
+    self.headerView.headerImg.layer.masksToBounds = YES;
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(callBack)
+                                                 name: @"退出登录刷新UI"
+                                               object: nil];
+    
     // 按钮设置
 //    [self setButton];
 }
@@ -118,48 +135,40 @@
 //    [self.navigationController pushViewController:listVC animated:YES];
 //}
 
+- (void)callBack{
+     NSLog(@"get it");
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self resqusetInfoData];
+}
 
 - (void)setInfoMessage {
-    UserHeaderView *headerView = [UserHeaderView loadFromNib];
-    headerView.owner = self;
-    headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 222);
-    self.tableView.tableHeaderView = headerView;
-    headerView.headerImg.layer.cornerRadius = 55 / 2;
-    headerView.headerImg.layer.masksToBounds = YES;
     ///////////
-    headerView.nameLabel.text = @"大王叫我来巡山";
-    headerView.headerImg.image = [UIImage imageNamed:@"head.jpg"];
-//    headerView.nameLabel.text = _infoDic[@"nickname"];
-//    NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _infoDic[@"member_picture"]];
-//    [headerView.headerImg sd_setImageWithURL:[NSURL URLWithString:str]];
+    [self.headerView.headerImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _infoDic[@"member_picture"]]]];
+    self.headerView.nameLabel.text = _infoDic[@"nickname"];
+    self.headerView.jifen.text = [NSString stringWithFormat:@"积分：%@", _infoDic[@""]];
+    [self.tableView reloadData];;
 }
+
 
 - (void)resqusetInfoData {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    NSLog(@"ID:%@", appDelegate.userIdTag);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
     // 默认的方式
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"uid"] = appDelegate.userIdTag;
-    NSLog(@"zidian:%@", params);
-    [manager POST:XZYS_Info_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    self.params[@"uid"] = appDelegate.userIdTag;
+    [manager POST:XZYS_Info_URL parameters:self.params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调.
         NSError *error;
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        NSLog(@"dic:%@", dic);
+        self.infoDic = dic[@"data"];
+        [self setInfoMessage];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
-    
-    [[AFHTTPSessionManager manager] POST:XZYS_GSJJ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        self.infoDic = responseObject[@"data"];
-        self.gongsijianjie = responseObject[@"data"];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
     }];
 }
 
@@ -230,7 +239,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
     // 进行跳转详细操作页面
     if (indexPath.row == 0) {
         self.hidesBottomBarWhenPushed = YES;
@@ -249,9 +257,7 @@
         self.hidesBottomBarWhenPushed = NO;
     } else if (indexPath.row == 3) {
         self.hidesBottomBarWhenPushed = YES;
-//        ShouHouViewController *mlvc = [[ShouHouViewController alloc] init];
-        
-        LoginViewController *mlvc = [[LoginViewController alloc] init];
+        ShouHouViewController *mlvc = [[ShouHouViewController alloc] init];
         [self.navigationController pushViewController:mlvc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
     } else if (indexPath.row == 4) {

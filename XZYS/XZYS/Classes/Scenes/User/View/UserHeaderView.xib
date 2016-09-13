@@ -102,7 +102,7 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="积分：1000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cRn-Az-QqC">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="积分：0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cRn-Az-QqC">
                     <rect key="frame" x="80" y="50" width="100" height="20"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="100" id="S7q-vK-PcA"/>
@@ -185,12 +185,12 @@
                                         <constraint firstAttribute="height" constant="35" id="WrV-tS-ynq"/>
                                         <constraint firstAttribute="width" constant="35" id="dPy-RF-gRm"/>
                                     </constraints>
-                                    <state key="normal" title="Button" image="info_41.png"/>
+                                    <state key="normal" title="Button" image="info_43.png"/>
                                     <connections>
                                         <action selector="daiShouHuo:" destination="iN0-l3-epB" eventType="touchUpInside" id="tXG-B5-ysy"/>
                                     </connections>
                                 </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="待收货" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMs-hv-dXi">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已支付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMs-hv-dXi">
                                     <rect key="frame" x="12" y="41" width="50" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="50" id="4c0-dZ-w25"/>
@@ -251,12 +251,12 @@
                                         <constraint firstAttribute="height" constant="35" id="YCG-CZ-d0S"/>
                                         <constraint firstAttribute="width" constant="35" id="iG5-pn-QSJ"/>
                                     </constraints>
-                                    <state key="normal" title="Button" image="info_43.png"/>
+                                    <state key="normal" title="Button" image="info_41.png"/>
                                     <connections>
                                         <action selector="yiZhiFu:" destination="iN0-l3-epB" eventType="touchUpInside" id="5mH-EX-fWk"/>
                                     </connections>
                                 </button>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="已支付" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVe-LQ-1fd">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="待收货" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVe-LQ-1fd">
                                     <rect key="frame" x="12" y="41" width="50" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="shP-fe-VwK"/>

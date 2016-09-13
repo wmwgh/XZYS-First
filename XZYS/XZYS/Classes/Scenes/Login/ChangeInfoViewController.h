@@ -23,7 +23,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *manButton;
 @property (strong, nonatomic) IBOutlet UIButton *nvButton;
 @property (strong, nonatomic) IBOutlet UITextField *emailLabel;
-@property (strong, nonatomic) IBOutlet UITextField *sectionLabel;
+@property (strong, nonatomic) IBOutlet UILabel *sectionLabel;
 @property (strong, nonatomic) IBOutlet UITextView *addressLabel;
 @property (strong, nonatomic) IBOutlet UIButton *sureButton;
 //@property (strong, nonatomic) IBOutlet UIButton *iconBtn;

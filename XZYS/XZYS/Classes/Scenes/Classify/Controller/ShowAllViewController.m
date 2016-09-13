@@ -82,7 +82,7 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 - (void)setTableView {
     [self.rootView.collectionView removeFromSuperview];
-    self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 6, SCREEN_WIDTH, SCREEN_HEIGHT - 155)];
+    self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 6, SCREEN_WIDTH, SCREEN_HEIGHT - 111)];
     [self.mainTableView registerNib:[UINib nibWithNibName:NSStringFromClass([OneTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
     self.mainTableView.delegate = self;
     self.mainTableView.dataSource = self;
@@ -124,9 +124,8 @@ static NSString *const identifier_cell = @"identifier_cell";
     model = self.allDataArray[indexPath.row];
     XXVC.model = model;
     XXVC.passID = model.goods_id;
-    self.hidesBottomBarWhenPushed = YES;
+    XXVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
     [self.mainTableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
@@ -316,9 +315,8 @@ static NSString *const identifier_cell = @"identifier_cell";
     model = self.allDataArray[indexPath.row];
     XXVC.model = model;
     XXVC.passID = model.goods_id;
-    self.hidesBottomBarWhenPushed = YES;
+    XXVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
     
 }
 

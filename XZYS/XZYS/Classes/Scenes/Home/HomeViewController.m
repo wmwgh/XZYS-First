@@ -33,6 +33,9 @@
 #import "OrderListViewController.h"
 #import "TiaoHuoViewController.h"
 #import "AppDelegate.h"
+#import "LoginViewController.h"
+#import "AppDelegate.h"
+#import "ShowAllViewController.h"
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
@@ -99,8 +102,10 @@ static NSString *const identifier_cell = @"identifier_cell";
 static NSString *const firatID = @"firstHeader";//图和字和线
 static NSString *const secondID = @"secondHeader";//字和线
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.title = @"首页";
 //    self.tabBarController.selectedIndex = 0;
     self.navigationController.navigationBarHidden = YES;
@@ -120,7 +125,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     // 手势设置
     [self setTap];
     // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
+//    [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
 
 
@@ -236,12 +241,10 @@ static NSString *const secondID = @"secondHeader";//字和线
         [self.rootView.collectionView.mj_header endRefreshing];
         [self.rootView.collectionView reloadData];
         // 隐藏指示器
-        [SVProgressHUD dismiss];
+//        [SVProgressHUD dismiss];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
-        // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+
     }];
 }
 
@@ -387,6 +390,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 #pragma mark -  消息
 - (void)messageButtonClick:(UIButton *)sender {
     XiTongViewController *messageVC = [[XiTongViewController alloc] init];
+    messageVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:messageVC animated:YES];
 }
 
@@ -402,6 +406,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 // 搜索
 - (void)searchTapClick:(UITapGestureRecognizer *)sender {
     SearchViewController *searchVC = [[SearchViewController alloc] init];
+    searchVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
 }
 
@@ -540,13 +545,14 @@ static NSString *const secondID = @"secondHeader";//字和线
 // 订单按钮点击事件
 - (void)button1Click {
     OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:order animated:YES];
 }
 // 分类按钮点击事件
 - (void)button2Click {
-    ClassifyViewController *classVC = [[ClassifyViewController alloc] init];
-    [self.tabBarController setSelectedIndex:1];
-    [self.tabBarController.navigationController pushViewController:classVC animated:YES];
+    ShowAllViewController *classVC = [[ShowAllViewController alloc] init];
+    classVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:classVC animated:YES];
 }
 // 调货区按钮点击事件
 - (void)button3Click {

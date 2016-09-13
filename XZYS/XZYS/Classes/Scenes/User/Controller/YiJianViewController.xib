@@ -27,6 +27,9 @@
                     <state key="normal" title="提     交">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="sendMessage:" destination="-1" eventType="touchUpInside" id="j5q-HS-p8l"/>
+                    </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="请输入您对我们的建议，我们会不断优化用户体验" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ny5-bi-v0b">
                     <rect key="frame" x="20" y="80" width="335" height="350"/>

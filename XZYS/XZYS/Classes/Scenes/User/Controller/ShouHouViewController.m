@@ -16,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"售后区";
     // Do any additional setup after loading the view from its nib.
 }
 

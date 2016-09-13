@@ -17,6 +17,8 @@
 #import <AFNetworking/AFNetworking.h>
 #import <UIImageView+WebCache.h>
 #import "XZYS_Other.h"
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
@@ -69,8 +71,8 @@ static NSString * indentifier = @"shopCarCell";
 
 - (void)requestData {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
-#warning 需要UID
-    param[@"uid"] = @"1";
+    AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
+    param[@"uid"] = appdele.userIdTag;
     [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Cart/cart" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //        NSDictionary *dic = responseObject[@"data"];
         
@@ -137,7 +139,7 @@ static NSString * indentifier = @"shopCarCell";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 70;
+    return 90;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{

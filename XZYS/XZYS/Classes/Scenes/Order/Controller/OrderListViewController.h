@@ -16,5 +16,5 @@
 @property (strong, nonatomic) IBOutlet UIButton *daiReceive;
 @property (strong, nonatomic) IBOutlet UIButton *complateButton;
 @property (strong, nonatomic) UIView *lineView;
-@property (nonatomic , assign) int aaaa;
+@property (nonatomic , assign) NSInteger orderType;
 @end

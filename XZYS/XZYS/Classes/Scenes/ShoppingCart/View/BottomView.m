@@ -43,7 +43,7 @@
 - (UIButton *)leftBtn{
     if (_leftBtn == nil) {
         self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _leftBtn.frame = CGRectMake(10, 13, 24, 24);
+        _leftBtn.frame = CGRectMake(10, 11, 27, 27);
         [_leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
         [_leftBtn addTarget:self action:@selector(clickedLeftBtn) forControlEvents:UIControlEventTouchUpInside];
     }

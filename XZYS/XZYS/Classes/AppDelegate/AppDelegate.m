@@ -12,6 +12,7 @@
 #import "HomeViewController.h"
 #import "ShoppingCarViewController.h"
 #import "UserViewController.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -33,9 +34,11 @@
     // 第二步：创建UITabBarController对象
     self.mainTab = [[UITabBarController alloc] init];
     
-    
     // 第三步：设置window的根视图控制器
     self.window.rootViewController = self.mainTab;
+    UINavigationController *loginVC = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+    loginVC.navigationBarHidden = YES;
+    [self.mainTab presentViewController:loginVC animated:NO completion:nil];
 
     // 控制器
     UINavigationController *homeNVC = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
@@ -65,6 +68,7 @@
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
+
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.

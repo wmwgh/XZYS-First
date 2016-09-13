@@ -26,15 +26,22 @@
     [super viewDidLoad];
     
     self.title = @"登录";
+    
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    self.phoneNum.text = [defaults objectForKey:@"userName"];
+//    BOOL autoLogin = [defaults boolForKey:@"auto_login"];
+//    NSLog(@"%@ -- %d", self.phoneNum.text, autoLogin);
+    
     // Do any additional setup after loading the view from its nib.
 }
 
 
 // 登录
 - (IBAction)loginButtonClick:(id)sender {
-//    self.hidesBottomBarWhenPushed = NO;
-//    self.hidesBottomBarWhenPushed = YES;
-    // 参数 phone手机号码 password密码
+#warning 固定账号
+    self.phoneNum.text = @"15046783721";
+    self.passWord.text = @"15046783721";
+
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/login";
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -49,10 +56,17 @@
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        NSLog(@"%@", dic);
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
         NSDictionary *dataDic = dic[@"data"];
         if (![dataDic isEqual:@""]) {
+            // 1.利用NSUserDefaults,就能直接访问软件的偏好设置(Library/Preferences)
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            // 2.存储数据
+            [defaults setObject:self.phoneNum.text forKey:@"userName"];
+            [defaults setObject:self.passWord.text forKey:@"passWord"];
+            [defaults setBool:YES forKey:@"auto_login"];
+            // 3.立刻同步
+            [defaults synchronize];
             self.userId = dataDic[@"uid"];
         } else {
             NSLog(@"userId = nil");
@@ -64,7 +78,8 @@
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             appDelegate.isLogin = @"Yes";
             appDelegate.userIdTag = self.userId;
-            [self.navigationController popViewControllerAnimated:NO];
+            [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+            
         } else {
             hud.labelText = dic[@"msg"];
         }
@@ -84,7 +99,9 @@
     RegiestViewController *regiestVC = [[RegiestViewController alloc] init];
     [self.navigationController pushViewController:regiestVC animated:YES];
     self.hidesBottomBarWhenPushed = YES;
+    NSLog(@"wdfashdjfm");
 }
+
 // 忘记密码
 - (IBAction)forgetPassWord:(id)sender {
     self.hidesBottomBarWhenPushed = YES;
@@ -92,13 +109,6 @@
     [self.navigationController pushViewController:passWord animated:YES];
     self.hidesBottomBarWhenPushed = YES;
 }
-
-
-
-- (IBAction)backButton:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

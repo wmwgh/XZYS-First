@@ -10,7 +10,8 @@
 #import "OrderListViewController.h"
 #import "PassWordViewController.h"
 #import "ChangeInfoViewController.h"
-
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 @implementation UserHeaderView
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -28,47 +29,50 @@
 
 // 修改个人信息
 - (IBAction)changeMessage:(id)sender {
-    [self.owner.navigationController  pushViewController:[ChangeInfoViewController new] animated:YES];
+    ChangeInfoViewController *changeVC = [[ChangeInfoViewController alloc] init];
+    changeVC.hidesBottomBarWhenPushed = YES;
+    [self.owner.navigationController  pushViewController:changeVC animated:YES];
 }
 // 修改密码
 - (IBAction)changePassWord:(id)sender {
-    [self.owner.navigationController  pushViewController:[PassWordViewController new] animated:YES];
-
+    PassWordViewController *passVC = [[PassWordViewController alloc] init];
+    passVC.hidesBottomBarWhenPushed = YES;
+    [self.owner.navigationController  pushViewController:passVC animated:YES];
 }
 // 查看全部订单
 - (IBAction)allDingDan:(id)sender {
     OrderListViewController *order = [[OrderListViewController alloc] init];
-    order.aaaa = 0;
+    order.hidesBottomBarWhenPushed = YES;
+    order.orderType = 0;
     [self.owner.navigationController  pushViewController:order animated:YES];
-
 }
 // 待付款
 - (IBAction)daiFukuan:(id)sender {
     OrderListViewController *order = [[OrderListViewController alloc] init];
-    order.aaaa = 1;
+    order.orderType = 1;
+    order.hidesBottomBarWhenPushed = YES;
     [self.owner.navigationController  pushViewController:order animated:YES];
-
 }
 // 待收货
 - (IBAction)daiShouHuo:(id)sender {
     OrderListViewController *order = [[OrderListViewController alloc] init];
-    order.aaaa = 2;
+    order.orderType = 2;
+    order.hidesBottomBarWhenPushed = YES;
     [self.owner.navigationController  pushViewController:order animated:YES];
-
 }
 // 已支付
 - (IBAction)yiZhiFu:(id)sender {
     OrderListViewController *order = [[OrderListViewController alloc] init];
-    order.aaaa = 3;
+    order.orderType = 3;
+    order.hidesBottomBarWhenPushed = YES;
     [self.owner.navigationController  pushViewController:order animated:YES];
-
 }
 // 已完成
 - (IBAction)yiWanCheng:(id)sender {
     OrderListViewController *order = [[OrderListViewController alloc] init];
-    order.aaaa = 4;
+    order.orderType = 4;
+    order.hidesBottomBarWhenPushed = YES;
     [self.owner.navigationController  pushViewController:order animated:YES];
-
 }
 
 

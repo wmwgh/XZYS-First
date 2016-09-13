@@ -9,13 +9,19 @@
 #import "SearchViewController.h"
 
 @interface SearchViewController ()
-
+@property (nonatomic , strong) UILabel *lab;
 @end
 
 @implementation SearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.lab = [[UILabel alloc] initWithFrame:CGRectMake(30, 50, 300, 300)];
+    [self.view addSubview:_lab];
+    self.lab.text = self.astr;
+    self.lab.backgroundColor = [UIColor cyanColor];
+    self.lab.font = [UIFont systemFontOfSize:50];
+    NSLog(@"%@", self.lab.text);
     // Do any additional setup after loading the view from its nib.
 }
 

@@ -132,27 +132,6 @@
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjI-Li-YYG">
-                    <rect key="frame" x="20" y="30" width="10" height="15"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="15" id="QxO-cB-rCT"/>
-                        <constraint firstAttribute="width" constant="10" id="jcE-Qo-5tS"/>
-                    </constraints>
-                    <state key="normal" image="gw_03.png"/>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aS5-nz-jlj">
-                    <rect key="frame" x="35" y="23" width="30" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="30" id="P3j-kX-Mbn"/>
-                        <constraint firstAttribute="height" constant="30" id="q7L-Xs-aPV"/>
-                    </constraints>
-                    <state key="normal" title="返回">
-                        <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="backButton:" destination="-1" eventType="touchUpInside" id="XHY-dZ-Ddb"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -166,8 +145,6 @@
                 <constraint firstItem="BCu-Wd-52f" firstAttribute="top" secondItem="P5n-2G-Tcr" secondAttribute="bottom" constant="20" id="D75-M4-A3u"/>
                 <constraint firstItem="gIX-xG-fhd" firstAttribute="centerY" secondItem="ObC-Bw-zJL" secondAttribute="centerY" id="DTU-om-9wh"/>
                 <constraint firstAttribute="trailing" secondItem="ye7-GS-Lv5" secondAttribute="trailing" id="DXr-Oo-s3d"/>
-                <constraint firstItem="aS5-nz-jlj" firstAttribute="leading" secondItem="jjI-Li-YYG" secondAttribute="trailing" constant="5" id="E3e-to-lEh"/>
-                <constraint firstItem="jjI-Li-YYG" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="GTi-UE-s1W"/>
                 <constraint firstItem="ObC-Bw-zJL" firstAttribute="trailing" secondItem="XLa-oC-hbp" secondAttribute="trailing" id="HXc-7M-EjB"/>
                 <constraint firstAttribute="trailing" secondItem="P5n-2G-Tcr" secondAttribute="trailing" constant="50" id="Hbk-Om-Un6"/>
                 <constraint firstItem="oCj-Zq-did" firstAttribute="top" secondItem="cjc-IC-KnG" secondAttribute="bottom" constant="50" id="J5Y-OM-WUf"/>
@@ -177,7 +154,6 @@
                 <constraint firstItem="cjc-IC-KnG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="35" id="TaO-Mn-1l1"/>
                 <constraint firstItem="Hxy-FM-FwA" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="UX3-Qa-dpu"/>
                 <constraint firstItem="jZx-ux-wIq" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Uuq-lf-GgL"/>
-                <constraint firstItem="jjI-Li-YYG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Wfo-3R-J2x"/>
                 <constraint firstItem="P5n-2G-Tcr" firstAttribute="top" secondItem="TpI-dW-N4F" secondAttribute="bottom" constant="20" id="YVD-ZN-BIo"/>
                 <constraint firstItem="jZx-ux-wIq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="115" id="beQ-CK-eOI"/>
                 <constraint firstItem="ye7-GS-Lv5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="cQg-Rr-XJi"/>
@@ -191,7 +167,6 @@
                 <constraint firstItem="SOo-YZ-Rdk" firstAttribute="centerY" secondItem="XLa-oC-hbp" secondAttribute="centerY" id="nso-yO-T9e"/>
                 <constraint firstItem="Sdx-OJ-8aN" firstAttribute="top" secondItem="P5n-2G-Tcr" secondAttribute="bottom" constant="20" id="oFV-Lr-ZxZ"/>
                 <constraint firstItem="cjc-IC-KnG" firstAttribute="top" secondItem="jZx-ux-wIq" secondAttribute="bottom" constant="10" id="p98-vS-GUR"/>
-                <constraint firstItem="aS5-nz-jlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="23" id="qLw-P2-we4"/>
                 <constraint firstItem="Sdx-OJ-8aN" firstAttribute="trailing" secondItem="P5n-2G-Tcr" secondAttribute="trailing" id="rQ0-c6-ENj"/>
                 <constraint firstItem="oCj-Zq-did" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="35" id="vFX-Bn-XLf"/>
                 <constraint firstAttribute="trailing" secondItem="TpI-dW-N4F" secondAttribute="trailing" constant="35" id="vU3-DI-DeL"/>
@@ -203,7 +178,6 @@
     </objects>
     <resources>
         <image name="LoginBack.jpg" width="640" height="1100"/>
-        <image name="gw_03.png" width="20" height="35"/>
         <image name="loginButton.png" width="483" height="77"/>
         <image name="loginbk.png" width="569" height="644"/>
         <image name="logo.png" width="235" height="170"/>

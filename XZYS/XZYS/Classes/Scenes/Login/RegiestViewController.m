@@ -167,7 +167,6 @@
         [hud hide:YES afterDelay:1.5];
     } else {
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-#warning 请输入注册调用的网址
         // 注册调用的网址
         NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/registe";
         manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -222,10 +221,8 @@
     // 隐藏时候从父控件中移除
     hud.removeFromSuperViewOnHide = YES;
     // 1秒之后再消失
-    [hud hide:YES afterDelay:4];
-    
-    [self performSelector:@selector(delayMethod) withObject:nil afterDelay:1.0f];
-    
+    [hud hide:YES afterDelay:1.5];
+
     
     // 参数 phone手机号码 password密码
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -242,35 +239,42 @@
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        NSLog(@"%@", dic);
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        NSDictionary *dataDic = dic[@"data"];
+        if (![dataDic isEqual:@""]) {
+            // 1.利用NSUserDefaults,就能直接访问软件的偏好设置(Library/Preferences)
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            // 2.存储数据
+            [defaults setObject:self.regiestView.phoneNum.text forKey:@"userName"];
+            [defaults setObject:self.regiestView.passWord.text forKey:@"passWord"];
+            [defaults setBool:YES forKey:@"auto_login"];
+            // 3.立刻同步
+            [defaults synchronize];
+            self.userId = dataDic[@"uid"];
+        } else {
+            NSLog(@"userId = nil");
+        }
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
         if([result isEqualToString:@"-106"]){
             hud.labelText = dic[@"msg"];
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             appDelegate.isLogin = @"Yes";
-            [self.navigationController popViewControllerAnimated:NO];
-        }else {
+            appDelegate.userIdTag = self.userId;
+            [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+            
+        } else {
             hud.labelText = dic[@"msg"];
         }
+        NSLog(@"request:%@", dic[@"msg"]);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
-        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 数据加载失败回调.
         NSLog(@"登录失败: %@",error);
     }];
-}
-
-#warning  数据持久化
--(void)delayMethod{
-    NSDictionary *resultDiction = [NSDictionary dictionaryWithObjectsAndKeys:@"1",@"loginState", nil];
-    [[NSUserDefaults standardUserDefaults] setObject:resultDiction forKey:@"ResultAuthData"];
-    //保存数据，实现持久化存储
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 // 判断手机号

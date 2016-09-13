@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TiaoHuoViewController : UIViewController
-
+@property (nonatomic , copy) NSString *tiaoHuoID;
 @end

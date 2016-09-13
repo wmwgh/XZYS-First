@@ -372,6 +372,7 @@ static NSInteger pageNumber = 0;
     carBT.titleLabel.font = [UIFont systemFontOfSize:14];
     carBT.frame = CGRectMake(SCREEN_WIDTH*2 / 3 + 10, 0, SCREEN_WIDTH / 3, 49);
     [carBT setTitle:@"加入购物车" forState:UIControlStateNormal];
+    [carBT addTarget:self action:@selector(addGoods) forControlEvents:UIControlEventTouchUpInside];
     carBT.backgroundColor = [UIColor blueColor];
     [bBackView addSubview:carBT];
     
@@ -379,6 +380,7 @@ static NSInteger pageNumber = 0;
     kefuBT.titleLabel.font = [UIFont systemFontOfSize:14];
     [kefuBT setImage:[UIImage imageNamed:@"kf"] forState:UIControlStateNormal];
     kefuBT.frame = CGRectMake(0, 8, btWidth, 40);
+    [kefuBT addTarget:self action:@selector(kefuClick) forControlEvents:UIControlEventTouchUpInside];
     [bBackView addSubview:kefuBT];
     
     UIButton *shoucangBT = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -405,38 +407,34 @@ static NSInteger pageNumber = 0;
     [self.view addSubview:self.backView];
 }
 
+//  加入购物车
+- (void)addGoods {
+}
+//  收藏
 - (void)shoucangAction:(UIButton *)esnder {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if ([appDelegate.isLogin isEqualToString:@"Yes"]) {
-        NSLog(@"shoucang");
-    } else {
-        LoginViewController *loginVC = [[LoginViewController alloc] init];
-        self.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:loginVC animated:YES];
-        self.hidesBottomBarWhenPushed = YES;
-    }
     
 }
-
+//  店铺
 - (void)dianpuClick:(UIButton *)sender {
     ShopViewController *dianpuVC = [[ShopViewController alloc] init];
     dianpuVC.shopID = _dict[@"shop_id"];
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:dianpuVC animated:YES];
     self.hidesBottomBarWhenPushed = YES;
+    
+}
+//  购物车
+- (void)gouwuche:(UIButton *)dender {
+    ShoppingCarViewController *carVC = [[ShoppingCarViewController alloc] init];
+    self.tabBarController.selectedIndex = 2;
+    self.hidesBottomBarWhenPushed = NO;
+    [self.tabBarController.navigationController pushViewController:carVC animated:YES];
+    self.hidesBottomBarWhenPushed = YES;
+}
+// 客服
+- (void)kefuClick {
 }
 
-- (void)gouwuche:(UIButton *)dender {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    if ([appDelegate.isLogin isEqualToString:@"Yes"]) {
-        NSLog(@"gouwuche");
-    } else {
-        ShoppingCarViewController *carVC = [[ShoppingCarViewController alloc] init];
-        self.hidesBottomBarWhenPushed = NO;
-        [self.navigationController pushViewController:carVC animated:YES];
-        self.hidesBottomBarWhenPushed = YES;
-    }
-}
 - (void)backButton:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
