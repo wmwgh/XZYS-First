@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface CountView : UIView
-
+@property (nonatomic, strong)UIButton * leftBtn;
+@property (nonatomic, strong)UIButton * rightBtn;
+@property (nonatomic, strong)UITextField * countTF;
 @property (nonatomic, assign)NSInteger count;
 @property (nonatomic, copy)void (^CountBlock)(NSInteger num);
 @end

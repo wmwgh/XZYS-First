@@ -16,6 +16,7 @@
 #import "SonLislModel.h"
 #import "AllOrderListCell.h"
 #import "OrderDetailViewController.h"
+#import "ShopViewController.h"
 
 static NSString *headerID = @"cityHeaderSectionID";
 static NSString *footerID = @"cityFooterSectionID";
@@ -108,57 +109,37 @@ static NSString *footerID = @"cityFooterSectionID";
     titLabel.font = [UIFont systemFontOfSize:14];
     [backView bringSubviewToFront:titLabel];
     [backView addSubview:titLabel];
+    
+    UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 140, 40);
+    [titleButton setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
+    [titleButton addTarget:self action:@selector(titleBT:) forControlEvents:UIControlEventTouchUpInside];
+    titleButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    [titleButton.titleLabel setTextAlignment:NSTextAlignmentLeft];
+    [backView addSubview:titleButton];
+    
     UIImageView *jianimage = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(titLabel.frame), 12, 15, 17)];
     jianimage.image = [UIImage imageNamed:@"dp_ht"];
     [backView addSubview:jianimage];
     titLabel.text = self.model.shop_name;
     return headerView;
 }
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    _footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:footerID];
-    _footerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:footerID];
-    _footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 32)];
-    _footView.backgroundColor = [UIColor whiteColor];
-    [_footerView addSubview:_footView];
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 50, 30)];
-    priceLabel.font = [UIFont systemFontOfSize:11];
-    priceLabel.text = @"订单金额:";
-    [_footView addSubview:priceLabel];
-    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 60, 30)];
-    priceLabel1.textColor = XZYSPinkColor;
-    priceLabel1.font = [UIFont systemFontOfSize:11];
-    priceLabel1.text = _model.total_price;
-    [_footView addSubview:priceLabel1];
-    _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_deleteButton setTitle:@"删除订单" forState:UIControlStateNormal];
-    _deleteButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
-//    [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_deleteButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
-    [_deleteButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
-    _payButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_payButton setTitle:@"去支付" forState:UIControlStateNormal];
-    [_payButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
-//    [_payButton addTarget:self action:@selector(payButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_payButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
-    _payButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
-    _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_sureButton setTitle:@"确认收货" forState:UIControlStateNormal];
-    _sureButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
-//    [_sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [_sureButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
-    [_sureButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
-    if ([_model.order_status_text isEqualToString:@"未付款"]) {
-        _deleteButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
-        [_footView addSubview:_deleteButton];
-        _payButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6.5 - 20, 4, SCREEN_WIDTH / 6.5, 22);
-        [_footView addSubview:_payButton];
-        return _footerView;
-    } else if ([_model.order_status_text isEqualToString:@"已发货"]) {
-        _sureButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
-        [_footView addSubview:_sureButton];
-        return _footerView;
-    }
-    return _footerView;
+
+- (void)titleBT:(UIButton *)sender {
+    ShopViewController *shopVC = [[ShopViewController alloc] init];
+    shopVC.shopID = self.shopID;
+    [self.navigationController pushViewController:shopVC animated:YES];
+}
+
+- (void)deleteButtonClick:(UIButton *)sender {
+    //发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"取消刷新UI" object:self userInfo:[NSDictionary dictionaryWithObject:_orderID forKey:@"sid"]];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)sureButtonClick:(UIButton *)sender {
+    //发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"收获刷新UI" object:self userInfo:[NSDictionary dictionaryWithObject:_orderID forKey:@"sid"]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)requestAllData {
@@ -183,6 +164,7 @@ static NSString *footerID = @"cityFooterSectionID";
         self.zhuangTai.text = self.model.order_status_text;
         self.nameLabel.text = self.model.consignee;
         self.numLabel.text = self.model.telephone;
+        self.shopID = self.model.shop_id;
         self.addressLabel.text = [NSString stringWithFormat:@"%@%@%@%@", self.model.province, self.model.city, self.model.county, self.model.payment];
         [self.titleArray addObject:self.model];
         NSArray *arr = dic[@"goods_list"];

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "SonLislModel.h"
-
+typedef void(^BlockButton)(UIButton *superID);
 @interface DaiOrderListCell : UITableViewCell
+
 @property (strong, nonatomic) IBOutlet UIImageView *goodsImg;
 @property (strong, nonatomic) IBOutlet UILabel *goodsTitle;
 @property (strong, nonatomic) IBOutlet UILabel *colorLabel;
@@ -19,7 +20,10 @@
 @property (nonatomic , strong) SonLislModel *model;
 @property (strong, nonatomic) IBOutlet UIButton *shouhou;
 @property (strong, nonatomic) IBOutlet UIButton *tiaohuo;
-
-@property (nonatomic,strong) UIViewController *owner;
+@property (nonatomic , copy) NSString *idStr;
+//block属性
+@property (nonatomic, copy) BlockButton button;
+//自定义block方法
+- (void)handlerButtonAction:(BlockButton)block;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GwcShopModel.h"
+#import "AllGucModel.h"
 
 @protocol ShopCarTableViewCellDelegate <NSObject>
 @optional
@@ -16,8 +16,14 @@
 @end
 @interface ShopCarTableViewCell : UITableViewCell
 
-@property (nonatomic, strong)GwcShopModel * model;
+@property (nonatomic, strong)AllGucModel * model;
 
+@property (weak, nonatomic) IBOutlet UIButton *leftBtn;
+@property (weak, nonatomic) IBOutlet UILabel *goodsTitle;
+@property (weak, nonatomic) IBOutlet UILabel *priceLable;
+@property (strong, nonatomic) IBOutlet UILabel *colorTittle;
+@property (strong, nonatomic) IBOutlet UILabel *sizeLb;
+@property (strong, nonatomic) IBOutlet UIImageView *goodsImg;
 
 @property (nonatomic, assign)id<ShopCarTableViewCellDelegate>delegate;
 @end

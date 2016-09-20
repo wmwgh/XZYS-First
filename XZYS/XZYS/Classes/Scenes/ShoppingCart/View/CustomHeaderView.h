@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ShopCarModel.h"
+#import "AllGucModel.h"
 
 @protocol CustomHeaderViewDelegate <NSObject>
 
@@ -15,9 +15,9 @@
 
 @end
 @interface CustomHeaderView : UIView
-
-
-@property (nonatomic, strong)ShopCarModel * model;
+@property (nonatomic, strong)UIButton * tittleBtn;
+@property (nonatomic, strong)UILabel * titleLable;
+@property (nonatomic, strong)AllGucModel * model;
 
 @property (nonatomic, weak)id<CustomHeaderViewDelegate>delegate;
 @end

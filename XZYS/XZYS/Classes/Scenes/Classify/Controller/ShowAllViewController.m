@@ -31,10 +31,12 @@
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
 @property (nonatomic , strong) UIButton *MButton;
 @property (nonatomic , strong) UIButton *priceButton;
+@property (nonatomic , strong) UIButton *priceButton1;
 @property (nonatomic , strong) UIButton *timeButton;
 @property (nonatomic , strong) UIButton *numButton;
 @property (nonatomic , copy) NSString *picStr;
 @property (nonatomic , strong) UIView *cellView;
+@property (nonatomic , strong) UIImageView *image1;
 @property (nonatomic , strong) UITableView *mainTableView;
 @property (nonatomic , strong) NSMutableDictionary *param;
 //@property (nonatomic ,strong) NSMutableArray *priceArray;
@@ -244,13 +246,24 @@ static NSString *const identifier_cell = @"identifier_cell";
     [pickBackView addSubview:self.numButton];
     
     self.priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4, 0, SCREEN_WIDTH / 4, 36);
+    self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4 - 15, 0, SCREEN_WIDTH / 4, 36);
     [self.priceButton setTitle:@"价 格" forState:UIControlStateNormal];
+    self.image1 = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 37, 10, 8, 16)];
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
+    [pickBackView addSubview:self.image1];
     self.priceButton.titleLabel.font = [UIFont systemFontOfSize: 16];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-//    [priceButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
     [self.priceButton addTarget:self action:@selector(priceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [pickBackView addSubview:self.priceButton];
+    
+    self.priceButton1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.priceButton1.frame = CGRectMake(SCREEN_WIDTH / 4 - 15, 0, SCREEN_WIDTH / 4, 36);
+    [self.priceButton1 setTitle:@"价 格" forState:UIControlStateNormal];
+    self.priceButton1.titleLabel.font = [UIFont systemFontOfSize: 16];
+    self.priceButton1.hidden = YES;
+    [self.priceButton1 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.priceButton1 addTarget:self action:@selector(priceButton1Click:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.priceButton1];
     
     self.timeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.timeButton.frame = CGRectMake(SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 4, 36);
@@ -322,28 +335,53 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 - (void)numButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"sales";
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden  = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self requestAllData];
 }
 - (void)priceButtonClick:(UIButton *)sender {
-    self.param[@"order"] = @"down_price";
     self.param[@"order"] = @"up_price";
-    [self.priceButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    self.priceButton1.hidden = NO;
+    self.priceButton.hidden = YES;
+    [self.priceButton1 setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    self.image1.image = [UIImage imageNamed:@"lb_jtb"];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
 
     [self requestAllData];
 }
+- (void)priceButton1Click:(UIButton *)sender {
+    self.param[@"order"] = @"down_price";
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jta"];
+    [self.priceButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self requestAllData];
+}
+
 - (void)timeButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"create_time";
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden  = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self requestAllData];
 }
 - (void)sxButtonClick:(UIButton *)sender {
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden  = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     AF_MainScreeningViewController * testVC = [AF_MainScreeningViewController new];
     //这两句必须有
     self.definesPresentationContext = YES; //self is presenting view controller

@@ -22,7 +22,7 @@
 
 + (instancetype)cellWithTableView:(UITableView *)tableView dataArr:(NSMutableArray *)arr indexPath:(NSIndexPath *)indexPath
 {
-    NSString * baseCell = [NSString stringWithFormat:@"Brand%ld", indexPath.section];
+    NSString *baseCell = [NSString stringWithFormat:@"Brand%ld", indexPath.section];
     AF_BrandCell *cell = [tableView dequeueReusableCellWithIdentifier:baseCell];
     if (!cell) {
         cell = [[AF_BrandCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:baseCell dataArr:arr];

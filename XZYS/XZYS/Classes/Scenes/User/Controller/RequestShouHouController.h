@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface RequestShouHouController : UIViewController
-
+@property (nonatomic , copy) NSString *orderID;
+@property (nonatomic , copy) NSString *goodsID;
 @end

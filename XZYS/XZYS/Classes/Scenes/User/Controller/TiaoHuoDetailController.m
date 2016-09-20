@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import <MBProgressHUD.h>
 
+
 @interface TiaoHuoDetailController ()
 @property (nonatomic , strong) NSMutableArray *dataArray;
 @end
@@ -82,12 +83,14 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
+        //发出通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"取消调货刷新UI" object:self];
+        [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         // 显示加载错误信息
         [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
     }];
-    [self.navigationController popViewControllerAnimated:YES];
     
 }
 

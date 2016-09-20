@@ -10,8 +10,6 @@
 #import "ShopCarTableViewCell.h"
 #import "CustomHeaderView.h"
 #import "BottomView.h"
-#import "ShopCarModel.h"
-#import "GwcShopModel.h"
 #import <MBProgressHUD.h>
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
@@ -19,19 +17,28 @@
 #import "XZYS_Other.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "AllGucModel.h"
+#import "XIangQingViewController.h"
+#import "ShopViewController.h"
+#import <MJRefresh.h>
 
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
 
 @interface ShoppingCarViewController ()<UITableViewDelegate,UITableViewDataSource,ShopCarTableViewCellDelegate, CustomHeaderViewDelegate, BottomViewDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, strong)UITableView * baseTable;
-@property (nonatomic, strong)NSMutableArray * dataAry;
-@property (nonatomic, strong)BottomView * bottomView;
-@property (nonatomic, strong)BottomModel * bottomModel;
-@property (nonatomic, strong)NSMutableArray * totalSelectedAry;
-@property (nonatomic, strong)UIButton * rightTopBtn;
-@property (nonatomic, assign)BOOL isEditing;
+@property (nonatomic, strong) UITableView * baseTable;
+@property (nonatomic, strong) NSMutableArray * dataAry;
+@property (nonatomic, strong) BottomView * bottomView;
+@property (nonatomic, strong) AllGucModel * bottomModel;
+@property (nonatomic, strong) NSMutableArray * totalSelectedAry;
+@property (nonatomic, strong) UIButton * rightTopBtn;
+@property (nonatomic, assign) BOOL isEditing;
+@property (nonatomic , strong) NSMutableArray *shopNameArray;
+@property (nonatomic , strong) NSMutableArray *dataArray;
+@property (nonatomic , strong) NSMutableArray *allKeys;
+@property (nonatomic , strong) NSMutableArray *idArray;
+@property (nonatomic , strong) UILabel *labe;
 //测试
 @property (nonatomic, copy)NSMutableString * testString;
 @end
@@ -45,68 +52,124 @@ static NSString * indentifier = @"shopCarCell";
     self.title = @"购物车";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.baseTable];
-    
+    self.labe = [[UILabel alloc] initWithFrame:CGRectMake(100, 300, SCREEN_WIDTH - 200, 30)];
     BottomView * bottomView = [[BottomView alloc] initWithFrame:CGRectMake(0, kHeight - 100, kWidth, 50)];
     bottomView.backgroundColor = [UIColor whiteColor];
     bottomView.delegate = self;
     self.bottomView = bottomView;
     [self.view addSubview:self.bottomView];
-    self.bottomModel = [[BottomModel alloc] init];
+    self.bottomModel = [[AllGucModel alloc] init];
     
     [self configerNavItemBtn];
-    [self configerData];
-    [self requestData];
+//    [self configerData];
+//    [self requestCartData];
+    // 添加顶部刷新
+    [self addRefresh];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(callBack:)
+                                                 name:@"titleCall"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(textCallBack:)
+                                                 name:@"textCall"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(minCallBack:)
+                                                 name:@"minCall"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(plusCallBack:)
+                                                 name:@"plusCall"
+                                               object:nil];
 }
 
-- (void)configerNavItemBtn{
-    UIButton * btn = [UIButton buttonWithType:UIButtonTypeSystem];
-    btn.frame = CGRectMake(0, 0, 40, 40);
-    [btn setTitle:@"编辑" forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:16];
-    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn addTarget:self action:@selector(editBtnClicked) forControlEvents:UIControlEventTouchUpInside];
-    self.rightTopBtn = btn;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+- (void)addRefresh {
+    self.baseTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestCartData)];
+    [self.baseTable.mj_header beginRefreshing];
 }
 
-- (void)requestData {
+- (void)textCallBack:(NSNotification *)text {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
     param[@"uid"] = appdele.userIdTag;
-    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Cart/cart" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSDictionary *dic = responseObject[@"data"];
-        
-        NSLog(@"%@", responseObject);
-        
+    [param setValuesForKeysWithDictionary:text.userInfo];
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemNum" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *countStr = responseObject[@"data"];
+        NSLog(@"+===========%@", countStr);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+- (void)minCallBack:(NSNotification *)text {
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
+    param[@"uid"] = appdele.userIdTag;
+    [param setValuesForKeysWithDictionary:text.userInfo];
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemMinus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *countStr = responseObject[@"data"];
+        NSLog(@"------------%@", countStr);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+- (void)plusCallBack:(NSNotification *)text {
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
+    param[@"uid"] = appdele.userIdTag;
+    [param setValuesForKeysWithDictionary:text.userInfo];
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemPlus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *countStr = responseObject[@"data"];
+        NSLog(@"+++++++++++%@", countStr);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+- (void)callBack:(NSNotification *)text {
+    ShopViewController *xxVC = [[ShopViewController alloc] init];
+    xxVC.shopID = text.userInfo[@"sid"];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:xxVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+- (void)requestCartData {
+    self.dataArray = [NSMutableArray array];
+    [self.dataArray removeAllObjects];
+    self.shopNameArray = [NSMutableArray array];
+    [self.shopNameArray removeAllObjects];
+    self.allKeys = [NSMutableArray array];
+    [self.allKeys removeAllObjects];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
+    param[@"uid"] = appdele.userIdTag;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cart" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = responseObject[@"data"];
+        if (!([dic count] == 0)) {
+            NSArray *keyArray = [dic allKeys];
+            [self.allKeys addObjectsFromArray:keyArray];
+            for (NSString *key in self.allKeys) {
+                NSDictionary *dict = dic[key];
+                [self.shopNameArray addObject:dict[@"shop_name"]];
+                NSMutableArray *arra = dict[@"cart_list"];
+                NSMutableArray *dataAr = [NSMutableArray array];
+                for (NSDictionary *diction in arra) {
+                    AllGucModel *model = [[AllGucModel alloc] init];
+                    [model setValuesForKeysWithDictionary:diction];
+                    [dataAr addObject:model];
+                }
+                [self.dataArray addObject:dataAr];
+            }
+            [self.labe removeFromSuperview];
+            [self.baseTable.mj_header endRefreshing];
+            [self.baseTable reloadData];
+        } else {
+            self.labe.text = @"购物车还没有添加商品";
+            self.labe.textAlignment = NSTextAlignmentCenter;
+            [self.view addSubview:self.labe];
+            [self.baseTable.mj_header endRefreshing];
+            [self.baseTable reloadData];
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
 }
-- (void)configerData{
-    self.dataAry = [NSMutableArray array];
-    NSMutableArray * tempAry = [NSMutableArray array];
-    for (int i = 0; i < 10; i++) {
-        GwcShopModel * model = [[GwcShopModel alloc] init];
-        model.shopTitle = [NSString stringWithFormat:@"这是商品%zd", i];
-        model.singlePrice = (arc4random() % 300) + 100;
-        model.count = arc4random() % 5 + 1;
-        [tempAry addObject:model];
-    }
-    
-    NSMutableArray * array1 = [NSMutableArray arrayWithObjects:tempAry[0],tempAry[1] ,nil];
-    NSMutableArray * array2 = [NSMutableArray arrayWithObjects:tempAry[2],nil];
-    NSMutableArray * array3 = [NSMutableArray arrayWithObjects:tempAry[3],tempAry[4] ,tempAry[5] ,nil];
-    NSMutableArray * array4 = [NSMutableArray arrayWithObjects:tempAry[6],tempAry[7] ,nil];
-    NSMutableArray *ary  =[NSMutableArray arrayWithObjects:array1, array2, array3, array4, nil];
-    for (int i = 0; i < 4; i++) {
-        ShopCarModel * model = [[ShopCarModel alloc] init];
-        model.dianpuTitle = [NSString stringWithFormat:@"店铺名称%zd", i];
-        model.listArr = ary[i];
-        [self.dataAry addObject:model];
-    }
-    [self.baseTable reloadData];
-}
-
 
 -(UITableView *)baseTable{
     if (_baseTable == nil) {
@@ -123,15 +186,16 @@ static NSString * indentifier = @"shopCarCell";
 
 #pragma mark -- <UITableViewDataSource, UITableViewDelegate>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.dataAry.count;
+    return self.shopNameArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [self.dataAry[section] listArr].count;
+    NSArray *array = self.dataArray[section];
+    return array.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 40;
+    return 50;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
@@ -143,81 +207,121 @@ static NSString * indentifier = @"shopCarCell";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    CustomHeaderView * view = [[CustomHeaderView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 40)];
+    CustomHeaderView *view = [[CustomHeaderView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 40)];
     view.tag = section + 2000;
     view.delegate = self;
-    view.model = self.dataAry[section];
+    view.titleLable.text = self.shopNameArray[section];
+    view.tittleBtn.tag = [self.allKeys[section] intValue];
     return view;
 }
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    GwcShopModel * model = [self.dataAry[indexPath.section] listArr][indexPath.row];
-    NSMutableArray * ary = [self.dataAry[indexPath.section] listArr];
-    [ary removeObject:model];
-    if (ary.count == 0) {
-        [self.dataAry removeObjectAtIndex:indexPath.section];
-        [self.baseTable reloadData];
-    }else{
-        [self.baseTable reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [self GetTotalBill];
-}
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     ShopCarTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:indentifier forIndexPath:indexPath];
     cell.delegate = self;
-    cell.model = [self.dataAry[indexPath.section] listArr][indexPath.row];
+    NSArray *ar = self.dataArray[indexPath.section];
+    AllGucModel *model = ar[indexPath.row];
+    cell.model = model;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSLog(@"点击进入商品详情页面");
-
+    NSArray *array = self.dataArray[indexPath.section];
+    AllGucModel *model = array[indexPath.row];
+    XIangQingViewController *xxVC = [[XIangQingViewController alloc] init];
+    xxVC.passID = model.goods_id;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:xxVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.idArray = [NSMutableArray array];
+    NSArray *arr = self.dataArray[indexPath.section];
+    AllGucModel * model = arr[indexPath.row];
+    [self.idArray addObject:model.ID];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.idArray options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
+    param[@"uid"] = appdele.userIdTag;
+    param[@"id"] = strjson;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartDel" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+        if ([str isEqualToString:@"-1202"]) {
+            [self requestCartData];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+#warning 2687654323456789876543
+    
+//    NSMutableArray * ary = [self.dataArray[indexPath.section] listArr];
+//    [ary removeObject:model];
+//    if (ary.count == 0) {
+//        [self.dataAry removeObjectAtIndex:indexPath.section];
+//        [self.baseTable reloadData];
+//    }else{
+//        [self.baseTable reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+//    }
+//    [self GetTotalBill];
+}
+
+- (void)configerNavItemBtn{
+    UIButton * btn = [UIButton buttonWithType:UIButtonTypeSystem];
+    btn.frame = CGRectMake(0, 0, 40, 40);
+    [btn setTitle:@"编辑" forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(editBtnClicked) forControlEvents:UIControlEventTouchUpInside];
+    self.rightTopBtn = btn;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+}
 
 #pragma mark --- cell代理方法(cell 左侧按钮)
 - (void)clickedWichLeftBtn:(UITableViewCell *)cell{
     NSIndexPath * indexpath = [self.baseTable indexPathForCell:cell];
-    ShopCarModel * shopCarModel = self.dataAry[indexpath.section];//当前选中的商品对应的店铺的模型
-    GwcShopModel * model = shopCarModel.listArr[indexpath.row];
+    AllGucModel * shopCarModel = self.dataAry[indexpath.section];//当前选中的商品对应的店铺的模型
+    AllGucModel * model = shopCarModel.listArr[indexpath.row];
     model.selected = !model.selected;
     NSInteger totalCount = 0;
     for (int i = 0; i < shopCarModel.listArr.count; i++) {
-        GwcShopModel * GwcShopModel = shopCarModel.listArr[i];
+        AllGucModel * GwcShopModel = shopCarModel.listArr[i];
         if (GwcShopModel.selected) {
             totalCount++;
         }
     }
-    ShopCarModel * sectionModel = self.dataAry[indexpath.section];
+    AllGucModel * sectionModel = self.dataAry[indexpath.section];
     sectionModel.isChecked = (totalCount == shopCarModel.listArr.count);
     
     [self checkShopState];
 }
 
 //修改数量
-- (void)changeTheShopCount:(UITableViewCell *)cell count:(NSInteger )count{
-    NSIndexPath * indexpath = [self.baseTable indexPathForCell:cell];
-    NSLog(@"%zd-----%zd", indexpath.section, indexpath.row);
-    ShopCarModel * shopCarModel = self.dataAry[indexpath.section];//当前选中的商品对应的店铺的模型
-    GwcShopModel * model = shopCarModel.listArr[indexpath.row];
-    model.count = count;
-    //    [self checkShopState];错误
-    [self GetTotalBill];
-}
+//- (void)changeTheShopCount:(UITableViewCell *)cell count:(NSInteger )count{
+//    NSIndexPath * indexpath = [self.baseTable indexPathForCell:cell];
+//    NSLog(@"%zd-----%zd", indexpath.section, indexpath.row);
+//    ShopCarModel * shopCarModel = self.dataAry[indexpath.section];//当前选中的商品对应的店铺的模型
+//    GwcShopModel * model = shopCarModel.listArr[indexpath.row];
+//    model.count = count;
+//    //    [self checkShopState];错误
+//    [self GetTotalBill];
+//}
 
 #pragma mark --- CustomHeaderViewDelegate
 
 - (void)clickedWhichHeaderView:(NSInteger)index{
     NSInteger sectionIndex = index - 2000;
-    ShopCarModel * model = self.dataAry[sectionIndex];
-    model.isChecked = !model.isChecked;
-    NSMutableArray * tempAry = [self.dataAry[sectionIndex] listArr];
+    AllGucModel *model = self.dataArray[sectionIndex];
+//    model.isChecked = !model.isChecked;
+    NSMutableArray * tempAry = self.dataArray[sectionIndex];
     for (int i = 0; i < tempAry.count; i++) {
-        GwcShopModel * shopModel = tempAry[i];
+        AllGucModel *model = tempAry[i];
+        AllGucModel * shopModel = tempAry[i];
         shopModel.selected = model.isChecked;
     }
     [self checkShopState];
@@ -228,10 +332,10 @@ static NSString * indentifier = @"shopCarCell";
     
     self.bottomModel.isSelecteAll = !self.bottomModel.isSelecteAll;
     for (int i = 0; i < self.dataAry.count; i++) {
-        ShopCarModel * model = self.dataAry[i];
+        AllGucModel * model = self.dataAry[i];
         model.isChecked = self.bottomModel.isSelecteAll;
         for (int j = 0; j < model.listArr.count; j++) {
-            GwcShopModel *shopModel = model.listArr[j];
+            AllGucModel *shopModel = model.listArr[j];
             shopModel.selected = self.bottomModel.isSelecteAll;
         }
     }
@@ -273,7 +377,7 @@ static NSString * indentifier = @"shopCarCell";
 - (void)checkShopState{
     NSInteger totalSelected = 0;
     for (int i = 0; i < self.dataAry.count; i++) {
-        ShopCarModel * model = self.dataAry[i];
+        AllGucModel * model = self.dataAry[i];
         if (model.isChecked) {
             totalSelected++;
         }
@@ -296,14 +400,14 @@ static NSString * indentifier = @"shopCarCell";
     float totalMoney = 0.00;
     NSMutableString * compentStr = [[NSMutableString alloc] init];
     for (int i = 0; i < self.dataAry.count; i++) {
-        ShopCarModel * model = self.dataAry[i];
+        AllGucModel * model = self.dataAry[i];
         for (int j = 0; j < model.listArr.count; j++) {
-            GwcShopModel *shopModel = model.listArr[j];
+            AllGucModel *shopModel = model.listArr[j];
             if (shopModel.selected) {
                 //保存model。如果是结算，传递选中商品，确认订单页面展示。如果是删除，根据此数组，拿到商品ID，用来删除。
                 [_totalSelectedAry addObject:shopModel];
-                [compentStr appendString:shopModel.shopTitle];
-                totalMoney += shopModel.singlePrice * shopModel.count;
+                [compentStr appendString:shopModel.shop_name];
+                totalMoney += [shopModel.price intValue] * [shopModel.num intValue];
             }
         }
     }

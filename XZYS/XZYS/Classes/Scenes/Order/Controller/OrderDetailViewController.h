@@ -13,7 +13,7 @@
 @interface OrderDetailViewController : UIViewController
 
 @property (nonatomic , copy) NSString *orderID;
-
+@property (nonatomic , copy) NSString *shopID;
 
 //@property (nonatomic , strong) SonLislModel *sonModel;
 //@property (nonatomic , strong) AllListModel *allModel;

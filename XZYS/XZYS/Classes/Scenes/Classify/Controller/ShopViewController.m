@@ -24,6 +24,7 @@
 #import "AF_MainScreeningViewController.h"
 #import "LoginViewController.h"
 #import "AppDelegate.h"
+#import <MBProgressHUD.h>
 
 static NSString *const identifier_cell = @"identifier_cell";
 static NSString *const firatID = @"firstHeader";//图和字和线
@@ -35,6 +36,8 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 @property (nonatomic , strong) UIButton *priceButton;
 @property (nonatomic , strong) UIButton *timeButton;
 @property (nonatomic , strong) UIButton *numButton;
+@property (nonatomic , strong) UIButton *priceButton1;
+@property (nonatomic , strong) UIImageView *image1;
 /// 搜索
 @property (strong, nonatomic) UIImageView *searchIamgeView;
 @property (nonatomic , strong) ShopView *rootView;
@@ -59,7 +62,38 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self requestData];
     [self setCollection];
     [self setNavigation];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(callback1:)
+                                                 name:@"cbt1"
+                                               object:nil];
+}
+
+- (void)callback1:(NSNotification *)text {
+    AppDelegate *appd = [[UIApplication sharedApplication] delegate];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appd.userIdTag;
+    params[@"shop_id"] = text.userInfo[@"sid"];
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Collect/collectShop" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSDictionary *dic = responseObject;
+        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        if([result isEqualToString:@"-900"]){
+            hud.labelText = dic[@"msg"];
+            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_sca"] forState:UIControlStateNormal];
+        } else {
+            hud.labelText = dic[@"msg"];
+            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
+        }
+        NSLog(@"request:%@", dic[@"msg"]);
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+
 }
 
 - (void)setCollection {
@@ -83,18 +117,27 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self.numButton setTitle:@"销 量" forState:UIControlStateNormal];
     self.numButton.titleLabel.font = [UIFont systemFontOfSize: 16];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    //    [numButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
     [self.numButton addTarget:self action:@selector(numButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [pickBackView addSubview:self.numButton];
     
     self.priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4, 0, SCREEN_WIDTH / 4, 42);
+    self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4 - 10, 0, SCREEN_WIDTH / 4, 42);
     [self.priceButton setTitle:@"价 格" forState:UIControlStateNormal];
     self.priceButton.titleLabel.font = [UIFont systemFontOfSize: 16];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    //    [priceButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
     [self.priceButton addTarget:self action:@selector(priceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [pickBackView addSubview:self.priceButton];
+    self.image1 = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 33, 13, 8, 16)];
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
+    [pickBackView addSubview:self.image1];
+    self.priceButton1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.priceButton1.frame = CGRectMake(SCREEN_WIDTH / 4 - 10, 0, SCREEN_WIDTH / 4, 42);
+    [self.priceButton1 setTitle:@"价 格" forState:UIControlStateNormal];
+    self.priceButton1.titleLabel.font = [UIFont systemFontOfSize: 16];
+    self.priceButton1.hidden = YES;
+    [self.priceButton1 setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.priceButton1 addTarget:self action:@selector(priceButton1Click:) forControlEvents:UIControlEventTouchUpInside];
+    [pickBackView addSubview:self.priceButton1];
     
     self.timeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.timeButton.frame = CGRectMake(SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 4, 42);
@@ -118,27 +161,75 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 
 - (void)numButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"sales";
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden  = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self requestAllData];
 }
 - (void)priceButtonClick:(UIButton *)sender {
-    self.param[@"order"] = @"down_price";
     self.param[@"order"] = @"up_price";
+    self.priceButton1.hidden = NO;
+    self.priceButton.hidden = YES;
+    [self.priceButton1 setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    self.image1.image = [UIImage imageNamed:@"lb_jtb"];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    
+    [self requestAllData];
+}
+- (void)priceButton1Click:(UIButton *)sender {
+    self.param[@"order"] = @"down_price";
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jta"];
     [self.priceButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self requestAllData];
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self yanzheng];
+}
+- (void)yanzheng {
+    AppDelegate *appd = [[UIApplication sharedApplication] delegate];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appd.userIdTag;
+    params[@"shop_id"] = self.shopID;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Collect/checkCollectShop/shop_id/16" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSDictionary *dic = responseObject;
+        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        if([result isEqualToString:@"-902"]){
+            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
+        } else {
+            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_sca"] forState:UIControlStateNormal];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
 - (void)timeButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"create_time";
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden  = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self requestAllData];
 }
 - (void)sxButtonClick:(UIButton *)sender {
+    self.priceButton1.hidden = YES;
+    self.priceButton.hidden  = NO;
+    self.image1.image = [UIImage imageNamed:@"lb_jtc"];
+    [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     AF_MainScreeningViewController * testVC = [AF_MainScreeningViewController new];
     //这两句必须有
     self.definesPresentationContext = YES; //self is presenting view controller
@@ -195,6 +286,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             self.headView.titleLabel.text = model.shop_name;
             self.headView.baclImageView.image = [UIImage imageNamed:@"daji.jpg"];
             [self.headView.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.shop_logo]]];
+            self.headView.collectButton.tag = [model.ID intValue];
             self.headView.numLabel.text = model.goods_num;
             self.headView.dianPuCollect.text = model.sales_num;
             self.headView.goodsCollect.text = model.collect_num;
@@ -212,7 +304,6 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         NSLog(@"%@", weakSelf.param);
         [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 请求成功，解析数据
-            NSLog(@"%@", responseObject);
             NSArray *dataArr = responseObject[@"data"];
             if (dataArr != nil && ![dataArr isKindOfClass:[NSNull class]] && dataArr.count != 0) {
                 for (NSDictionary *dic in dataArr) {

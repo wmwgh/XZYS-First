@@ -10,11 +10,8 @@
 
 #define RGBAColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
 @interface CountView ()<UITextFieldDelegate>
-@property (nonatomic, strong)UIButton * leftBtn;
-@property (nonatomic, strong)UIButton * rightBtn;
 @property (nonatomic, strong)UIView * leftLineView;
 @property (nonatomic, strong)UIView * rightLineView;
-@property (nonatomic, strong)UITextField * countTF;
 
 @end
 @implementation CountView
@@ -31,7 +28,6 @@
         self.layer.cornerRadius = 3;
         self.layer.borderWidth = 1;
         self.layer.borderColor = RGBAColor(240, 240, 240, 1).CGColor;
-//        self.backgroundColor = [UIColor yellowColor];
     }
     return self;
 }
@@ -47,7 +43,6 @@
         self.layer.cornerRadius = 3;
         self.layer.borderWidth = 1;
         self.layer.borderColor = RGBAColor(200, 200, 200, 1).CGColor;
-        //        self.backgroundColor = [UIColor yellowColor];
     }
     return self;
 }
@@ -105,7 +100,15 @@
 #pragma mark -- UITextFieldDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     if (self.CountBlock) {
-        self.CountBlock([textField.text floatValue]);
+        self.CountBlock([textField.text intValue]);
+        NSString *str = [NSString stringWithFormat:@"%d", [textField.text intValue]];
+        NSString *strTag = [NSString stringWithFormat:@"%ld", self.countTF.tag];
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        dic[@"num"] = str;
+        dic[@"id"] = strTag;
+        //发出通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"textCall" object:self userInfo:dic];
+        NSLog(@"%d", [textField.text intValue]);
     }
 }
 
@@ -127,6 +130,14 @@
     self.countTF.text = [NSString stringWithFormat:@"%zd", count];
     if (self.CountBlock) {
         self.CountBlock(count);
+        NSString *str = [NSString stringWithFormat:@"%ld", count];
+        NSString *strTag = [NSString stringWithFormat:@"%ld", self.leftBtn.tag];
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        dic[@"num"] = str;
+        dic[@"id"] = strTag;
+        //发出通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"minCall" object:self userInfo:dic];
+        NSLog(@"%ld", count);
     }
 }
 
@@ -137,6 +148,15 @@
     [self.leftBtn setImage:[UIImage imageNamed:@"gw_17"] forState:UIControlStateNormal];
     if (self.CountBlock) {
         self.CountBlock(count);
+        NSString *str = [NSString stringWithFormat:@"%ld", count];
+        NSString *strTag = [NSString stringWithFormat:@"%ld", self.rightBtn.tag];
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        dic[@"num"] = str;
+        dic[@"id"] = strTag;
+        //发出通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"plusCall" object:self userInfo:dic];
+        NSLog(@"%ld", count);
+        NSLog(@"%@", strTag);
     }
 }
 

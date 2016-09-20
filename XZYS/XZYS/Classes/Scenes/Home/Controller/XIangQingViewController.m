@@ -25,6 +25,7 @@
 #import "ShopViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import <MBProgressHUD.h>
 
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
 @interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -45,6 +46,8 @@
 @property (nonatomic , strong) UIScrollView *backScr;
 @property (nonatomic, assign) float cellHeight;
 @property (nonatomic, strong) NSArray *LFLarray;
+@property (nonatomic , strong) UIButton *dianpuBT;
+@property (nonatomic , strong) UIButton *shoucangBT;
 @property (nonatomic, strong) UIScrollView *mainScrollView; /**< 正文mainSV */
 @property (nonatomic ,strong) LFLUISegmentedControl * LFLuisement; /**< LFLuisement */
 @property (nonatomic, strong) SPXQModel *GuiGeModel;
@@ -97,7 +100,6 @@
     [self initLayoutSegmt];
     // 主scrollView
     [self createMainScrollView];
-
 }
 
 - (void)initLayoutSegmt {
@@ -383,19 +385,18 @@ static NSInteger pageNumber = 0;
     [kefuBT addTarget:self action:@selector(kefuClick) forControlEvents:UIControlEventTouchUpInside];
     [bBackView addSubview:kefuBT];
     
-    UIButton *shoucangBT = [UIButton buttonWithType:UIButtonTypeCustom];
-    shoucangBT.titleLabel.font = [UIFont systemFontOfSize:14];
-    shoucangBT.frame = CGRectMake(btWidth, 8, btWidth, 40);
-    [shoucangBT addTarget:self action:@selector(shoucangAction:) forControlEvents:UIControlEventTouchUpInside];
-    [shoucangBT setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
-    [bBackView addSubview:shoucangBT];
+    self.shoucangBT = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.shoucangBT.titleLabel.font = [UIFont systemFontOfSize:14];
+    self.shoucangBT.frame = CGRectMake(btWidth, 8, btWidth, 40);
+    [self.shoucangBT addTarget:self action:@selector(shoucangAction:) forControlEvents:UIControlEventTouchUpInside];
+    [bBackView addSubview:self.shoucangBT];
     
-    UIButton *dianpuBT = [UIButton buttonWithType:UIButtonTypeCustom];
-    dianpuBT.titleLabel.font = [UIFont systemFontOfSize:14];
-    dianpuBT.frame = CGRectMake(btWidth * 2, 8, btWidth, 40);
-    [dianpuBT setImage:[UIImage imageNamed:@"dp"] forState:UIControlStateNormal];
-    [dianpuBT addTarget:self action:@selector(dianpuClick:) forControlEvents:UIControlEventTouchUpInside];
-    [bBackView addSubview:dianpuBT];
+    self.dianpuBT = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.dianpuBT.titleLabel.font = [UIFont systemFontOfSize:14];
+    self.dianpuBT.frame = CGRectMake(btWidth * 2, 8, btWidth, 40);
+    [self.dianpuBT setImage:[UIImage imageNamed:@"dp"] forState:UIControlStateNormal];
+    [self.dianpuBT addTarget:self action:@selector(dianpuClick:) forControlEvents:UIControlEventTouchUpInside];
+    [bBackView addSubview:self.dianpuBT];
     
     UIButton *gouwucheBT = [UIButton buttonWithType:UIButtonTypeCustom];
     gouwucheBT.titleLabel.font = [UIFont systemFontOfSize:14];
@@ -407,12 +408,54 @@ static NSInteger pageNumber = 0;
     [self.view addSubview:self.backView];
 }
 
+- (void)yanzheng {
+    AppDelegate *appd = [[UIApplication sharedApplication] delegate];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appd.userIdTag;
+    params[@"goods_id"] = self.passID;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Collect/checkCollectGoods" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSDictionary *dic = responseObject;
+        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        if([result isEqualToString:@"-902"]){
+        [self.shoucangBT setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
+        } else {
+        [self.shoucangBT setImage:[UIImage imageNamed:@"sc_dp"] forState:UIControlStateNormal];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
+
 //  加入购物车
 - (void)addGoods {
 }
 //  收藏
 - (void)shoucangAction:(UIButton *)esnder {
-    
+    AppDelegate *appd = [[UIApplication sharedApplication] delegate];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appd.userIdTag;
+    params[@"goods_id"] = self.passID;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Collect/collectGoods" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSDictionary *dic = responseObject;
+        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        if([result isEqualToString:@"-900"]){
+            hud.labelText = dic[@"msg"];
+            [self.shoucangBT setImage:[UIImage imageNamed:@"sc_dp"] forState:UIControlStateNormal];
+        } else {
+            hud.labelText = dic[@"msg"];
+            [self.shoucangBT setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
+        }
+        NSLog(@"request:%@", dic[@"msg"]);
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+
+    }];
 }
 //  店铺
 - (void)dianpuClick:(UIButton *)sender {
@@ -443,6 +486,11 @@ static NSInteger pageNumber = 0;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self yanzheng];
 }
 
 /*

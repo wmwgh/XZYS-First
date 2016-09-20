@@ -103,7 +103,7 @@
 
 
 #pragma mark -- setter
--(void)setModel:(BottomModel *)model{
+-(void)setModel:(AllGucModel *)model{
     _model = model;
     if (_model.isSelecteAll) {
         [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];

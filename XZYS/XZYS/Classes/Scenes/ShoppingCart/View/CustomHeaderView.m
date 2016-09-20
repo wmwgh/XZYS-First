@@ -11,7 +11,6 @@
 @interface CustomHeaderView ()
 @property (nonatomic, strong)UIView * topView;
 @property (nonatomic, strong)UIButton * leftBtn;
-@property (nonatomic, strong)UILabel * titleLable;
 @property (nonatomic, strong)UIImageView *imgV;
 @end
 
@@ -25,6 +24,7 @@
         [self addSubview:self.topView];
         [self addSubview:self.leftBtn];
         [self addSubview:self.titleLable];
+        [self addSubview:self.tittleBtn];
         [self addSubview:self.imgV];
     }
     return self;
@@ -42,7 +42,7 @@
 
 - (UIImageView *)imgV {
     if (_imgV == nil) {
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 35, 17, 15, 18)];
+        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width - 45, 23, 13, 16)];
         self.imgV.image = [UIImage imageNamed:@"gw_13"];
     }
     return _imgV;
@@ -51,16 +51,26 @@
 -(UIButton *)leftBtn{
     if (_leftBtn == nil) {
         self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _leftBtn.frame = CGRectMake(10, 12, 27, 27);
+        _leftBtn.frame = CGRectMake(10, 17, 27, 27);
         [_leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
         [_leftBtn addTarget:self action:@selector(clicked) forControlEvents:UIControlEventTouchUpInside];
     }
     return _leftBtn;
 }
 
+-(UIButton *)tittleBtn{
+    if (_tittleBtn == nil) {
+        self.tittleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _tittleBtn.frame = CGRectMake(45, 11, 220, 37);
+        self.tittleBtn.backgroundColor = [UIColor clearColor];
+        [_tittleBtn addTarget:self action:@selector(clicked1:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _tittleBtn;
+}
+
 -(UILabel *)titleLable{
     if (_titleLable == nil) {
-        _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(45, 15, 120, 20)];
+        _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(45, 20, 120, 20)];
         _titleLable.text = @"店铺名称";
         _titleLable.font = [UIFont systemFontOfSize:16];
     }
@@ -74,16 +84,20 @@
         [self.delegate clickedWhichHeaderView:self.tag];
     }
 }
+- (void)clicked1:(UIButton *)sender {
+    NSString *str = [NSString stringWithFormat:@"%ld", sender.tag];
+    //发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"titleCall" object:self userInfo:[NSDictionary dictionaryWithObject:str forKey:@"sid"]];
+}
 
-
--(void)setModel:(ShopCarModel *)model{
+-(void)setModel:(AllGucModel *)model{
     _model = model;
-    self.titleLable.text = _model.dianpuTitle;
-    if (_model.isChecked) {
-        [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
-    }else{
-        [self.leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
-    }
+    self.titleLable.text = _model.shop_name;
+//    if (_model.isChecked) {
+//        [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
+//    }else{
+//        [self.leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
+//    }
 }
 
 @end

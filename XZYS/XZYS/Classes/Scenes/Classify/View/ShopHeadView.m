@@ -7,9 +7,14 @@
 //
 
 #import "ShopHeadView.h"
-
+#import "ShopViewController.h"
 @implementation ShopHeadView
 
+- (IBAction)collect:(UIButton *)sender {
+    NSString *str = [NSString stringWithFormat:@"%ld", sender.tag];
+    //发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"cbt1" object:self userInfo:[NSDictionary dictionaryWithObject:str forKey:@"sid"]];
+}
 
 
 /*

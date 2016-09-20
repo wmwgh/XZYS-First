@@ -36,16 +36,28 @@
 }
 
 - (IBAction)shouHouAction:(id)sender {
-    RequestShouHouController *shouHouVC = [[RequestShouHouController alloc] init];
-    [self.owner.navigationController pushViewController:shouHouVC animated:YES];
-    NSLog(@"%ld", _shouhou.tag);
+    //发出通知
+    NSString *idStr =  [NSString stringWithFormat:@"%ld", (long)_tiaohuo.tag];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"申请售后" object:self userInfo:[NSDictionary dictionaryWithObject:idStr forKey:@"sid"]];
+    if (self.button) {
+        self.button(self.shouhou);
+    }
 }
 - (IBAction)tiaoHuoAction:(id)sender {
-    RequestTiaoHuoController *shouHouVC = [[RequestTiaoHuoController alloc] init];
-    [self.owner.navigationController pushViewController:shouHouVC animated:YES];
-    NSLog(@"%ld", _tiaohuo.tag);
-
+    _idStr =  [NSString stringWithFormat:@"%ld", (long)_tiaohuo.tag];
+    // 发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"调货跳转" object:self userInfo:[NSDictionary dictionaryWithObject:_idStr forKey:@"gid"]];
+    
+    if (self.button) {
+        self.button(self.tiaohuo);
+    }
 }
+//block的实现部分
+- (void)handlerButtonAction:(BlockButton)block
+{
+    self.button = block;
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

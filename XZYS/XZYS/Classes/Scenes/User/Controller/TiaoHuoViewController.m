@@ -42,10 +42,10 @@
     [self setTab];
     [self requestAllData];
     // 通知中心
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(callBack)
-                                                 name: @"取消调货刷新UI"
-                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(callBack)
+                                                 name:@"取消调货刷新UI"
+                                               object:nil];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -99,6 +99,8 @@
 #pragma mark - 数据区
 // 获取全部数据
 - (void)requestAllData {
+    // 显示指示器
+    [SVProgressHUD showWithStatus:@"正在加载数据......"];
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     _allDataArray = [NSMutableArray array];
@@ -130,6 +132,8 @@
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:2];
             [self.mainTab reloadData];
+            // 隐藏指示器
+            [SVProgressHUD dismiss];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败

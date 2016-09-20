@@ -17,6 +17,8 @@
 @property (nonatomic , copy) NSString *goods_name;
 // 商品图片
 @property (nonatomic , copy) NSString *goods_img;
+@property (nonatomic , copy) NSString *shop_name;
+@property (nonatomic , copy) NSString *shop_id;
 // 商品颜色
 @property (nonatomic , copy) NSString *goods_color;
 // 商品尺码

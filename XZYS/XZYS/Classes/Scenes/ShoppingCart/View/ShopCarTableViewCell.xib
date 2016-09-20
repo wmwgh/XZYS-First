@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -14,15 +14,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="476" height="88.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="商品标题" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kez-GQ-31w">
-                        <rect key="frame" x="127" y="5" width="344" height="18"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="18" id="LDM-Od-LWJ"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="颜色分类:深蓝色" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yh-xb-bKO">
                         <rect key="frame" x="127" y="35" width="100" height="18"/>
                         <constraints>
@@ -84,6 +75,15 @@
                             <constraint firstAttribute="width" constant="80" id="G0R-gx-rNE"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="商品标题" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kez-GQ-31w">
+                        <rect key="frame" x="127" y="5" width="344" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="LDM-Od-LWJ"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="h2X-0l-MKj" firstAttribute="leading" secondItem="2Yh-xb-bKO" secondAttribute="trailing" constant="5" id="BV7-i8-Ehv"/>
@@ -104,10 +104,13 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="colorTittle" destination="2Yh-xb-bKO" id="KEO-ZQ-He7"/>
                 <outlet property="countview" destination="SYy-9G-KyS" id="9Qs-qN-d8L"/>
+                <outlet property="goodsImg" destination="b7l-HU-sV7" id="dIN-Ji-43T"/>
+                <outlet property="goodsTitle" destination="kez-GQ-31w" id="yyX-BM-jVi"/>
                 <outlet property="leftBtn" destination="oOQ-Fb-zoY" id="E6F-KD-HjY"/>
                 <outlet property="priceLable" destination="sXH-7f-1H3" id="CJ7-XB-LWZ"/>
-                <outlet property="shopTitle" destination="kez-GQ-31w" id="MPU-R9-IOj"/>
+                <outlet property="sizeLb" destination="h2X-0l-MKj" id="vbj-cs-zQH"/>
             </connections>
             <point key="canvasLocation" x="285" y="514.5"/>
         </tableViewCell>

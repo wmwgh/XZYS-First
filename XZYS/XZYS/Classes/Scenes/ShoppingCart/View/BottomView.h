@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BottomModel.h"
+#import "AllGucModel.h"
 
 @protocol BottomViewDelegate <NSObject>
 
@@ -20,6 +20,6 @@
 
 @property (nonatomic, weak)id<BottomViewDelegate>delegate;
 
-@property (nonatomic, strong)BottomModel * model;
+@property (nonatomic, strong)AllGucModel * model;
 
 @end

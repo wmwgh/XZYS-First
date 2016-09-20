@@ -21,6 +21,8 @@
 -(id)initWithFrame:(CGRect)frame Data:(NSArray *)dataArr;
 
 -(void)showPickerView;
-
+//@property (nonatomic, strong) NSArray *ProvinceArray;
+//@property (nonatomic, strong) NSArray *CityArray;
+//@property (nonatomic, strong) NSArray *districtArray;
 
 @end

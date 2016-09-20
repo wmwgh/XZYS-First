@@ -18,6 +18,10 @@
 #import "SonLislModel.h"
 #import "OrderDetailViewController.h"
 #import <MBProgressHUD.h>
+#import "RequestTiaoHuoController.h"
+#import "RequestShouHouController.h"
+#import "ShopViewController.h"
+#import "PayViewController.h"
 
 static NSString *headerID = @"cityHeaderSectionID";
 static NSString *footerID = @"cityFooterSectionID";
@@ -35,6 +39,10 @@ static NSString *footerID = @"cityFooterSectionID";
 @property (nonatomic , strong) UIButton *payButton;
 @property (nonatomic , strong) UIButton *sureButton;
 @property (nonatomic , strong) NSMutableDictionary *params;
+@property (nonatomic , strong) NSMutableDictionary *idDic;
+@property (nonatomic , assign) NSInteger sectionID;
+@property (nonatomic , assign) NSInteger rowID;
+@property (nonatomic , strong) UIButton *titleButton;
 @end
 
 @implementation OrderListViewController
@@ -45,14 +53,101 @@ static NSString *footerID = @"cityFooterSectionID";
     return _allDataArray;
 }
 
+- (NSMutableDictionary *)idDic {
+    if (_idDic) {
+        _idDic = [NSMutableDictionary dictionary];
+    }
+    return _idDic;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"订单管理";
     [self setButton];
     [self setNav];
     [self requestAllData];
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(cellCallBack:)
+                                                 name: @"调货跳转"
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(cellShouHou:)
+                                                 name: @"申请售后"
+                                               object: nil];
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(orderCallBack)
+                                                 name:@"申请调货刷新UI"
+                                               object:nil];
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cancelCallBack:)
+                                                 name:@"取消刷新UI"
+                                               object:nil];
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sureCallBack:)
+                                                 name:@"收获刷新UI"
+                                               object:nil];
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
+}
+
+- (void)sureCallBack:(NSNotification *)text {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"确认收货成功";
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:1.5];
+    
+    self.params = [NSMutableDictionary dictionary];
+    self.params[@"order_id"] = text.userInfo[@"sid"];
+    self.params[@"act"] = @"shipping_complete";
+    
+    [self orderAction];
+}
+
+- (void)cancelCallBack:(NSNotification *)text {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"取消订单成功";
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:1.5];
+    
+    self.params = [NSMutableDictionary dictionary];
+    self.params[@"order_id"] = text.userInfo[@"sid"];
+    self.params[@"act"] = @"cancel";
+    
+    [self orderAction];
+}
+
+- (void)orderCallBack {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"申请调货成功";
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:1.5];
+}
+
+- (void)cellShouHou:(id)sender {
+    AllListModel *allModel = self.titleArray[self.sectionID];
+    RequestShouHouController *requestVC = [[RequestShouHouController alloc] init];
+    NSArray *ar = self.cellAllay[self.sectionID];
+    SonLislModel *sonModel = ar[self.rowID];
+    requestVC.orderID = allModel.ID;
+    requestVC.goodsID = sonModel.ID;
+    [self.navigationController pushViewController:requestVC animated:YES];
+}
+
+- (void)cellCallBack:(id)sender {
+    AllListModel *allModel = self.titleArray[self.sectionID];
+    RequestTiaoHuoController *requestVC = [[RequestTiaoHuoController alloc] init];
+    NSArray *ar = self.cellAllay[self.sectionID];
+    SonLislModel *sonModel = ar[self.rowID];
+    requestVC.orderID = allModel.ID;
+    requestVC.goodsID = sonModel.ID;
+    [self.navigationController pushViewController:requestVC animated:YES];
 }
 
 - (void)requestAllData {
@@ -77,10 +172,9 @@ static NSString *footerID = @"cityFooterSectionID";
     
     AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
     params[@"uid"] = appDele.userIdTag;
-    NSLog(@"%@", params);
         [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Order/orderList.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *NVArray = responseObject[@"data"];
-            if (NVArray) {
+            if (![NVArray isEqual:@""]) {
                 //获取数据源
                 for (NSDictionary *dic1 in NVArray) {
                     NSMutableArray *arra = [NSMutableArray array];
@@ -95,6 +189,13 @@ static NSString *footerID = @"cityFooterSectionID";
                     }
                     [self.cellAllay addObject:arra];
                 }
+            } else {
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.labelText = @"还未添加任何商品";
+                // 隐藏时候从父控件中移除
+                hud.removeFromSuperViewOnHide = YES;
+                [hud hide:YES afterDelay:1.5];
             }
         // 隐藏指示器
         [SVProgressHUD dismiss];
@@ -134,18 +235,24 @@ static NSString *footerID = @"cityFooterSectionID";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     SonLislModel *model = [[SonLislModel alloc] init];
     NSArray *array = self.cellAllay[indexPath.section];
     model = array[indexPath.row];
+    
     if (_orderType == 0) {
         AllListModel *allModel = [[AllListModel alloc] init];
         allModel = self.titleArray[indexPath.section];
         if ([allModel.order_status_text isEqualToString:@"已完成"]) {
+#warning block
             DaiOrderListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell2" forIndexPath:indexPath];
             [cell setModel:model];
-            cell.shouhou.tag = [model.ID integerValue];
-            cell.tiaohuo.tag = [model.ID integerValue];
+            [cell handlerButtonAction:^(UIButton *superID) {
+                DaiOrderListCell *cell = (DaiOrderListCell *)[[superID superview] superview];
+                NSIndexPath *path = [self.mainTab indexPathForCell:cell];
+                self.sectionID = [path section];
+                self.rowID = [path row];
+            }];
+            
             return cell;
         }
     }
@@ -153,8 +260,14 @@ static NSString *footerID = @"cityFooterSectionID";
     if (_orderType == 4) {
         DaiOrderListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell1" forIndexPath:indexPath];
         [cell setModel:model];
-        cell.shouhou.tag = [model.ID integerValue];
-        cell.tiaohuo.tag = [model.ID integerValue];
+        [cell handlerButtonAction:^(UIButton *superID) {
+            UIButton *butn = [UIButton buttonWithType:UIButtonTypeCustom];
+            butn = superID;
+            DaiOrderListCell *cell = (DaiOrderListCell *)[[superID superview] superview];
+            NSIndexPath *path = [self.mainTab indexPathForCell:cell];
+            self.sectionID = [path section];
+            self.rowID = [path row];
+        }];
         return cell;
     } else {
         AllOrderListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
@@ -168,27 +281,39 @@ static NSString *footerID = @"cityFooterSectionID";
     return 87;
 }
 - (void)titleBT:(UIButton *)sender {
-    NSLog(@"title");
+    ShopViewController *shopVC = [[ShopViewController alloc] init];
+    shopVC.shopID = [NSString stringWithFormat:@"%ld", sender.tag];
+    [self.navigationController pushViewController:shopVC animated:YES];
 }
+
 - (void)deleteButtonClick:(UIButton *)sender {
     self.params = [NSMutableDictionary dictionary];
     self.params[@"order_id"] = [NSString stringWithFormat:@"%ld", sender.tag];
-//    self.params[@"order_id"] = @"9";
-    self.params[@"act"] = @"order_del";
-    
+    self.params[@"act"] = @"cancel";
     [self orderAction];
 }
 - (void)orderButtonClick:(UIButton *)sender {
+    
+    AllListModel *allModel = [[AllListModel alloc] init];
+    allModel = self.titleArray[self.sectionID];
     OrderDetailViewController *detailVC = [[OrderDetailViewController alloc] init];
     detailVC.orderID = [NSString stringWithFormat:@"%ld", sender.tag];
+    //    detailVC.shopID = [NSString stringWithFormat:@"%ld", _titleButton.tag];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 - (void)payButtonClick:(UIButton *)sender {
-    NSLog(@"pay");
+    self.params = [NSMutableDictionary dictionary];
+    self.params[@"order_id"] = [NSString stringWithFormat:@"%ld", sender.tag];
+    self.params[@"act"] = @"payment_yes";
+//    [self orderAction];
+    NSLog(@"PAY");
 }
 
 - (void)sureButtonClick:(UIButton *)sender {
-    NSLog(@"sure");
+    self.params = [NSMutableDictionary dictionary];
+    self.params[@"order_id"] = [NSString stringWithFormat:@"%ld", sender.tag];
+    self.params[@"act"] = @"shipping_complete";
+    [self orderAction];
 }
 
 - (void)orderAction {
@@ -293,18 +418,18 @@ static NSString *footerID = @"cityFooterSectionID";
     UIImageView *dpImage = [[UIImageView alloc] initWithFrame:CGRectMake(15, 7, 25, 25)];
     dpImage.image = [UIImage imageNamed:@"dp_sd"];
     [backView addSubview:dpImage];
-    UIButton *titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 140, 40);
+    _titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 140, 40);
     UILabel *titLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, SCREEN_WIDTH - 145, 40)];
     titLabel.font = [UIFont systemFontOfSize:14];
     [backView bringSubviewToFront:titLabel];
     [backView addSubview:titLabel];
-    [titleButton setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
-    [titleButton addTarget:self action:@selector(titleBT:) forControlEvents:UIControlEventTouchUpInside];
-    titleButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
-    [titleButton.titleLabel setTextAlignment:NSTextAlignmentLeft];
-    [backView addSubview:titleButton];
-    UIImageView *jianimage = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(titleButton.frame), 12, 15, 17)];
+    [_titleButton setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
+    [_titleButton addTarget:self action:@selector(titleBT:) forControlEvents:UIControlEventTouchUpInside];
+    _titleButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    [_titleButton.titleLabel setTextAlignment:NSTextAlignmentLeft];
+    [backView addSubview:_titleButton];
+    UIImageView *jianimage = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_titleButton.frame), 12, 15, 17)];
     jianimage.image = [UIImage imageNamed:@"dp_ht"];
     [backView addSubview:jianimage];
     self.nomalLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 58, 7, 50, 30)];
@@ -315,7 +440,7 @@ static NSString *footerID = @"cityFooterSectionID";
         AllListModel *model = [[AllListModel alloc] init];
         model = self.titleArray[section];
         titLabel.text = model.shop_name;
-        titleButton.tag = [model.ID integerValue];
+        _titleButton.tag = [model.shop_id integerValue];
         self.nomalLabel.text = model.order_status_text;
         return headerView;
 #pragma maik ------ 待收货订单
@@ -323,7 +448,7 @@ static NSString *footerID = @"cityFooterSectionID";
         AllListModel *model = [[AllListModel alloc] init];
         model = self.titleArray[section];
         titLabel.text = model.shop_name;
-        titleButton.tag = [model.ID integerValue];
+        _titleButton.tag = [model.shop_id integerValue];
         self.nomalLabel.text = model.order_status_text;
         return headerView;
 #pragma maik ------ 已付款订单
@@ -331,7 +456,7 @@ static NSString *footerID = @"cityFooterSectionID";
         AllListModel *model = [[AllListModel alloc] init];
         model = self.titleArray[section];
         titLabel.text = model.shop_name;
-        titleButton.tag = [model.ID integerValue];
+        _titleButton.tag = [model.shop_id integerValue];
         self.nomalLabel.text = model.order_status_text;
         return headerView;
 #pragma maik ------ 已完成订单
@@ -339,14 +464,14 @@ static NSString *footerID = @"cityFooterSectionID";
         AllListModel *model = [[AllListModel alloc] init];
         model = self.titleArray[section];
         titLabel.text = model.shop_name;
-        titleButton.tag = [model.ID integerValue];
+        _titleButton.tag = [model.shop_id integerValue];
         self.nomalLabel.text = model.order_status_text;
         return headerView;
     } else {
         AllListModel *model = [[AllListModel alloc] init];
         model = self.titleArray[section];
         titLabel.text = model.shop_name;
-        titleButton.tag = [model.ID integerValue];
+        _titleButton.tag = [model.shop_id integerValue];
         self.nomalLabel.text = model.order_status_text;
         return headerView;
     }
@@ -370,7 +495,7 @@ static NSString *footerID = @"cityFooterSectionID";
     priceLabel1.text = model.total_price;
     [_footView addSubview:priceLabel1];
     _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_deleteButton setTitle:@"删除订单" forState:UIControlStateNormal];
+    [_deleteButton setTitle:@"取消订单" forState:UIControlStateNormal];
     _deleteButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
     [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_deleteButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];

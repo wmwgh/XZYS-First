@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -102,6 +102,9 @@
                         <constraint firstAttribute="width" constant="30" id="gMU-VK-wYg"/>
                     </constraints>
                     <state key="normal" image="dp_scc.png"/>
+                    <connections>
+                        <action selector="collect:" destination="iN0-l3-epB" eventType="touchUpInside" id="rmr-MW-svM"/>
+                    </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vd1-GZ-W8d">
                     <rect key="frame" x="0.0" y="212" width="375" height="1"/>
@@ -172,7 +175,7 @@
                 <outlet property="pickBackView" destination="9GS-HV-mwa" id="21t-Hr-WK6"/>
                 <outlet property="titleLabel" destination="YAU-hS-HMu" id="rOc-Th-Y2W"/>
             </connections>
-            <point key="canvasLocation" x="307.5" y="-102"/>
+            <point key="canvasLocation" x="235.5" y="-106"/>
         </view>
     </objects>
     <resources>

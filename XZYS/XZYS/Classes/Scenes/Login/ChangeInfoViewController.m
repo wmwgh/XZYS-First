@@ -25,6 +25,11 @@
 
 @interface ChangeInfoViewController ()
 @property (nonatomic , strong) NSMutableDictionary *params;
+@property (nonatomic, strong) NSArray *ProvinceArray;
+@property (nonatomic, strong) NSArray *CityArray;
+@property (nonatomic, strong) NSArray *districtArray;
+@property (nonatomic , strong) GPDateView *gpDateView;
+
 @end
 
 @implementation ChangeInfoViewController
@@ -37,6 +42,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.ProvinceArray = [NSMutableArray array];
+    self.CityArray = [NSMutableArray array];
+    self.districtArray = [NSMutableArray array];
+//    [self requsetAddress];
     self.title = @"修改资料";
     self.addressLabel.layer.cornerRadius = 5;
     self.addressLabel.layer.borderColor = XZYSRGBColor(231, 231, 231).CGColor;
@@ -45,9 +54,27 @@
     [self setIcornButton];
     //默认头像
     [_iconBtn setImage:[UIImage imageNamed:@"info_04"] forState:UIControlStateNormal];
-    // Do any additional setup after loading the view from its nib.
-    
 }
+//- (void)requsetAddress {
+//    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaProvince" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        self.ProvinceArray = responseObject[@"data"];
+////        self.gpDateView.ProvinceArray = self.ProvinceArray;
+//        NSLog(@"%@", self.ProvinceArray);
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//    }];
+//    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaCity/city_id/3" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        self.CityArray = responseObject[@"data"];
+////        self.gpDateView.CityArray = self.CityArray;
+//        NSLog(@"%@", self.CityArray);
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//    }];
+//    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaDistrict/district_id/111" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        self.districtArray = responseObject[@"data"];
+////        self.gpDateView.districtArray = self.districtArray;
+//        NSLog(@"%@", self.districtArray);
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//    }];
+//}
 
 - (IBAction)AddressPickerClick:(id)sender {
     GPDateView * dateView = [[GPDateView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 250, SCREEN_WIDTH, 250) Data:nil];
@@ -154,6 +181,7 @@
     if (self.params[@"shop_address"] != nil && ![self.params[@"shop_address"] isKindOfClass:[NSNull class]] && ![self.params[@"shop_address"] isEqualToString:@""]) {
         NSLog(@"%@", _params);
         NSLog(@"成功了");
+        [self changeInfo];
     } else {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -168,8 +196,10 @@
 - (IBAction)sureButtonClick:(id)sender {
     
     [self setDict];
-    [self changeInfo];
+    
 }
+
+
 - (void)changeInfo {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";
