@@ -10,7 +10,8 @@
 
 @interface ShopCarModel : NSObject
 
-@property (nonatomic, strong)NSMutableArray * listArr;
-@property (nonatomic, copy)NSString * dianpuTitle;
+@property (nonatomic, strong) NSMutableArray * listArr;
+@property (nonatomic, copy) NSString *shop_name;
+@property (nonatomic, copy) NSString *shop_id;
 @property (nonatomic, assign)BOOL isChecked;//店铺被选中
 @end

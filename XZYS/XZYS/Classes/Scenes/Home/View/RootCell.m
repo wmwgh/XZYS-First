@@ -82,16 +82,6 @@
 
 -(void)setShopModel:(ShopModel *)shopModel{
     
-//    _shopModel = shopModel;
-//    NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL,_shopModel.goods_img];
-//    NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _shopModel.sales_num];
-//    NSString *priceStr = [NSString stringWithFormat:@"￥%@", _shopModel.price];
-//    [_photoImage sd_setImageWithURL:[NSURL URLWithString:str]];
-//    _tittleLable.text = _shopModel.goods_name;
-//    _priceLable.text = priceStr;
-//    _priceLable.textColor = XZYSBlueColor;
-//    _NumberLable.text = numStr;
-//    _NumberLable.textColor = XZYSPinkColor;
 }
 
 @end

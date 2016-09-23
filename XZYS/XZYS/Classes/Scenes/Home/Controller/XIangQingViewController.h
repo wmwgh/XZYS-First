@@ -15,5 +15,4 @@
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
 @property (nonatomic ,strong) SDFQModel *model;
 @property (nonatomic , copy) NSString *passID;
-
 @end

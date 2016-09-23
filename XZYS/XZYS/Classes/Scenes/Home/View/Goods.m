@@ -32,11 +32,6 @@
 
     for (int i = 0; i < _picArray.count; i++) {
         UIImageView *imageView = [[UIImageView alloc]init];
-        //        imageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"0%d.jpg",i]];
-//        LBTModel *model = [[LBTModel alloc] init];
-//        model = self.LBTArray[i];
-//        NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.img];
-//        [imageView sd_setImageWithURL:[NSURL URLWithString:urlStr]];
         [_picArray addObject:imageView];
     }
     

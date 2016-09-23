@@ -9,17 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface AllGucModel : NSObject
-@property (nonatomic, assign) BOOL selected;//店铺中的单个商品被选中
-@property (nonatomic, assign)BOOL isSelecteAll;
-@property (nonatomic, assign)float  totalMoney;
-@property (nonatomic, assign)NSInteger totalCount;
-@property (nonatomic, assign)BOOL isEdit;
-@property (nonatomic, strong)NSMutableArray * listArr;
-@property (nonatomic, copy)NSString * dianpuTitle;
-@property (nonatomic, assign)BOOL isChecked;//店铺被选中
-
-/// 店铺名称
-@property (nonatomic, copy)NSString * shop_name;
 /// 商品尺码
 @property (nonatomic, copy)NSString * goods_size;
 /// 购物车ID
@@ -42,4 +31,8 @@
 @property (nonatomic, copy)NSString * num;
 /// 购物车创建时间戳
 @property (nonatomic, copy)NSString * create_time;
+
+@property (nonatomic, assign)BOOL selected;//店铺中的单个商品被选中
+@property (nonatomic, assign) NSInteger count;
+
 @end

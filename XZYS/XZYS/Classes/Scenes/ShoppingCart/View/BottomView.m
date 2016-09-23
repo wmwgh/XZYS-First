@@ -10,7 +10,7 @@
 #define RGBAColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
 @interface BottomView ()
 
-@property (nonatomic, strong)UIButton *leftBtn;
+
 @property (nonatomic, strong)UILabel * titleLable;
 @property (nonatomic, strong)UIButton *rightBtn;
 @property (nonatomic, strong)UILabel * totalLable;
@@ -103,7 +103,7 @@
 
 
 #pragma mark -- setter
--(void)setModel:(AllGucModel *)model{
+-(void)setModel:(BottomModel *)model{
     _model = model;
     if (_model.isSelecteAll) {
         [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];

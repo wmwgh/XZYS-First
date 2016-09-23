@@ -145,7 +145,7 @@
     [self.countTF resignFirstResponder];
     NSInteger count = [self.countTF.text integerValue] + 1;
     self.countTF.text = [NSString stringWithFormat:@"%zd", count];
-    [self.leftBtn setImage:[UIImage imageNamed:@"gw_17"] forState:UIControlStateNormal];
+    [self.leftBtn setImage:[UIImage imageNamed:@"gw_17_1"] forState:UIControlStateNormal];
     if (self.CountBlock) {
         self.CountBlock(count);
         NSString *str = [NSString stringWithFormat:@"%ld", count];
@@ -168,7 +168,7 @@
     if (count == 1) {
         [self.leftBtn setImage:[UIImage imageNamed:@"gw_17"] forState:UIControlStateNormal];
     }else{
-        [self.leftBtn setImage:[UIImage imageNamed:@"gw_17"] forState:UIControlStateNormal];
+        [self.leftBtn setImage:[UIImage imageNamed:@"gw_17_1"] forState:UIControlStateNormal];
     }
 }
 

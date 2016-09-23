@@ -22,6 +22,7 @@
     self.countview.CountBlock = ^(NSInteger num){
         if (MySelf.delegate && [self.delegate respondsToSelector:@selector(changeTheShopCount:count:)]) {
             [MySelf.delegate changeTheShopCount:MySelf count:num];
+            NSLog(@"num=================%ld", num);
         }
     };
 }
@@ -38,11 +39,11 @@
     self.countview.countTF.tag = [_model.ID intValue];
     self.countview.count =  [_model.num intValue];
     
-//    if (_model.selected) {
-//        [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
-//    }else{
-//        [self.leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
-//    }
+    if (_model.selected) {
+        [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
+    }else{
+        [self.leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
+    }
 }
 
 - (IBAction)leftBtnClicked:(id)sender {

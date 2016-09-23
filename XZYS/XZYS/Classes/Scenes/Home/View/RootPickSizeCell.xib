@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="RootPickSizeCell">
+            <rect key="frame" x="0.0" y="0.0" width="135" height="47"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="135" height="47"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cu9-SU-jcV">
+                        <rect key="frame" x="0.0" y="0.0" width="135" height="47"/>
+                        <state key="normal" title="Button">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="sizeAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="9u4-GL-gW6"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="cu9-SU-jcV" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="7ij-XL-082"/>
+                <constraint firstAttribute="trailing" secondItem="cu9-SU-jcV" secondAttribute="trailing" id="GeG-iD-dI9"/>
+                <constraint firstItem="cu9-SU-jcV" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="g2J-67-aME"/>
+                <constraint firstAttribute="bottom" secondItem="cu9-SU-jcV" secondAttribute="bottom" id="nLK-Vt-29K"/>
+            </constraints>
+            <size key="customSize" width="135" height="47"/>
+            <connections>
+                <outlet property="sizePickBt" destination="cu9-SU-jcV" id="igC-ty-lte"/>
+            </connections>
+            <point key="canvasLocation" x="382.5" y="331.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

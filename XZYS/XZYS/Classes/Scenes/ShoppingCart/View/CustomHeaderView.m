@@ -90,14 +90,14 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"titleCall" object:self userInfo:[NSDictionary dictionaryWithObject:str forKey:@"sid"]];
 }
 
--(void)setModel:(AllGucModel *)model{
+-(void)setModel:(ShopCarModel *)model{
     _model = model;
     self.titleLable.text = _model.shop_name;
-//    if (_model.isChecked) {
-//        [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
-//    }else{
-//        [self.leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
-//    }
+    if (_model.isChecked) {
+        [self.leftBtn setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
+    }else{
+        [self.leftBtn setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
+    }
 }
 
 @end

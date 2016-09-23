@@ -21,6 +21,7 @@
 #import "XIangQingViewController.h"
 #import "ShopViewController.h"
 #import <MJRefresh.h>
+#import "ShopCarModel.h"
 
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
@@ -28,17 +29,16 @@
 @interface ShoppingCarViewController ()<UITableViewDelegate,UITableViewDataSource,ShopCarTableViewCellDelegate, CustomHeaderViewDelegate, BottomViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UITableView * baseTable;
-@property (nonatomic, strong) NSMutableArray * dataAry;
 @property (nonatomic, strong) BottomView * bottomView;
-@property (nonatomic, strong) AllGucModel * bottomModel;
+@property (nonatomic, strong) BottomModel * bottomModel;
 @property (nonatomic, strong) NSMutableArray * totalSelectedAry;
 @property (nonatomic, strong) UIButton * rightTopBtn;
 @property (nonatomic, assign) BOOL isEditing;
-@property (nonatomic , strong) NSMutableArray *shopNameArray;
 @property (nonatomic , strong) NSMutableArray *dataArray;
 @property (nonatomic , strong) NSMutableArray *allKeys;
 @property (nonatomic , strong) NSMutableArray *idArray;
 @property (nonatomic , strong) UILabel *labe;
+@property (nonatomic , strong) NSMutableDictionary *jsonParam;
 //测试
 @property (nonatomic, copy)NSMutableString * testString;
 @end
@@ -58,7 +58,7 @@ static NSString * indentifier = @"shopCarCell";
     bottomView.delegate = self;
     self.bottomView = bottomView;
     [self.view addSubview:self.bottomView];
-    self.bottomModel = [[AllGucModel alloc] init];
+    self.bottomModel = [[BottomModel alloc] init];
     
     [self configerNavItemBtn];
 //    [self configerData];
@@ -95,6 +95,7 @@ static NSString * indentifier = @"shopCarCell";
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemNum" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *countStr = responseObject[@"data"];
+        [self GetTotalBill];
         NSLog(@"+===========%@", countStr);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -107,6 +108,7 @@ static NSString * indentifier = @"shopCarCell";
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemMinus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *countStr = responseObject[@"data"];
         NSLog(@"------------%@", countStr);
+        [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
 }
@@ -118,6 +120,7 @@ static NSString * indentifier = @"shopCarCell";
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemPlus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *countStr = responseObject[@"data"];
         NSLog(@"+++++++++++%@", countStr);
+        [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
 }
@@ -132,8 +135,6 @@ static NSString * indentifier = @"shopCarCell";
 - (void)requestCartData {
     self.dataArray = [NSMutableArray array];
     [self.dataArray removeAllObjects];
-    self.shopNameArray = [NSMutableArray array];
-    [self.shopNameArray removeAllObjects];
     self.allKeys = [NSMutableArray array];
     [self.allKeys removeAllObjects];
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -146,7 +147,10 @@ static NSString * indentifier = @"shopCarCell";
             [self.allKeys addObjectsFromArray:keyArray];
             for (NSString *key in self.allKeys) {
                 NSDictionary *dict = dic[key];
-                [self.shopNameArray addObject:dict[@"shop_name"]];
+                ShopCarModel *shopModel = [[ShopCarModel alloc] init];
+                shopModel.shop_name = dict[@"shop_name"];
+                shopModel.shop_id = key;
+//                [self.shopNameArray addObject:dict[@"shop_name"]];
                 NSMutableArray *arra = dict[@"cart_list"];
                 NSMutableArray *dataAr = [NSMutableArray array];
                 for (NSDictionary *diction in arra) {
@@ -154,9 +158,12 @@ static NSString * indentifier = @"shopCarCell";
                     [model setValuesForKeysWithDictionary:diction];
                     [dataAr addObject:model];
                 }
-                [self.dataArray addObject:dataAr];
+                shopModel.listArr = dataAr;
+                [self.dataArray addObject:shopModel];
             }
             [self.labe removeFromSuperview];
+            self.bottomModel.isSelecteAll = NO;
+            [self GetTotalBill];
             [self.baseTable.mj_header endRefreshing];
             [self.baseTable reloadData];
         } else {
@@ -164,6 +171,7 @@ static NSString * indentifier = @"shopCarCell";
             self.labe.textAlignment = NSTextAlignmentCenter;
             [self.view addSubview:self.labe];
             [self.baseTable.mj_header endRefreshing];
+            [self GetTotalBill];//求和
             [self.baseTable reloadData];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -186,12 +194,11 @@ static NSString * indentifier = @"shopCarCell";
 
 #pragma mark -- <UITableViewDataSource, UITableViewDelegate>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return self.shopNameArray.count;
+    return self.dataArray.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSArray *array = self.dataArray[section];
-    return array.count;
+    return [self.dataArray[section] listArr].count;;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -210,24 +217,25 @@ static NSString * indentifier = @"shopCarCell";
     CustomHeaderView *view = [[CustomHeaderView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 40)];
     view.tag = section + 2000;
     view.delegate = self;
-    view.titleLable.text = self.shopNameArray[section];
-    view.tittleBtn.tag = [self.allKeys[section] intValue];
+    ShopCarModel *model = self.dataArray[section];
+    view.tittleBtn.tag = [model.shop_id intValue];
+    [view setModel:model];
     return view;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     ShopCarTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:indentifier forIndexPath:indexPath];
     cell.delegate = self;
-    NSArray *ar = self.dataArray[indexPath.section];
-    AllGucModel *model = ar[indexPath.row];
+    ShopCarModel *shopModel = self.dataArray[indexPath.section];
+    AllGucModel *model = shopModel.listArr[indexPath.row];
     cell.model = model;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSArray *array = self.dataArray[indexPath.section];
-    AllGucModel *model = array[indexPath.row];
+    ShopCarModel *shopModel = self.dataArray[indexPath.section];
+    AllGucModel *model = shopModel.listArr[indexPath.row];
     XIangQingViewController *xxVC = [[XIangQingViewController alloc] init];
     xxVC.passID = model.goods_id;
     self.hidesBottomBarWhenPushed = YES;
@@ -238,8 +246,9 @@ static NSString * indentifier = @"shopCarCell";
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     self.idArray = [NSMutableArray array];
-    NSArray *arr = self.dataArray[indexPath.section];
-    AllGucModel * model = arr[indexPath.row];
+    ShopCarModel *shopModel = self.dataArray[indexPath.section];
+    NSArray *arr = shopModel.listArr;
+    AllGucModel *model = arr[indexPath.row];
     [self.idArray addObject:model.ID];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.idArray options:NSJSONWritingPrettyPrinted error:nil];
@@ -252,23 +261,11 @@ static NSString * indentifier = @"shopCarCell";
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartDel" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
         if ([str isEqualToString:@"-1202"]) {
+            [self GetTotalBill];
             [self requestCartData];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
     }];
-    
-#warning 2687654323456789876543
-    
-//    NSMutableArray * ary = [self.dataArray[indexPath.section] listArr];
-//    [ary removeObject:model];
-//    if (ary.count == 0) {
-//        [self.dataAry removeObjectAtIndex:indexPath.section];
-//        [self.baseTable reloadData];
-//    }else{
-//        [self.baseTable reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-//    }
-//    [self GetTotalBill];
 }
 
 - (void)configerNavItemBtn{
@@ -285,8 +282,8 @@ static NSString * indentifier = @"shopCarCell";
 #pragma mark --- cell代理方法(cell 左侧按钮)
 - (void)clickedWichLeftBtn:(UITableViewCell *)cell{
     NSIndexPath * indexpath = [self.baseTable indexPathForCell:cell];
-    AllGucModel * shopCarModel = self.dataAry[indexpath.section];//当前选中的商品对应的店铺的模型
-    AllGucModel * model = shopCarModel.listArr[indexpath.row];
+    ShopCarModel * shopCarModel = self.dataArray[indexpath.section];//当前选中的商品对应的店铺的模型
+    AllGucModel *model = shopCarModel.listArr[indexpath.row];
     model.selected = !model.selected;
     NSInteger totalCount = 0;
     for (int i = 0; i < shopCarModel.listArr.count; i++) {
@@ -295,33 +292,32 @@ static NSString * indentifier = @"shopCarCell";
             totalCount++;
         }
     }
-    AllGucModel * sectionModel = self.dataAry[indexpath.section];
+    ShopCarModel *sectionModel = self.dataArray[indexpath.section];
     sectionModel.isChecked = (totalCount == shopCarModel.listArr.count);
     
     [self checkShopState];
 }
 
 //修改数量
-//- (void)changeTheShopCount:(UITableViewCell *)cell count:(NSInteger )count{
-//    NSIndexPath * indexpath = [self.baseTable indexPathForCell:cell];
-//    NSLog(@"%zd-----%zd", indexpath.section, indexpath.row);
-//    ShopCarModel * shopCarModel = self.dataAry[indexpath.section];//当前选中的商品对应的店铺的模型
-//    GwcShopModel * model = shopCarModel.listArr[indexpath.row];
-//    model.count = count;
-//    //    [self checkShopState];错误
-//    [self GetTotalBill];
-//}
+- (void)changeTheShopCount:(UITableViewCell *)cell count:(NSInteger )count{
+    NSIndexPath *indexpath = [self.baseTable indexPathForCell:cell];
+    NSLog(@"%zd-----%zd", indexpath.section, indexpath.row);
+    ShopCarModel *shopCarModel = self.dataArray[indexpath.section];//当前选中的商品对应的店铺的模型
+    AllGucModel *model = shopCarModel.listArr[indexpath.row];
+    model.count = count;
+    //    [self checkShopState];错误
+    [self GetTotalBill];
+}
 
 #pragma mark --- CustomHeaderViewDelegate
 
 - (void)clickedWhichHeaderView:(NSInteger)index{
     NSInteger sectionIndex = index - 2000;
-    AllGucModel *model = self.dataArray[sectionIndex];
-//    model.isChecked = !model.isChecked;
-    NSMutableArray * tempAry = self.dataArray[sectionIndex];
+    ShopCarModel *model = self.dataArray[sectionIndex];
+    model.isChecked = !model.isChecked;
+    NSMutableArray * tempAry = [self.dataArray[sectionIndex] listArr];
     for (int i = 0; i < tempAry.count; i++) {
-        AllGucModel *model = tempAry[i];
-        AllGucModel * shopModel = tempAry[i];
+        AllGucModel *shopModel = tempAry[i];
         shopModel.selected = model.isChecked;
     }
     [self checkShopState];
@@ -331,8 +327,8 @@ static NSString * indentifier = @"shopCarCell";
 -  (void)clickedBottomSelecteAll{//全选方法
     
     self.bottomModel.isSelecteAll = !self.bottomModel.isSelecteAll;
-    for (int i = 0; i < self.dataAry.count; i++) {
-        AllGucModel * model = self.dataAry[i];
+    for (int i = 0; i < self.dataArray.count; i++) {
+        ShopCarModel * model = self.dataArray[i];
         model.isChecked = self.bottomModel.isSelecteAll;
         for (int j = 0; j < model.listArr.count; j++) {
             AllGucModel *shopModel = model.listArr[j];
@@ -354,9 +350,16 @@ static NSString * indentifier = @"shopCarCell";
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:2];
         }else{
-            NSLog(@"选择了商品，进行删除");
-            NSLog(@"要删除的数据模型是%@", _totalSelectedAry);
             [self warnMessage:@"是否确定要删除该商品"];
+            NSData *jsonData = [NSJSONSerialization dataWithJSONObject:_totalSelectedAry options:NSJSONWritingPrettyPrinted error:nil];
+            NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+            
+            self.jsonParam = [NSMutableDictionary dictionary];
+            AppDelegate *appdele = [[UIApplication sharedApplication] delegate];
+            self.jsonParam[@"uid"] = appdele.userIdTag;
+            self.jsonParam[@"id"] = strjson;
+            
+            
         }
     }else{
         if (self.bottomModel.totalCount == 0) {
@@ -372,17 +375,37 @@ static NSString * indentifier = @"shopCarCell";
     }
 }
 
+- (void)warnMessage:(NSString *)string{
+    UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:string delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alertView show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (buttonIndex == 1) {
+        //删除事件。多个删除直接重新请求数据！
+        [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartDel" parameters:self.jsonParam progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+            if ([str isEqualToString:@"-1202"]) {
+                self.bottomModel.isSelecteAll = NO;
+                [self GetTotalBill];
+                [self requestCartData];
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        }];
+    }
+}
+
 #pragma mark -- 公共方法
 //选中商品或者选中店铺都会走这个公共方法。在这里判断选中的店铺数量还不是和数据源数组数量相等。一样的话就全选，否则相反。
 - (void)checkShopState{
     NSInteger totalSelected = 0;
-    for (int i = 0; i < self.dataAry.count; i++) {
-        AllGucModel * model = self.dataAry[i];
+    for (int i = 0; i < self.dataArray.count; i++) {
+        ShopCarModel * model = self.dataArray[i];
         if (model.isChecked) {
             totalSelected++;
         }
     }
-    if (totalSelected == self.dataAry.count) {
+    if (totalSelected == self.dataArray.count) {
         self.bottomModel.isSelecteAll = YES;
     }else{
         self.bottomModel.isSelecteAll = NO;
@@ -399,19 +422,22 @@ static NSString * indentifier = @"shopCarCell";
     self.totalSelectedAry  = [NSMutableArray array];
     float totalMoney = 0.00;
     NSMutableString * compentStr = [[NSMutableString alloc] init];
-    for (int i = 0; i < self.dataAry.count; i++) {
-        AllGucModel * model = self.dataAry[i];
+    for (int i = 0; i < self.dataArray.count; i++) {
+        ShopCarModel * model = self.dataArray[i];
         for (int j = 0; j < model.listArr.count; j++) {
             AllGucModel *shopModel = model.listArr[j];
             if (shopModel.selected) {
                 //保存model。如果是结算，传递选中商品，确认订单页面展示。如果是删除，根据此数组，拿到商品ID，用来删除。
-                [_totalSelectedAry addObject:shopModel];
-                [compentStr appendString:shopModel.shop_name];
+                [_totalSelectedAry addObject:shopModel.ID];
+                [compentStr appendString:shopModel.goods_name];
+                if (shopModel.count != 0) {
+                    shopModel.num = [NSString stringWithFormat:@"%ld", shopModel.count];
+                }
                 totalMoney += [shopModel.price intValue] * [shopModel.num intValue];
             }
         }
     }
-    if (self.dataAry.count == 0) {
+    if (self.dataArray.count == 0) {
         self.bottomModel.isSelecteAll = NO;
         self.bottomModel.isEdit = NO;
         [self.rightTopBtn setTitle:@"编辑"forState:UIControlStateNormal];
@@ -422,18 +448,6 @@ static NSString * indentifier = @"shopCarCell";
     self.bottomModel.totalCount = _totalSelectedAry.count;
     self.bottomView.model = self.bottomModel;
 }
-
-- (void)warnMessage:(NSString *)string{
-    UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示" message:string delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
-    [alertView show];
-}
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (buttonIndex == 1) {
-        //删除事件。多个删除直接重新请求数据！
-    }
-}
-
 
 
 #pragma mark --- NavgationItemBtnClicked
@@ -448,6 +462,7 @@ static NSString * indentifier = @"shopCarCell";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self requestCartData];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
