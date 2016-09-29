@@ -72,6 +72,7 @@
     }
     cell.xiTongTitle.text = model.title;
     cell.dateLabel.text = model.create_time;
+    cell.decLabel.text = model.content;
     return cell;
 }
 
@@ -87,9 +88,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.mainTableView deselectRowAtIndexPath:indexPath animated:NO];
     XITongListViewController *listVC = [[XITongListViewController alloc] init];
-    listVC.model = self.xiTongArray[indexPath.row];
+    XiTongModel *model = self.xiTongArray[indexPath.row];
+    listVC.model = model;
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:listVC animated:YES
      ];
+    self.hidesBottomBarWhenPushed = YES;
 }
 
 - (void)requestData {

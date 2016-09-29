@@ -48,6 +48,10 @@
 /// 商品详情尺寸数组
 @property (nonatomic, strong) NSMutableArray *SpxqSizeArray;
 @property (nonatomic, strong) NSMutableArray *SpxqSizeKeyArray;
+/// 内里数组
+@property (nonatomic, strong) NSArray *SpxqNLArray;
+@property (nonatomic, strong) NSMutableArray *SpxqNLKeyArray;
+@property (nonatomic , strong) NSMutableArray *NLBtArray;
 @property (nonatomic , strong) UIView *alineView;
 /// 商品详情季节数组
 @property (nonatomic, strong) NSMutableArray *SpxqSeasonArray;
@@ -112,6 +116,12 @@ static NSString *const pickSize_cell = @"pickSize_cell";
     }
     return _sizeBtArray;
 }
+- (NSMutableArray *)NLBtArray {
+    if (!_NLBtArray) {
+        _NLBtArray = [NSMutableArray array];
+    }
+    return _NLBtArray;
+}
 - (NSMutableArray *)sizeColorNum {
     if (!_sizeColorNum) {
         _sizeColorNum = [NSMutableArray array];
@@ -169,6 +179,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"商品详情";
+    self.SpxqNLArray = @[@"单里", @"棉里"];
     
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
@@ -219,10 +230,31 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         }
     }
 }
+
+- (void)NLCallBack:(NSNotification *)text {
+    NSInteger tagID = [text.userInfo[@"sid"] integerValue] - 1000;
+#warning GGGGGGGGGGGGGGGGGGGGGGG
+    self.sizeStr = self.SpxqSizeKeyArray[tagID];
+    self.sizeStrChn = self.SpxqSizeArray[tagID];
+    for (UIButton *bt in self.NLBtArray) {
+        if (bt.tag - 1000 == tagID) {
+            [bt setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+            [bt setBackgroundColor:[UIColor whiteColor]];
+            bt.layer.borderWidth = 0.5;
+            bt.layer.borderColor = XZYSBlueColor.CGColor;
+        } else {
+            [bt setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            bt.layer.borderWidth = 0;
+            bt.backgroundColor = XZYSRGBColor(234, 234, 234);
+        }
+    }
+}
+
 - (void)colorCallBack:(NSNotification *)text {
     NSInteger tagID = [text.userInfo[@"sid"] integerValue] - 1000;
     self.colorStr = self.SpxqColorKeyArray[tagID];
     self.colorStrChn = self.SpxqColorArray[tagID];
+    
     for (UIButton *bt in self.colrorBtArray) {
         if (bt.tag - 1000 == tagID) {
             [bt setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
@@ -276,7 +308,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         cell.backgroundColor = [UIColor clearColor];
         if (self.sizeColorNumChn.count != 0) {
             NSArray *temp = self.sizeColorNumChn[indexPath.row];
-            cell.titltLab.text = [NSString stringWithFormat:@"颜色:%@      尺码:%@      X%@", temp[0], temp[1], temp[2]];
+            cell.titltLab.text = [NSString stringWithFormat:@"规格：%@ - %@ - X%@", temp[0], temp[1], temp[2]];
             cell.titltLab.font = [UIFont systemFontOfSize:14];
             cell.titltLab.textColor = XZYSBlueColor;
             cell.deleBtn.tag = indexPath.row;
@@ -290,7 +322,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         cellout.backgroundColor = [UIColor whiteColor];
         if (self.sizeColorNumChn.count != 0) {
             NSArray *temp = self.sizeColorNumChn[indexPath.row];
-            cellout.titltLab.text = [NSString stringWithFormat:@"颜色:%@      尺码:%@      X%@", temp[0], temp[1], temp[2]];
+            cellout.titltLab.text = [NSString stringWithFormat:@"规格：%@ - %@ - X%@", temp[0], temp[1], temp[2]];
             cellout.titltLab.font = [UIFont systemFontOfSize:14];
             cellout.titltLab.textColor = XZYSBlueColor;
             return cellout;
@@ -310,22 +342,94 @@ static NSString *const pickSize_cell = @"pickSize_cell";
 }
 
 - (void)addGoodsToCell {
-    NSMutableArray *arr = [NSMutableArray array];
-    if ((self.colorStr != nil || self.colorStr != NULL) && (self.sizeStr != nil || self.sizeStr != NULL)) {
-        [arr addObject:self.colorStr];
-        [arr addObject:self.sizeStr];
-        [arr addObject:self.numText.text];
-        [self.sizeColorNum addObject:arr];
-    }
+//    if (self.sizeColorNum.count == 0) {
+        NSMutableArray *arr = [NSMutableArray array];
+        if ((self.colorStr != nil || self.colorStr != NULL) && (self.sizeStr != nil || self.sizeStr != NULL)) {
+            [arr addObject:self.colorStr];
+            [arr addObject:self.sizeStr];
+            [arr addObject:self.numText.text];
+            [self.sizeColorNum addObject:arr];
+        }
+//    }
+//    else {
+//        if ((self.colorStr != nil || self.colorStr != NULL) && (self.sizeStr != nil || self.sizeStr != NULL)) {
+//            NSLog(@"count==%ld", self.sizeColorNum.count);
+//            for (int i = 0; i < self.sizeColorNum.count; i++) {
+//                NSMutableArray *arrTp = [NSMutableArray array];
+//                NSArray *tempAry = self.sizeColorNum[i];
+//                NSLog(@"%@", tempAry);
+//                NSString *colostr = tempAry[0];
+//                NSString *sizestr = tempAry[1];
+//                NSString *numstr = tempAry[2];
+//                NSLog(@"%@-%@-%@", colostr, sizestr, numstr);
+//                int a = [numstr intValue];
+//                int b = [self.numText.text intValue];
+//                if ([self.colorStr isEqualToString:colostr] && [self.sizeStr isEqualToString:sizestr]) {
+//                    NSString *numAdd = [NSString stringWithFormat:@"%d", a+b];
+//                    [arrTp addObject:self.colorStr];
+//                    [arrTp addObject:self.sizeStr];
+//                    [arrTp addObject:numAdd];
+//                    [self.sizeColorNum removeObjectAtIndex:i];
+//                    [self.sizeColorNum addObject:arrTp];
+//                } else {
+//                    if ((self.colorStr != nil || self.colorStr != NULL) && (self.sizeStr != nil || self.sizeStr != NULL)) {
+//                        NSMutableArray *arr = [NSMutableArray array];
+//                        [arr addObject:self.colorStr];
+//                        [arr addObject:self.sizeStr];
+//                        [arr addObject:self.numText.text];
+//                        [self.sizeColorNum addObject:arr];
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    
     NSMutableArray *arr1 = [NSMutableArray array];
-    if ((self.colorStrChn != nil || self.colorStrChn != NULL) && (self.sizeStrChn != nil || self.sizeStrChn != NULL)) {
-        [arr1 addObject:self.colorStrChn];
-        [arr1 addObject:self.sizeStrChn];
-        [arr1 addObject:self.numText.text];
-        [self.sizeColorNumChn addObject:arr1];
+//    if (self.sizeColorNumChn.count == 0) {
+        if ((self.colorStrChn != nil || self.colorStrChn != NULL) && (self.sizeStrChn != nil || self.sizeStrChn != NULL)) {
+            [arr1 addObject:self.colorStrChn];
+            [arr1 addObject:self.sizeStrChn];
+            [arr1 addObject:self.numText.text];
+            [self.sizeColorNumChn addObject:arr1];
+//        }
     }
+//    else {
+//        if ((self.colorStrChn != nil || self.colorStrChn != NULL) && (self.sizeStrChn != nil || self.sizeStrChn != NULL)) {
+//            NSLog(@"count==%ld", self.sizeColorNumChn.count);
+//            for (int i = 0; i < self.sizeColorNumChn.count; i++) {
+//                NSMutableArray *arrTp = [NSMutableArray array];
+//                NSArray *tempAry = self.sizeColorNumChn[i];
+//                NSLog(@"%@", tempAry);
+//                NSString *colostr = tempAry[0];
+//                NSString *sizestr = tempAry[1];
+//                NSString *numstr = tempAry[2];
+//                NSLog(@"%@-%@-%@", colostr, sizestr, numstr);
+//                int a = [numstr intValue];
+//                int b = [self.numText.text intValue];
+//                if ([self.colorStrChn isEqualToString:colostr] && [self.sizeStrChn isEqualToString:sizestr]) {
+//                    NSString *numAdd = [NSString stringWithFormat:@"%d", a+b];
+//                    [arrTp addObject:self.colorStrChn];
+//                    [arrTp addObject:self.sizeStrChn];
+//                    [arrTp addObject:numAdd];
+//                    [self.sizeColorNumChn removeObjectAtIndex:i];
+//                    [self.sizeColorNumChn addObject:arrTp];
+//                } else {
+//                    if ((self.colorStrChn != nil || self.colorStrChn != NULL) && (self.sizeStrChn != nil || self.sizeStrChn != NULL)) {
+//                        NSMutableArray *arr = [NSMutableArray array];
+//                        [arr addObject:self.colorStrChn];
+//                        [arr addObject:self.sizeStrChn];
+//                        [arr addObject:self.numText.text];
+//                        [self.sizeColorNumChn addObject:arr];
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
     [self.chooseTab reloadData];
 }
+    
 - (void)addGoods {
     [self.dictArray removeAllObjects];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -402,7 +506,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
     self.imagea.frame = CGRectMake(SCREEN_WIDTH - 33, CGRectGetMaxY(self.blineView.frame) + 11, 15, 20);
     self.imageView.frame = CGRectMake(0, CGRectGetMaxY(self.blineView.frame), SCREEN_WIDTH, 40);
     self.clineView.frame = CGRectMake(5, CGRectGetMaxY(self.imageView.frame) + 1, SCREEN_WIDTH - 10, 1);
-    self.dlineView.frame = CGRectMake(5, CGRectGetMaxY(self.dlineView.frame) + 5, SCREEN_WIDTH - 10, 1);
+    self.dlineView.frame = CGRectMake(5, CGRectGetMaxY(self.clineView.frame) + 5, SCREEN_WIDTH - 10, 1);
 }
 
 - (void)pickAction:(UIButton *)sender {
@@ -429,7 +533,8 @@ static NSString *const pickSize_cell = @"pickSize_cell";
     self.imagea.frame = CGRectMake(SCREEN_WIDTH - 33, CGRectGetMaxY(self.blineView.frame) + 11, 15, 20);
     self.imageView.frame = CGRectMake(0, CGRectGetMaxY(self.blineView.frame), SCREEN_WIDTH, 40);
     self.clineView.frame = CGRectMake(5, CGRectGetMaxY(self.imageView.frame) + 1, SCREEN_WIDTH - 10, 1);
-    self.dlineView.frame = CGRectMake(5, CGRectGetMaxY(self.dlineView.frame) + 5, SCREEN_WIDTH - 10, 1);
+    
+    self.dlineView.frame = CGRectMake(5, CGRectGetMaxY(self.clineView.frame) + 5, SCREEN_WIDTH - 10, 1);
     
     [self.mainTable reloadData];
 }
@@ -475,6 +580,21 @@ static NSString *const pickSize_cell = @"pickSize_cell";
     } else if (_SpxqSizeArray.count < 18) {
         height += 245;
     }
+#warning gggggggggggggggggggggggggggggg
+    if (_SpxqNLArray.count < 4) {
+        height += 70;
+    } else if (_SpxqNLArray.count < 7) {
+        height += 105;
+    } else if (_SpxqNLArray.count < 10) {
+        height += 140;
+    } else if (_SpxqNLArray.count < 13) {
+        height += 175;
+    } else if (_SpxqNLArray.count < 15) {
+        height += 210;
+    } else if (_SpxqNLArray.count < 18) {
+        height += 245;
+    }
+    
     self.rootPickView = [[ColorSizePickView alloc] initWithFrame:self.view.bounds];
     [self.pickerBackView addSubview:self.rootPickView];
     // 创建对象并指定样式
@@ -556,7 +676,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
 
 // 设置多少个分区
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 2;
+    return 3;
 }
 
 // 设置每个分区里面有几个item
@@ -565,6 +685,9 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         return self.SpxqColorArray.count;
     } else if (section == 1) {
         return self.SpxqSizeArray.count;
+    } else if (section == 2) {
+#warning gggggggggggggggggggggggggggggg
+        return self.SpxqNLArray.count;
     }
     return 0;
 }
@@ -586,6 +709,14 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         cell1.sizePickBt.tag = indexPath.row + 1000;
         [self.sizeBtArray addObject:cell1.sizePickBt];
         return cell1;
+#warning gggggggggggggggggggggggggggggg
+    } else if (indexPath.section == 2) {
+        RootPickColorCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:pickColor_cell forIndexPath:indexPath];
+        NSString *str = _SpxqNLArray[indexPath.row];
+        [cell.colorBtn setTitle:str forState:UIControlStateNormal];
+        cell.colorBtn.tag = indexPath.row + 1000;
+        [self.NLBtArray addObject:cell.colorBtn];
+        return cell;
     }
     return nil;
 }
@@ -597,7 +728,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
 // 返回头视图和尾视图
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     PickerViewHeaderView *firstHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"picker" forIndexPath:indexPath];
-    NSArray *ar = @[@"颜色", @"尺寸"];
+    NSArray *ar = @[@"颜色", @"尺寸", @"内里"];
     firstHeaderView.headerLabel.text = ar[indexPath.section];
     firstHeaderView.headerLabel.font = [UIFont systemFontOfSize:15];
     firstHeaderView.headerLabel.textColor = XZYSPinkColor;
@@ -771,7 +902,7 @@ static NSString *const pickSize_cell = @"pickSize_cell";
     self.clineView.backgroundColor = XZYSLightDarkColor;
     [self.backScr addSubview:self.clineView];
     
-    self.dlineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(self.dlineView.frame) + 5, SCREEN_WIDTH - 10, 1)];
+    self.dlineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(self.clineView.frame) + 5, SCREEN_WIDTH - 10, 1)];
     self.dlineView.backgroundColor = XZYSLightDarkColor;
     [self.backScr addSubview:self.dlineView];
     // 隐藏指示器
@@ -811,13 +942,15 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         NSInteger count1 = [arry1 count];
         for (int i = 0; i < count; i++) {
             for (int j = 0; j < count - i - 1; j++) {
-                if([[arry objectAtIndex:j] compare:[arry objectAtIndex:j + 1] options:NSNumericSearch] == 1){                      [arry exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
+                if([[arry objectAtIndex:j] compare:[arry objectAtIndex:j + 1] options:NSNumericSearch] == 1){
+                    [arry exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
                 }
             }
         }
         for (int i = 0; i < count1; i++) {
             for (int j = 0; j < count1 - i - 1; j++) {
-                if([[arry objectAtIndex:j] compare:[arry1 objectAtIndex:j + 1] options:NSNumericSearch] == 1){                      [arry1 exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
+                if([[arry objectAtIndex:j] compare:[arry1 objectAtIndex:j + 1] options:NSNumericSearch] == 1){
+                    [arry1 exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
                 }
             }
         }
@@ -1014,9 +1147,13 @@ static NSInteger pageNumber = 0;
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"sizeBt" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"colorBt" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleBt" object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"sizeBt" object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"colorBt" object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleBt" object:nil];
 }
 
 /*

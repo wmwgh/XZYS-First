@@ -106,7 +106,7 @@
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    params[@"uid"] = appDelegate.userIdTag;;
+    params[@"uid"] = appDelegate.userIdTag;
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsList.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *order = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
         if ([order isEqualToString:@"-101"]) {

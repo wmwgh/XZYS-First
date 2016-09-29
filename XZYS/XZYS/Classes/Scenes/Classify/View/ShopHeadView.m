@@ -7,7 +7,6 @@
 //
 
 #import "ShopHeadView.h"
-#import "ShopViewController.h"
 @implementation ShopHeadView
 
 - (IBAction)collect:(UIButton *)sender {

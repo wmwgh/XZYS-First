@@ -44,7 +44,7 @@
 @property (nonatomic, strong) UICollectionView *mianCollectionView;
 @property (nonatomic,retain) SMVerticalSegmentedControl *segmentedControl;
 /// 搜索
-@property (strong, nonatomic) UIImageView *searchIamgeView;
+@property (strong, nonatomic) UITextField *searchText;
 
 @end
 
@@ -116,26 +116,25 @@
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
     
-    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 8, SCREEN_WIDTH - 90, 34)];
-    self.searchIamgeView.image = [UIImage imageNamed:@"index_04.png"];
-    [backImageView addSubview:self.searchIamgeView];
+    self.searchText = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, SCREEN_WIDTH - 90, 30)];
+    self.searchText.placeholder = @"搜索...";
+    self.searchText.backgroundColor = [UIColor whiteColor];
+    [backImageView addSubview:self.searchText];
+    self.searchText.textColor = [UIColor lightGrayColor];
+    UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchBtn.frame = CGRectMake(CGRectGetMaxX(self.searchText.frame) - 30, 10, 30, 30);
+    [searchBtn addTarget:self action:@selector(search) forControlEvents:UIControlEventTouchUpInside];
+    [searchBtn setImage:[UIImage imageNamed:@"zy_fdj"] forState:UIControlStateNormal];
+    [backImageView addSubview:searchBtn];
     [self.view addSubview:backImageView];
-    [self setTap];
 }
 
-#pragma mark --- 手势设置
-
-- (void)setTap {
-    //设置搜索单击手势
-    [self.searchIamgeView setUserInteractionEnabled:YES];
-    [self.searchIamgeView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTapClick:)]];
-    
-}
-
-// 搜索
-- (void)searchTapClick:(UITapGestureRecognizer *)sender {
+- (void)search {
     SearchViewController *searchVC = [[SearchViewController alloc] init];
+    searchVC.searchID = self.searchText.text;
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (void)backButtonClick:(UIButton *)sender {

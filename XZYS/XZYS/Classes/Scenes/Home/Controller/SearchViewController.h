@@ -10,7 +10,7 @@
 
 @interface SearchViewController : UIViewController
 
-@property (nonatomic , copy) NSString *astr;
+@property (nonatomic , copy) NSString *searchID;
 
 
 @end

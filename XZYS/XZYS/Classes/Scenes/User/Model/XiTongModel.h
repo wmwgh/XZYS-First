@@ -15,5 +15,8 @@
 @property (nonatomic, copy) NSString *create_time;
 /// ID
 @property (nonatomic, copy) NSString *ID;
-
+/// 创建时间
+@property (nonatomic, copy) NSString *content;
+/// ID
+@property (nonatomic, copy) NSString *img;
 @end

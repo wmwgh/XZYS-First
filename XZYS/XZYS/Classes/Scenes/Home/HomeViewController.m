@@ -39,7 +39,7 @@
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
-@property (strong, nonatomic) UIImageView *searchIamgeView;
+@property (strong, nonatomic) UITextField *searchText;
 
 // 主头视图
 @property (nonatomic, strong) UIView *headerBackView;
@@ -122,8 +122,6 @@ static NSString *const secondID = @"secondHeader";//字和线
     [self addRefresh];
     // 按钮
     [self fourButton];
-    // 手势设置
-    [self setTap];
     // 显示指示器
 //    [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
@@ -373,11 +371,27 @@ static NSString *const secondID = @"secondHeader";//字和线
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
     
-    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 8, SCREEN_WIDTH - 90, 34)];
-    self.searchIamgeView.image = [UIImage imageNamed:@"index_04.png"];
-    [backImageView addSubview:self.searchIamgeView];
+    
+    self.searchText = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, SCREEN_WIDTH - 90, 30)];
+    self.searchText.placeholder = @"搜索...";
+    self.searchText.textColor = [UIColor lightGrayColor];
+    self.searchText.backgroundColor = [UIColor whiteColor];
+    [backImageView addSubview:self.searchText];
+    UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchBtn.frame = CGRectMake(CGRectGetMaxX(self.searchText.frame) - 30, 10, 30, 30);
+    [searchBtn addTarget:self action:@selector(searchGoods) forControlEvents:UIControlEventTouchUpInside];
+    [searchBtn setImage:[UIImage imageNamed:@"zy_fdj"] forState:UIControlStateNormal];
+    [backImageView addSubview:searchBtn];
     [self.view addSubview:backImageView];
     
+}
+
+- (void)searchGoods {
+    SearchViewController *searchVC = [[SearchViewController alloc] init];
+    searchVC.searchID = self.searchText.text;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:searchVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark -  扫一扫
@@ -393,23 +407,6 @@ static NSString *const secondID = @"secondHeader";//字和线
     messageVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:messageVC animated:YES];
 }
-
-#pragma mark --- 手势设置
-
-- (void)setTap {
-    //设置搜索单击手势
-    [self.searchIamgeView setUserInteractionEnabled:YES];
-    [self.searchIamgeView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTapClick:)]];
-
-}
-
-// 搜索
-- (void)searchTapClick:(UITapGestureRecognizer *)sender {
-    SearchViewController *searchVC = [[SearchViewController alloc] init];
-    searchVC.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:searchVC animated:YES];
-}
-
 
 #pragma mark --- 轮播图
 - (void)LBTView {

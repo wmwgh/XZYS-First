@@ -23,6 +23,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"申请调货";
+    self.addressText.layer.borderWidth = 1;
+    self.addressText.layer.cornerRadius = 5;
+    self.addressText.layer.borderColor = XZYSRGBColor(231, 231, 231).CGColor;
+    self.addressText.layer.masksToBounds = YES;
     // Do any additional setup after loading the view from its nib.
 }
 

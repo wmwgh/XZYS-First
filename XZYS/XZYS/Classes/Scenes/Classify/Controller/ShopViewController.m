@@ -21,10 +21,20 @@
 #import "SDFQModel.h"
 #import "ShopHeadView.h"
 #import "UIView+LoadFromNib.h"
-#import "AF_MainScreeningViewController.h"
 #import "LoginViewController.h"
 #import "AppDelegate.h"
 #import <MBProgressHUD.h>
+
+#import "ShaiXuanViewCell.h"
+#import "ShaiXuanHeaderView.h"
+#import "PickerViewHeaderView.h"
+#import "ZQViewCell.h"
+#import "CZViewCell.h"
+#import "NLViewCell.h"
+#import "XGViewCell.h"
+#import "JJViewCell.h"
+#import "YSViewCell.h"
+#import "XIangQingViewController.h"
 
 static NSString *const identifier_cell = @"identifier_cell";
 static NSString *const firatID = @"firstHeader";//图和字和线
@@ -38,15 +48,24 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 @property (nonatomic , strong) UIButton *numButton;
 @property (nonatomic , strong) UIButton *priceButton1;
 @property (nonatomic , strong) UIImageView *image1;
+@property (nonatomic , strong) UIView *underView;
+
+@property (nonatomic , copy) NSString *price1;
+@property (nonatomic , copy) NSString *price2;
+@property (nonatomic , strong) UITextField *textFileda;
+@property (nonatomic , strong) UITextField *textFiledb;
+
 /// 搜索
-@property (strong, nonatomic) UIImageView *searchIamgeView;
+@property (strong, nonatomic) UITextField *searchText;
 @property (nonatomic , strong) ShopView *rootView;
 @property (nonatomic , strong) ShopHeadView *headView;
 @property (nonatomic ,strong) NSMutableArray *dataArray;
 @property (nonatomic ,strong) NSMutableArray *collectionArray;
+
 @end
 
 @implementation ShopViewController
+
 - (NSMutableDictionary *)param {
     if (!_param) {
         _param = [NSMutableDictionary dictionary];
@@ -58,6 +77,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"店铺";
+    
     // 请求数据
     [self requestData];
     [self setCollection];
@@ -66,6 +86,97 @@ static NSString *const firatID = @"firstHeader";//图和字和线
                                              selector:@selector(callback1:)
                                                  name:@"cbt1"
                                                object:nil];
+    [self setSXView];
+}
+- (void)setSXView {
+    self.underView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.underView.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.7];
+    UIButton *backBT = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backBT addTarget:self action:@selector(backBTAction) forControlEvents:UIControlEventTouchUpInside];
+    backBT.frame = self.view.bounds;
+    backBT.backgroundColor = [UIColor clearColor];
+    [self.underView addSubview:backBT];
+    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, 80)];
+    backView.backgroundColor = [UIColor whiteColor];
+    [self.underView addSubview:backView];
+    [self.view addSubview:self.underView];
+    UILabel *titleLab = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 230, 20)];
+    titleLab.text = @"请选择价格区间";
+    titleLab.textColor = XZYSPinkColor;
+    titleLab.font = [UIFont systemFontOfSize:15];
+    [backView addSubview:titleLab];
+    
+    self.textFileda = [[UITextField alloc] initWithFrame:CGRectMake(10, 40, 80, 25)];
+    UIView *aView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.textFileda.frame) + 10, 51, 15, 2)];
+    aView.backgroundColor = [UIColor lightGrayColor];
+    [backView addSubview:aView];
+    self.textFiledb = [[UITextField alloc] initWithFrame:CGRectMake(125, 40, 80, 25)];
+    
+    self.textFileda.textAlignment = NSTextAlignmentCenter;
+    self.textFiledb.layer.cornerRadius = 5;
+    self.textFileda.text = @"0";
+    self.textFiledb.text = @"500";
+    self.textFiledb.layer.borderWidth = 0.5;
+    self.textFiledb.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.textFileda.layer.borderWidth = 0.5;
+    self.textFileda.layer.cornerRadius = 5;
+    self.textFileda.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.textFiledb.textAlignment = NSTextAlignmentCenter;
+    [backView addSubview:self.textFileda];
+    [backView addSubview:self.textFiledb];
+    
+    UIButton *sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureBtn.frame = CGRectMake(SCREEN_WIDTH - 90, 40, 80, 25);
+    [sureBtn setTitle:@"确认" forState:UIControlStateNormal];
+    [sureBtn addTarget:self action:@selector(sureBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    [sureBtn setBackgroundImage:[UIImage imageNamed:@"loginButton.png"] forState:UIControlStateNormal];
+    sureBtn.titleLabel.font = [UIFont systemFontOfSize:15];
+    [backView addSubview:sureBtn];
+    self.underView.hidden = YES;
+}
+- (void)backBTAction {
+    self.underView.hidden = YES;
+}
+- (void)sureBtnAction {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [self.collectionArray removeAllObjects];
+    self.price1 = self.textFileda.text;
+    self.price2 = self.textFiledb.text;
+    if (self.price1 != nil) {
+        dic[@"start_price"] = self.price1;
+    }
+    if (self.price2 != nil) {
+        dic[@"end_price"] = self.price2;
+    }
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+        if ([str isEqualToString:@"-101"]) {
+            NSArray *dataArray = [responseObject objectForKey:@"data"];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [self.collectionArray addObject:model];
+            }
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1];
+            [self.rootView.collectionView reloadData];
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }
+        // 隐藏指示器
+        [SVProgressHUD dismiss];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    self.underView.hidden = YES;
 }
 
 - (void)callback1:(NSNotification *)text {
@@ -105,6 +216,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     
     // 第一步：注册cell
     [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
+    
     self.headView = [[ShopHeadView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
     self.headView = [ShopHeadView loadFromNib];
     [self.rootView.collectionView addSubview:self.headView];
@@ -152,7 +264,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     sxButton.frame = CGRectMake(SCREEN_WIDTH * 3 / 4, 0, SCREEN_WIDTH / 4, 42);
     [sxButton setTitleColor:XZYSBlueColor forState:UIControlStateSelected];
     sxButton.titleLabel.font = [UIFont systemFontOfSize: 16];
-    [sxButton setTitle:@"筛 选" forState:UIControlStateNormal];
+    [sxButton setTitle:@"区 间" forState:UIControlStateNormal];
     [sxButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [sxButton addTarget:self action:@selector(sxButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [pickBackView addSubview:sxButton];
@@ -190,6 +302,8 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self requestAllData];
 }
+
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -230,13 +344,8 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    AF_MainScreeningViewController * testVC = [AF_MainScreeningViewController new];
-    //这两句必须有
-    self.definesPresentationContext = YES; //self is presenting view controller
-    testVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    /** 设置半透明度 */
-    testVC.view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:.5];
-    [self presentViewController:testVC animated:NO completion:nil];
+    
+    self.underView.hidden = NO;
 }
 #pragma mark - 数据区
 // 获取全部数据
@@ -284,7 +393,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             [weakSelf.dataArray addObject:model];
             
             self.headView.titleLabel.text = model.shop_name;
-            self.headView.baclImageView.image = [UIImage imageNamed:@"daji.jpg"];
+            self.headView.baclImageView.image = [UIImage imageNamed:@"dpbjt.jpg"];
             [self.headView.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.shop_logo]]];
             self.headView.collectButton.tag = [model.ID intValue];
             self.headView.numLabel.text = model.goods_num;
@@ -335,7 +444,6 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 
 // 设置每个分区里面有几个item
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    
     return self.collectionArray.count;
 }
 
@@ -345,6 +453,19 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     RootCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier_cell forIndexPath:indexPath];
     cell.oneModel = self.collectionArray[indexPath.row];
     return cell;
+}
+
+// 点击item
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    SDFQModel *model = [[SDFQModel alloc] init];
+    model = self.collectionArray[indexPath.row];
+    XXVC.model = model;
+    XXVC.passID = model.goods_id;
+    XXVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:XXVC animated:YES];
+    
 }
 
 
@@ -372,27 +493,28 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
     
-    self.searchIamgeView = [[UIImageView alloc] initWithFrame:CGRectMake(45, 5, SCREEN_WIDTH - 90, 34)];
-    self.searchIamgeView.image = [UIImage imageNamed:@"index_04.png"];
-    [backImageView addSubview:self.searchIamgeView];
+    self.searchText = [[UITextField alloc] initWithFrame:CGRectMake(45, 8, SCREEN_WIDTH - 90, 30)];
+    self.searchText.placeholder = @"搜索...";
+    self.searchText.backgroundColor = [UIColor whiteColor];
+    [backImageView addSubview:self.searchText];
+    self.searchText.textColor = [UIColor lightGrayColor];
+    UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    searchBtn.frame = CGRectMake(CGRectGetMaxX(self.searchText.frame) - 30, 10, 30, 30);
+    [searchBtn addTarget:self action:@selector(search) forControlEvents:UIControlEventTouchUpInside];
+    [searchBtn setImage:[UIImage imageNamed:@"zy_fdj"] forState:UIControlStateNormal];
+    [backImageView addSubview:searchBtn];
     [self.view addSubview:backImageView];
-    [self setTap];
-}
-
-#pragma mark --- 手势设置
-
-- (void)setTap {
-    //设置搜索单击手势
-    [self.searchIamgeView setUserInteractionEnabled:YES];
-    [self.searchIamgeView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTapClick:)]];
     
 }
 
-// 搜索
-- (void)searchTapClick:(UITapGestureRecognizer *)sender {
+- (void)search {
     SearchViewController *searchVC = [[SearchViewController alloc] init];
+    searchVC.searchID = self.searchText.text;
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
+
 
 - (void)backButtonClick:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
@@ -404,6 +526,12 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     XiTongViewController *messageVC = [[XiTongViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }
+
+#pragma mark ---------- 筛选部分
+
+
+
+
 
 /*
 #pragma mark - Navigation

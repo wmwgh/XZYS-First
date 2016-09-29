@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="FirstCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="372" height="25"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="372" height="25"/>
+                <subviews>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="VdH-8Q-HOZ">
+                        <rect key="frame" x="20" y="0.0" width="148.5" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="2yL-50-6xx"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jye-1j-2Rf">
+                        <rect key="frame" x="178.5" y="12" width="15" height="2"/>
+                        <color key="backgroundColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="15" id="OWT-Fa-Mal"/>
+                            <constraint firstAttribute="height" constant="2" id="bs9-j2-2K8"/>
+                        </constraints>
+                    </view>
+                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dAh-Wf-h72">
+                        <rect key="frame" x="203" y="0.0" width="148.5" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="pWQ-ES-HCS"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstItem="Jye-1j-2Rf" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="12" id="0HJ-Dw-SLY"/>
+                <constraint firstItem="VdH-8Q-HOZ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="11U-GP-RuQ"/>
+                <constraint firstItem="dAh-Wf-h72" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Ofj-eu-1Ul"/>
+                <constraint firstItem="dAh-Wf-h72" firstAttribute="leading" secondItem="Jye-1j-2Rf" secondAttribute="trailing" constant="10" id="QOZ-76-dGS"/>
+                <constraint firstItem="VdH-8Q-HOZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="Tag-17-3ro"/>
+                <constraint firstAttribute="trailing" secondItem="dAh-Wf-h72" secondAttribute="trailing" constant="20" id="WCo-tY-DFU"/>
+                <constraint firstItem="Jye-1j-2Rf" firstAttribute="leading" secondItem="VdH-8Q-HOZ" secondAttribute="trailing" constant="10" id="Wzw-Hi-C4N"/>
+                <constraint firstItem="Jye-1j-2Rf" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="wXV-fo-Dgj"/>
+            </constraints>
+            <size key="customSize" width="372" height="25"/>
+            <connections>
+                <outlet property="firstText" destination="VdH-8Q-HOZ" id="z94-tj-FT8"/>
+                <outlet property="secondText" destination="dAh-Wf-h72" id="NKw-kZ-vtY"/>
+            </connections>
+            <point key="canvasLocation" x="386" y="230.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

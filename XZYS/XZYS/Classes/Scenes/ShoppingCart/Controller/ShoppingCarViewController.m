@@ -96,7 +96,6 @@ static NSString * indentifier = @"shopCarCell";
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemNum" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
-        NSLog(@"+===========%@", countStr);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
 }
@@ -107,7 +106,6 @@ static NSString * indentifier = @"shopCarCell";
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemMinus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *countStr = responseObject[@"data"];
-        NSLog(@"------------%@", countStr);
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -119,7 +117,6 @@ static NSString * indentifier = @"shopCarCell";
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemPlus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *countStr = responseObject[@"data"];
-        NSLog(@"+++++++++++%@", countStr);
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -301,7 +298,6 @@ static NSString * indentifier = @"shopCarCell";
 //修改数量
 - (void)changeTheShopCount:(UITableViewCell *)cell count:(NSInteger )count{
     NSIndexPath *indexpath = [self.baseTable indexPathForCell:cell];
-    NSLog(@"%zd-----%zd", indexpath.section, indexpath.row);
     ShopCarModel *shopCarModel = self.dataArray[indexpath.section];//当前选中的商品对应的店铺的模型
     AllGucModel *model = shopCarModel.listArr[indexpath.row];
     model.count = count;
@@ -343,7 +339,6 @@ static NSString * indentifier = @"shopCarCell";
 - (void)clickedBottomJieSuan{//结算方法
     if (self.bottomModel.isEdit) {
         if (self.bottomModel.totalCount == 0) {
-            NSLog(@"请选择要删除的商品");
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"请选择要删除的商品";

@@ -13,6 +13,9 @@
 #import "XiTongModel.h"
 #import "XZYS_Other.h"
 #import "XITongListCell.h"
+#import "AppDelegate.h"
+#import <MBProgressHUD.h>
+#import <UIImageView+WebCache.h>
 
 @interface XITongListViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic , strong) NSMutableArray *xiTongArray;
@@ -33,7 +36,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = _model.title;
-    NSLog(@"%@", _model.ID);
     self.view.backgroundColor = [UIColor lightGrayColor];
     // Do any additional setup after loading the view.
     
@@ -61,18 +63,18 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return self.xiTongArray.count;
-    return 1;
+    return self.xiTongArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     XITongListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-//    XiTongModel *model = [[XiTongModel alloc] init];
-//    model = self.xiTongArray[indexPath.row];
-    
-    cell.cellPic.image = [UIImage imageNamed:@"head.jpg"];
-    cell.titleLabel.text = @"腾讯新闻,事实派";
-    cell.decLabel.text = @"腾讯新闻,事实派。新闻中心,包含有时政新闻、国内新闻、国际新闻、社会新闻、时事评论、新闻图片、新闻专题、新闻论坛、军事、历史、的专业时事报道门户网站";
+    XiTongModel *model = [[XiTongModel alloc] init];
+    model = self.xiTongArray[indexPath.row];
+    NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL ,model.img];
+    [cell.cellPic sd_setImageWithURL:[NSURL URLWithString:str]];
+    cell.titleLabel.text = model.title;
+    cell.decLabel.text = model.content;
+    cell.timeLabel.text = model.create_time;
     return cell;
 }
 
@@ -95,14 +97,29 @@
 }
 
 - (void)requestData {
-    [[AFHTTPSessionManager manager] GET:XZYS_XXTS_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSDictionary *dic = responseObject[@"data"];
-        XiTongModel *model = [[XiTongModel alloc] init];
-        [model setValuesForKeysWithDictionary:dic[@"1"]];
-        [self.xiTongArray addObject:model];
-        XiTongModel *model1 = [[XiTongModel alloc] init];
-        [model1 setValuesForKeysWithDictionary:dic[@"2"]];
-        [self.xiTongArray addObject:model1];
+    [self.xiTongArray removeAllObjects];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    params[@"uid"] = appDelegate.userIdTag;
+    params[@"id"] = _model.ID;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Msg/getPushMsgList" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+        if ([str isEqualToString:@"-101"]) {
+            NSArray *array = responseObject[@"data"];
+            for (NSDictionary *dic in array) {
+                XiTongModel *model = [[XiTongModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [self.xiTongArray addObject:model];
+            }
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }
+        NSLog(@"%@", _xiTongArray);
         [self.mainTableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -123,6 +140,7 @@
     self.navigationController.navigationBarHidden = YES;
     [super viewWillDisappear:animated];
 }
+
 /*
 #pragma mark - Navigation
 

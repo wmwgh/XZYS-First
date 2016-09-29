@@ -442,6 +442,7 @@ static NSString *headerID = @"HeaderSectionID";
 - (void)viewWillDisappear:(BOOL)animated {
     self.navigationController.navigationBarHidden = YES;
     [super viewWillDisappear:animated];
+
 }
 /*
 #pragma mark - Navigation

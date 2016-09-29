@@ -16,19 +16,29 @@
 #import "BDImagePicker.h"
 #import <MBProgressHUD.h>
 #import "YHRegular.h"
-#import "GPDateView.h"
 #import "XZYS_Other.h"
 #import <AFNetworking.h>
 #import <AFHTTPSessionManager.h>
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "AddressModel.h"
+#import "PCTModel.h"
 
-@interface ChangeInfoViewController ()
+@interface ChangeInfoViewController ()<UIPickerViewDataSource,UIPickerViewDelegate>
 @property (nonatomic , strong) NSMutableDictionary *params;
-@property (nonatomic, strong) NSArray *ProvinceArray;
-@property (nonatomic, strong) NSArray *CityArray;
-@property (nonatomic, strong) NSArray *districtArray;
-@property (nonatomic , strong) GPDateView *gpDateView;
+@property (nonatomic , strong) AddressModel *model;
+@property (nonatomic,strong) UIPickerView * pickerView;//自定义pickerview
+@property (nonatomic,strong) NSMutableArray *provinceArrar;
+@property (nonatomic,strong) NSMutableArray *cityArrar;
+@property (nonatomic,strong) NSMutableArray *sectionArrar;
+@property (nonatomic,copy) NSString *cityID;
+@property (nonatomic,copy) NSString *provinceID;
+@property (nonatomic,copy) NSString *sectionID;
+@property (nonatomic,copy) NSString *cityIDtText;
+@property (nonatomic,copy) NSString *provinceIDText;
+@property (nonatomic,copy) NSString *sectionIDText;
+@property (nonatomic , strong) UIView *back;
+@property (nonatomic , strong) UIView *mainBack;
 
 @end
 
@@ -42,59 +52,217 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.ProvinceArray = [NSMutableArray array];
-    self.CityArray = [NSMutableArray array];
-    self.districtArray = [NSMutableArray array];
-//    [self requsetAddress];
-    self.title = @"修改资料";
+    self.addressLabel.layer.borderWidth = 1;
     self.addressLabel.layer.cornerRadius = 5;
     self.addressLabel.layer.borderColor = XZYSRGBColor(231, 231, 231).CGColor;
-    self.addressLabel.layer.borderWidth = 1;
     self.addressLabel.layer.masksToBounds = YES;
+
+    self.title = @"修改资料";
     [self setIcornButton];
     //默认头像
     [_iconBtn setImage:[UIImage imageNamed:@"info_04"] forState:UIControlStateNormal];
+    //获取需要展示的数据
+    [self getAddressInformation];
+    [self setPickerView];
+    self.mainBack.hidden = YES;
 }
-//- (void)requsetAddress {
-//    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaProvince" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        self.ProvinceArray = responseObject[@"data"];
-////        self.gpDateView.ProvinceArray = self.ProvinceArray;
-//        NSLog(@"%@", self.ProvinceArray);
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//    }];
-//    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaCity/city_id/3" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        self.CityArray = responseObject[@"data"];
-////        self.gpDateView.CityArray = self.CityArray;
-//        NSLog(@"%@", self.CityArray);
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//    }];
-//    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaDistrict/district_id/111" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        self.districtArray = responseObject[@"data"];
-////        self.gpDateView.districtArray = self.districtArray;
-//        NSLog(@"%@", self.districtArray);
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//    }];
-//}
+
+- (void)dateEnsureAction {
+    NSString *str = [NSString stringWithFormat:@"%@ %@ %@", self.provinceID, self.cityID, self.sectionID];
+    NSLog(@"%@", str);
+    self.sectionLabel.text = [NSString stringWithFormat:@"%@ %@ %@", self.provinceIDText, self.cityIDtText, self.sectionIDText];
+    self.mainBack.hidden = YES;
+}
+
+- (void)dateCancleAction {
+    self.mainBack.hidden = YES;
+}
+
+
+- (void)setPickerView {
+    self.mainBack = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.mainBack.backgroundColor = [UIColor colorWithWhite:0.5f alpha:0.7];
+    [self.view addSubview:_mainBack];
+    self.back = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 190, [UIScreen mainScreen].bounds.size.width, 190)];
+    self.back.backgroundColor = [UIColor whiteColor];
+    [self.mainBack addSubview:self.back];
+    
+    UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cancleBtn setTitle:@"取消" forState:0];
+    [cancleBtn setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    cancleBtn.frame = CGRectMake(0, 0, 60, 40);
+    [cancleBtn addTarget:self action:@selector(dateCancleAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.back addSubview:cancleBtn];
+    
+    UIButton *ensureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [ensureBtn setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
+    [ensureBtn setTitle:@"确定" forState:0];
+    ensureBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 0, 60, 40);
+    [ensureBtn addTarget:self action:@selector(dateEnsureAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.back addSubview:ensureBtn];
+    
+    // 初始化pickerView
+    self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, 150)];
+    self.pickerView.backgroundColor = [UIColor whiteColor];
+    [self.back addSubview:self.pickerView];
+    //指定数据源和委托
+    self.pickerView.delegate = self;
+    self.pickerView.dataSource = self;
+}
+
+- (void)getAddressInformation {
+    self.provinceArrar = [NSMutableArray array];
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaProvince" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSArray *ar = responseObject[@"data"];
+        for (NSDictionary *dic in ar) {
+            PCTModel *model = [[PCTModel alloc] init];
+            [model setValuesForKeysWithDictionary:dic];
+            [self.provinceArrar addObject:model];
+        }
+        PCTModel *model = [[PCTModel alloc] init];
+        model = self.provinceArrar[0];
+        self.provinceID = model.area_id;
+        [self requestCities];
+        [self.pickerView reloadAllComponents];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+    
+}
+
+- (void)requestCities {
+    self.cityArrar = [NSMutableArray array];
+    [self.cityArrar removeAllObjects];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"city_id"] = self.provinceID;
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaCity/city_id/3" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSArray *ar = responseObject[@"data"];
+        for (NSDictionary *dic in ar) {
+            PCTModel *model = [[PCTModel alloc] init];
+            [model setValuesForKeysWithDictionary:dic];
+            [self.cityArrar addObject:model];
+        }
+        PCTModel *model = [[PCTModel alloc] init];
+        model = self.cityArrar[0];
+        self.cityID = model.area_id;
+        [self requestTowns];
+        [self.pickerView selectRow:0 inComponent:1 animated:NO];
+        [self.pickerView reloadComponent:1];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+    
+}
+
+- (void)requestTowns {
+    self.sectionArrar = [NSMutableArray array];
+    [self.sectionArrar removeAllObjects];
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    param[@"district_id"] = self.cityID;
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaDistrict/district_id/111" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSArray *ar = responseObject[@"data"];
+        for (NSDictionary *dic in ar) {
+            PCTModel *model = [[PCTModel alloc] init];
+            [model setValuesForKeysWithDictionary:dic];
+            [self.sectionArrar addObject:model];
+        }
+        [self.pickerView selectRow:0 inComponent:2 animated:NO];
+        [self.pickerView reloadComponent:2];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+    
+}
+
+#pragma mark UIPickerView DataSource Method 数据源方法
+
+//指定pickerview有几个表盘
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
+    return 3;//第一个展示字母、第二个展示数字
+}
+
+//指定每个表盘上有几行数据
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+    NSInteger result = 0;
+    switch (component) {
+        case 0:
+            result = self.provinceArrar.count;//根据数组的元素个数返回几行数据
+            break;
+        case 1:
+            result = self.cityArrar.count;
+            break;
+        case 2:
+            result = self.sectionArrar.count;
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
+#pragma mark UIPickerView Delegate Method 代理方法
+
+//指定每行如何展示数据（此处和tableview类似）
+-(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component{
+    NSString * title = nil;
+    PCTModel *model1 = [[PCTModel alloc] init];
+    PCTModel *model2 = [[PCTModel alloc] init];
+    PCTModel *model3 = [[PCTModel alloc] init];
+    switch (component) {
+        case 0:
+            model1 = self.provinceArrar[row];
+            title = model1.area_name;
+            self.provinceID = model1.area_id;
+            self.provinceIDText = model1.area_name;
+            break;
+        case 1:
+            model2 = self.cityArrar[row];
+            title = model2.area_name;
+            self.cityID = model2.area_id;
+            self.cityIDtText = model2.area_name;
+            break;
+        case 2:
+            model3 = self.sectionArrar[row];
+            title = model3.area_name;
+            self.sectionID = model3.area_id;
+            self.sectionIDText = model3.area_name;
+            break;
+        default:
+            break;
+    }
+    return title;
+}
+
+#pragma mark-设置下方的数据刷新
+// 当选中了pickerView的某一行的时候调用
+// 会将选中的列号和行号作为参数传入
+// 只有通过手指选中某一行的时候才会调用
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    //获取对应列，对应行的数据
+    //赋值
+    if (0 == component) {
+        PCTModel *model = [[PCTModel alloc] init];
+        model = self.provinceArrar[row];
+        self.provinceID = model.area_id;
+        self.provinceIDText = model.area_name;
+        [self requestCities];
+    } else if (1 == component) {
+        PCTModel *model = [[PCTModel alloc] init];
+        model = self.cityArrar[row];
+        self.cityID = model.area_id;
+        self.cityIDtText = model.area_name;
+        [self requestTowns];
+    } else {
+        PCTModel *model = [[PCTModel alloc] init];
+        model = self.sectionArrar[row];
+        self.sectionID = model.area_id;
+        self.sectionIDText = model.area_name;
+    }
+}
 
 - (IBAction)AddressPickerClick:(id)sender {
-    GPDateView * dateView = [[GPDateView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 250, SCREEN_WIDTH, 250) Data:nil];
-    
-    [dateView showPickerView];
-    
-    dateView.ActionDistrictViewSelectBlock = ^(NSString *desStr,NSDictionary *selectDistrictDict){
-        
-        NSString *str1 = [selectDistrictDict objectForKey:Key_DistrictSelectProvince];
-        NSString *str2 = [selectDistrictDict objectForKey:Key_DistrictSelectCity];
-        NSString *str3 = [selectDistrictDict objectForKey:Key_DistrictSelectProvinceSub];
-        // 省
-        self.params[@"area_province"] = str1;
-        // 市
-        self.params[@"area_city"] = str2;
-        // 县
-        self.params[@"area_district"] = str3;
-        self.sectionLabel.text = [NSString stringWithFormat:@"%@ %@ %@", str1, str2, str3];
-    };
+   self.mainBack.hidden = NO;
 }
+
+
 
 - (void)setDict {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -163,6 +331,9 @@
     }
 }
 - (void)setSection {
+    self.params[@"area_province"] = self.provinceID;
+    self.params[@"area_city"] = self.cityID;
+    self.params[@"area_district"] = self.sectionID;
     if (self.params[@"area_district"] != nil && ![self.params[@"area_district"] isKindOfClass:[NSNull class]]) {
         [self setAddresss];
     } else {
