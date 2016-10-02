@@ -301,11 +301,20 @@ static NSString *footerID = @"cityFooterSectionID";
     //    detailVC.shopID = [NSString stringWithFormat:@"%ld", _titleButton.tag];
     [self.navigationController pushViewController:detailVC animated:YES];
 }
+
+#pragma pay========================
 - (void)payButtonClick:(UIButton *)sender {
+    AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
     self.params = [NSMutableDictionary dictionary];
+    self.params[@"uid"] = appDele.userIdTag;
     self.params[@"order_id"] = [NSString stringWithFormat:@"%ld", sender.tag];
-    self.params[@"act"] = @"payment_yes";
 //    [self orderAction];
+    PayViewController *payVC = [[PayViewController alloc] init];
+    payVC.payDic = self.params;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:payVC animated:YES
+     ];
+    self.hidesBottomBarWhenPushed = YES;
     NSLog(@"PAY");
 }
 

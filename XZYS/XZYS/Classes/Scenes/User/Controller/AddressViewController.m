@@ -16,6 +16,7 @@
 #import "EditAddressController.h"
 #import <MBProgressHUD.h>
 #import "AddNewAddressController.h"
+#import "AddOrderViewController.h"
 
 @interface AddressViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic , strong) NSMutableArray *dataArray;
@@ -131,6 +132,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.mainTab deselectRowAtIndexPath:indexPath animated:NO];
+    AddressModel *model = [[AddressModel alloc] init];
+    model = self.dataArray[indexPath.section];
+    NSString *str = [NSString stringWithFormat:@"%@ %@ %@ %@", model.area_province_text, model.area_city_text, model.area_district_text, model.address];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"4"] = model.ID;
+    dic[@"1"] = model.consignee;
+    dic[@"2"] = model.contact_info;
+    dic[@"3"] = str;
+    //发出通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"传地址" object:self userInfo:[NSDictionary dictionaryWithObject:dic forKey:@"sid"]];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

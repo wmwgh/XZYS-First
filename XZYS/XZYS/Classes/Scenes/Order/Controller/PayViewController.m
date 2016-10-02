@@ -16,12 +16,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"支付";
+    self.payDic[@"paytype"] = @"Alipayapp";
+    NSLog(@"%@", self.payDic);
     // Do any additional setup after loading the view from its nib.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = YES;
+    [super viewWillDisappear:animated];
 }
 
 /*

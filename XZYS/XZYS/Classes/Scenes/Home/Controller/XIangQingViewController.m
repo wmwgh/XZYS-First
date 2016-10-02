@@ -179,7 +179,8 @@ static NSString *const pickSize_cell = @"pickSize_cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"商品详情";
-    self.SpxqNLArray = @[@"单里", @"棉里"];
+#pragma mark --- 添加单里
+//    self.SpxqNLArray = @[@"单里", @"棉里"];
     
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
@@ -581,19 +582,19 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         height += 245;
     }
 #warning gggggggggggggggggggggggggggggg
-    if (_SpxqNLArray.count < 4) {
-        height += 70;
-    } else if (_SpxqNLArray.count < 7) {
-        height += 105;
-    } else if (_SpxqNLArray.count < 10) {
-        height += 140;
-    } else if (_SpxqNLArray.count < 13) {
-        height += 175;
-    } else if (_SpxqNLArray.count < 15) {
-        height += 210;
-    } else if (_SpxqNLArray.count < 18) {
-        height += 245;
-    }
+//    if (_SpxqNLArray.count < 4) {
+//        height += 70;
+//    } else if (_SpxqNLArray.count < 7) {
+//        height += 105;
+//    } else if (_SpxqNLArray.count < 10) {
+//        height += 140;
+//    } else if (_SpxqNLArray.count < 13) {
+//        height += 175;
+//    } else if (_SpxqNLArray.count < 15) {
+//        height += 210;
+//    } else if (_SpxqNLArray.count < 18) {
+//        height += 245;
+//    }
     
     self.rootPickView = [[ColorSizePickView alloc] initWithFrame:self.view.bounds];
     [self.pickerBackView addSubview:self.rootPickView];
@@ -676,7 +677,8 @@ static NSString *const pickSize_cell = @"pickSize_cell";
 
 // 设置多少个分区
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 3;
+#pragma mark --- 添加单里
+    return 2;
 }
 
 // 设置每个分区里面有几个item
@@ -685,9 +687,11 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         return self.SpxqColorArray.count;
     } else if (section == 1) {
         return self.SpxqSizeArray.count;
-    } else if (section == 2) {
-#warning gggggggggggggggggggggggggggggg
-        return self.SpxqNLArray.count;
+#pragma mark --- 添加单里
+
+//    } else if (section == 2) {
+//#warning gggggggggggggggggggggggggggggg
+//        return self.SpxqNLArray.count;
     }
     return 0;
 }
@@ -709,14 +713,14 @@ static NSString *const pickSize_cell = @"pickSize_cell";
         cell1.sizePickBt.tag = indexPath.row + 1000;
         [self.sizeBtArray addObject:cell1.sizePickBt];
         return cell1;
-#warning gggggggggggggggggggggggggggggg
-    } else if (indexPath.section == 2) {
-        RootPickColorCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:pickColor_cell forIndexPath:indexPath];
-        NSString *str = _SpxqNLArray[indexPath.row];
-        [cell.colorBtn setTitle:str forState:UIControlStateNormal];
-        cell.colorBtn.tag = indexPath.row + 1000;
-        [self.NLBtArray addObject:cell.colorBtn];
-        return cell;
+#pragma mark --- 添加单里
+//    } else if (indexPath.section == 2) {
+//        RootPickColorCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:pickColor_cell forIndexPath:indexPath];
+//        NSString *str = _SpxqNLArray[indexPath.row];
+//        [cell.colorBtn setTitle:str forState:UIControlStateNormal];
+//        cell.colorBtn.tag = indexPath.row + 1000;
+//        [self.NLBtArray addObject:cell.colorBtn];
+//        return cell;
     }
     return nil;
 }

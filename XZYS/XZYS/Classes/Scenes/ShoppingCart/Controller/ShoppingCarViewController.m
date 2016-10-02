@@ -22,6 +22,7 @@
 #import "ShopViewController.h"
 #import <MJRefresh.h>
 #import "ShopCarModel.h"
+#import "AddOrderViewController.h"
 
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
@@ -38,7 +39,9 @@
 @property (nonatomic , strong) NSMutableArray *allKeys;
 @property (nonatomic , strong) NSMutableArray *idArray;
 @property (nonatomic , strong) UILabel *labe;
+@property (nonatomic , strong) NSMutableArray *carAry;
 @property (nonatomic , strong) NSMutableDictionary *jsonParam;
+@property (nonatomic , assign) float totalMoney;
 //测试
 @property (nonatomic, copy)NSMutableString * testString;
 @end
@@ -94,7 +97,7 @@ static NSString * indentifier = @"shopCarCell";
     param[@"uid"] = appdele.userIdTag;
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemNum" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSString *countStr = responseObject[@"data"];
+//        NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -105,7 +108,7 @@ static NSString * indentifier = @"shopCarCell";
     param[@"uid"] = appdele.userIdTag;
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemMinus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSString *countStr = responseObject[@"data"];
+//        NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -116,7 +119,7 @@ static NSString * indentifier = @"shopCarCell";
     param[@"uid"] = appdele.userIdTag;
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemPlus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSString *countStr = responseObject[@"data"];
+//        NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -354,18 +357,25 @@ static NSString * indentifier = @"shopCarCell";
             self.jsonParam[@"uid"] = appdele.userIdTag;
             self.jsonParam[@"id"] = strjson;
             
-            
         }
-    }else{
+    } else {
         if (self.bottomModel.totalCount == 0) {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"请选择结算商品";
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:2];
-        }else{
-            NSLog(@"选择了商品，进行结算，进入商品详情页面");
-            NSLog(@"要传给下一个订单详情页面的数据模型是%@", _totalSelectedAry);
+        } else {
+//            NSLog(@"选择了商品，进行结算，进入商品详情页面");
+//            NSLog(@"要传给下一个订单详情页面的数据模型是%@", _totalSelectedAry);
+            AddOrderViewController *AddVC = [[AddOrderViewController alloc] init];
+            AddVC.cellAllary = _carAry;
+            AddVC.orderAllary = _totalSelectedAry;
+            AddVC.resultPrice = [NSString stringWithFormat:@"%.2f", self.totalMoney];
+            self.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:AddVC animated:YES
+             ];
+            self.hidesBottomBarWhenPushed = NO;
         }
     }
 }
@@ -415,21 +425,34 @@ static NSString * indentifier = @"shopCarCell";
 //求得总共费用
 - (void)GetTotalBill{
     self.totalSelectedAry  = [NSMutableArray array];
-    float totalMoney = 0.00;
+    self.carAry  = [NSMutableArray array];
+    self.totalMoney = 0.00;
     NSMutableString * compentStr = [[NSMutableString alloc] init];
     for (int i = 0; i < self.dataArray.count; i++) {
         ShopCarModel * model = self.dataArray[i];
+        NSMutableArray *ary = [NSMutableArray array];
         for (int j = 0; j < model.listArr.count; j++) {
             AllGucModel *shopModel = model.listArr[j];
             if (shopModel.selected) {
                 //保存model。如果是结算，传递选中商品，确认订单页面展示。如果是删除，根据此数组，拿到商品ID，用来删除。
+                
                 [_totalSelectedAry addObject:shopModel.ID];
+                [ary addObject:shopModel];
                 [compentStr appendString:shopModel.goods_name];
                 if (shopModel.count != 0) {
                     shopModel.num = [NSString stringWithFormat:@"%ld", shopModel.count];
                 }
-                totalMoney += [shopModel.price intValue] * [shopModel.num intValue];
+                self.totalMoney += [shopModel.price intValue] * [shopModel.num intValue];
             }
+        }
+        if (ary.count != 0) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+            dic[@"shop_name"] = model.shop_name;
+            dic[@"listArr"] = ary;
+            dic[@"shop_id"] = model.shop_id;
+            ShopCarModel *model = [[ShopCarModel alloc] init];
+            [model setValuesForKeysWithDictionary:dic];
+            [_carAry addObject:model];
         }
     }
     if (self.dataArray.count == 0) {
@@ -439,7 +462,7 @@ static NSString * indentifier = @"shopCarCell";
         self.bottomView.model = self.bottomModel;
     }
     self.testString = compentStr;//保存，测试用。
-    self.bottomModel.totalMoney = totalMoney;
+    self.bottomModel.totalMoney = self.totalMoney;
     self.bottomModel.totalCount = _totalSelectedAry.count;
     self.bottomView.model = self.bottomModel;
 }
