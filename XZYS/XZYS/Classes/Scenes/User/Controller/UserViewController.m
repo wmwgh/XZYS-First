@@ -167,6 +167,7 @@
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
         self.infoDic = dic[@"data"];
+        NSLog(@"----------%@", self.infoDic[@"member_picture"]);
         [self setInfoMessage];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];

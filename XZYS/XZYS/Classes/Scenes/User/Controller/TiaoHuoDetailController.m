@@ -25,7 +25,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"%@", self.orderID);
     self.title = @"调货详情";
     // Do any additional setup after loading the view from its nib.
     [self setModel];

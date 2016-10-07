@@ -25,6 +25,10 @@
 #import "PCTModel.h"
 
 @interface ChangeInfoViewController ()<UIPickerViewDataSource,UIPickerViewDelegate>
+{
+    
+}
+@property (nonatomic , strong) NSData *imageData;
 @property (nonatomic , strong) NSMutableDictionary *params;
 @property (nonatomic , strong) AddressModel *model;
 @property (nonatomic,strong) UIPickerView * pickerView;//自定义pickerview
@@ -269,8 +273,6 @@
     self.params[@"id"] = appDelegate.userIdTag;;
     if (self.params[@"id"] != nil && ![self.params[@"id"] isKindOfClass:[NSNull class]]) {
         [self setImg];
-    } else {
-        NSLog(@"UID没有啊");
     }
 }
 - (void)setImg {
@@ -350,9 +352,7 @@
 - (void)setAddresss {
     self.params[@"shop_address"] = self.addressLabel.text;
     if (self.params[@"shop_address"] != nil && ![self.params[@"shop_address"] isKindOfClass:[NSNull class]] && ![self.params[@"shop_address"] isEqualToString:@""]) {
-        NSLog(@"%@", _params);
-        NSLog(@"成功了");
-        [self changeInfo];
+//        [self changeInfo];
     } else {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -365,35 +365,10 @@
 }
 
 - (IBAction)sureButtonClick:(id)sender {
-    
     [self setDict];
-    
 }
 
 
-- (void)changeInfo {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    // 默认的方式
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:urlString parameters:_params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 数据加载完后回调.
-        NSError *error;
-        NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
-        NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.labelText = dic[@"msg"];
-        NSLog(@"修改成功 success");
-        [self.navigationController popViewControllerAnimated:NO];
-        // 隐藏时候从父控件中移除
-        hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
-}
 - (IBAction)outButtonClick:(id)sender {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -555,53 +530,62 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-    
-    /* 此处info 有六个可选类型
-     * UIImagePickerControllerMediaType; // an NSString UTTypeImage)
-     * UIImagePickerControllerOriginalImage;  // a UIImage 原始图片
-     * UIImagePickerControllerEditedImage;    // a UIImage 裁剪后图片
-     * UIImagePickerControllerCropRect;       // an NSValue (CGRect)
-     * UIImagePickerControllerMediaURL;       // an NSURL
-     * UIImagePickerControllerReferenceURL    // an NSURL that references an asset in the AssetsLibrary framework
-     * UIImagePickerControllerMediaMetadata    // an NSDictionary containing metadata from a captured photo
-     */
     [_iconBtn setImage:image forState:UIControlStateNormal];
-    [self setInfoImg:image];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    // 设置时间格式
+    formatter.dateFormat = @"yyyyMMddHHmmss";
+    NSString *str = [formatter stringFromDate:[NSDate date]];
+    NSString *fileName = [NSString stringWithFormat:@"header%@.jpg", str];
+    [self saveImage:image withName:fileName];
+
+    NSLog(@"%@", fileName);
+#warning img ++++++++++++++++++++
+    
+//    [self changeInfo:fileName];
+    
 }
+
+//- (void)changeInfo:(NSString *)fileName {
+//}
 
 #pragma mark - 保存图片至本地沙盒
 
 - (void)saveImage:(UIImage *)currentImage withName:(NSString *)imageName
 {
-    NSData *imageData = UIImageJPEGRepresentation(currentImage, 0.8);
+    NSData *imageData = UIImageJPEGRepresentation(currentImage, 0.5);
     // 获取沙盒目录
     NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
-    self.params[@"member_picture"] = fullPath;
+//    self.params[@"member_picture"] = fullPath;
     NSLog(@"%@", self.params);
     // 将图片写入文件
     [imageData writeToFile:fullPath atomically:NO];
-}
-
+    
 #warning tyui++++++++++++++++++
-
-- (void)setInfoImg:(UIImage *)image {
-    NSString *strin = [NSString string];
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyyMMddHHmmss";
-    
-    NSDate *currentDate = [NSDate date];//获取当前时间，日期
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-    NSString *dateString = [dateFormatter stringFromDate:currentDate];
-    NSLog(@"dateString:%@",dateString);
-    
-    NSString *str = [formatter stringFromDate:[NSDate date]];
-    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", str];
-    
-    strin = [NSString stringWithFormat:@"/Uploads/MemberPicture/%@/%@", dateString, fileName];
-    NSLog(@"%@", strin);
+    NSString *url = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";//放上传图片的网址
+    NSString *mimType = [NSString stringWithFormat:@"%@%@", @"image/", [fullPath pathExtension]];
+    NSURL *fileUrl = [[NSBundle mainBundle] URLForResource:fullPath withExtension:nil];
+    NSLog(@"=====%@", fullPath);
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager POST:url parameters:self.params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        // 上传文件
+        [formData appendPartWithFileURL:fileUrl name:@"member_picture" fileName:@"image.jpg" mimeType:mimType error:nil];
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"上传陈宫");
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"上传失败");
+    }];
     
 }
+
+
+//- (void)setInfoImg:(UIImage *)image {
+
+//}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

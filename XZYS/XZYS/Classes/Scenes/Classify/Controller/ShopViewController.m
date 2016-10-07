@@ -19,7 +19,7 @@
 #import "XiTongViewController.h"
 #import "SearchViewController.h"
 #import "SDFQModel.h"
-#import "ShopHeadView.h"
+#import "ShopHeadReusableView.h"
 #import "UIView+LoadFromNib.h"
 #import "LoginViewController.h"
 #import "AppDelegate.h"
@@ -54,11 +54,11 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 @property (nonatomic , copy) NSString *price2;
 @property (nonatomic , strong) UITextField *textFileda;
 @property (nonatomic , strong) UITextField *textFiledb;
-
+@property (nonatomic , strong) UIButton * collectButton;
 /// 搜索
 @property (strong, nonatomic) UITextField *searchText;
 @property (nonatomic , strong) ShopView *rootView;
-@property (nonatomic , strong) ShopHeadView *headView;
+@property (nonatomic , strong) ShopHeadReusableView *headView;
 @property (nonatomic ,strong) NSMutableArray *dataArray;
 @property (nonatomic ,strong) NSMutableArray *collectionArray;
 
@@ -82,10 +82,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self requestData];
     [self setCollection];
     [self setNavigation];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(callback1:)
-                                                 name:@"cbt1"
-                                               object:nil];
+
     [self setSXView];
 }
 - (void)setSXView {
@@ -179,33 +176,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     self.underView.hidden = YES;
 }
 
-- (void)callback1:(NSNotification *)text {
-    AppDelegate *appd = [[UIApplication sharedApplication] delegate];
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    params[@"uid"] = appd.userIdTag;
-    params[@"shop_id"] = text.userInfo[@"sid"];
-    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Collect/collectShop" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 数据加载完后回调.
-        NSDictionary *dic = responseObject;
-        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        if([result isEqualToString:@"-900"]){
-            hud.labelText = dic[@"msg"];
-            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_sca"] forState:UIControlStateNormal];
-        } else {
-            hud.labelText = dic[@"msg"];
-            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
-        }
-        NSLog(@"request:%@", dic[@"msg"]);
-        // 隐藏时候从父控件中移除
-        hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
 
-}
 
 - (void)setCollection {
     self.rootView = [[ShopView alloc] initWithFrame:CGRectMake(0, 44, SCREEN_WIDTH, SCREEN_HEIGHT- 44)];
@@ -217,8 +188,16 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     // 第一步：注册cell
     [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
     
-    self.headView = [[ShopHeadView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
-    self.headView = [ShopHeadView loadFromNib];
+    self.headView = [[ShopHeadReusableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 247)];
+    self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.collectButton.frame = CGRectMake(SCREEN_WIDTH - 45, 179, 30, 30);
+    [self.collectButton setImage:[UIImage imageNamed:@"dp_scc.png"] forState:UIControlStateNormal];
+    [self.collectButton addTarget:self action:@selector(collect:) forControlEvents:UIControlEventTouchUpInside];
+    [self.headView bringSubviewToFront:self.collectButton];
+    self.collectButton.userInteractionEnabled = YES;
+    [self.headView addSubview:self.collectButton];
+    
+    self.headView.userInteractionEnabled = YES;
     [self.rootView.collectionView addSubview:self.headView];
     /// 添加选择按钮
     UIView *pickBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 215, SCREEN_WIDTH, 42)];
@@ -271,6 +250,35 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 
 }
 
+- (void)collect:(UIButton *)sender {
+    NSString *str = [NSString stringWithFormat:@"%ld", sender.tag];
+    AppDelegate *appd = [[UIApplication sharedApplication] delegate];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    params[@"uid"] = appd.userIdTag;
+    params[@"shop_id"] = str;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Collect/collectShop" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 数据加载完后回调.
+        NSDictionary *dic = responseObject;
+        NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        if([result isEqualToString:@"-900"]){
+            hud.labelText = dic[@"msg"];
+            [self.collectButton setImage:[UIImage imageNamed:@"dp_sca"] forState:UIControlStateNormal];
+        } else {
+            hud.labelText = dic[@"msg"];
+            [self.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
+        }
+        NSLog(@"request:%@", dic[@"msg"]);
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    NSLog(@"234");
+}
+
 - (void)numButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"sales";
     self.priceButton1.hidden = YES;
@@ -319,9 +327,9 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         NSDictionary *dic = responseObject;
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
         if([result isEqualToString:@"-902"]){
-            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
+            [self.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
         } else {
-            [self.headView.collectButton setImage:[UIImage imageNamed:@"dp_sca"] forState:UIControlStateNormal];
+            [self.collectButton setImage:[UIImage imageNamed:@"dp_sca"] forState:UIControlStateNormal];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -395,7 +403,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             self.headView.titleLabel.text = model.shop_name;
             self.headView.baclImageView.image = [UIImage imageNamed:@"dpbjt.jpg"];
             [self.headView.headImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.shop_logo]]];
-            self.headView.collectButton.tag = [model.ID intValue];
+            self.collectButton.tag = [model.ID intValue];
             self.headView.numLabel.text = model.goods_num;
             self.headView.dianPuCollect.text = model.sales_num;
             self.headView.goodsCollect.text = model.collect_num;

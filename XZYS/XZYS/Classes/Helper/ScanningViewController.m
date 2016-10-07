@@ -64,15 +64,15 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     
-    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    NSString *tips = @"无法访问相机";
-    if(status == AVAuthorizationStatusAuthorized) {
+//    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+//    NSString *tips = @"无法访问相机";
+//    if(status == AVAuthorizationStatusAuthorized) {
         // authorized
         [self setupCamera];
-    } else {
-        [SVProgressHUD showWithStatus:tips];
-        [self performSelector:@selector(dismiss) withObject:nil afterDelay:3];
-    }
+//    } else {
+//        [SVProgressHUD showWithStatus:tips];
+//        [self performSelector:@selector(dismiss) withObject:nil afterDelay:3];
+//    }
     
 }
 - (void)dismiss {
@@ -225,7 +225,7 @@
     view.alpha = alpha;
     [self.view addSubview:view];
     
-    // 返回按钮
+//    // 返回按钮
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake(20, 30, 15, 25);
     [backButton setImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal];

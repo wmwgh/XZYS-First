@@ -17,7 +17,7 @@
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
-
+#import "PayViewController.h"
 
 static NSString *headerID = @"HeaderSID";
 static NSString *footerID = @"FooterSID";
@@ -126,27 +126,20 @@ static NSString *footerID = @"FooterSID";
             NSString *temp = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
             if ([temp isEqualToString:@"-1300"]) {
 #warning  tiao zhi fu
-                NSDictionary *dict = responseObject[@"data"];
-//                NSArray *idArray = dict[@"order_ids"];
-                NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//                NSData *jsonData3 = [NSJSONSerialization dataWithJSONObject:idArray options:NSJSONWritingPrettyPrinted error:nil];
-//                NSString *strjson3 = [[NSString alloc] initWithData:jsonData3 encoding:NSUTF8StringEncoding];
-                params[@"uid"] = app.userIdTag;
-                params[@"order_id"] = dict;
-                params[@"paytype"] = @"Alipayapp";
-                
-                [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Payment/paymentRequest" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                    hud.mode = MBProgressHUDModeText;
-                    hud.labelText = responseObject[@"msg"];
-                    // 隐藏时候从父控件中移除
-                    hud.removeFromSuperViewOnHide = YES;
-                    // 1秒之后再消失
-                    [hud hide:YES afterDelay:1.5];
-                    NSLog(@" 跳支付");
-                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                }];
+                NSString *jsonString = responseObject[@"data"];
+                NSData *jData = [jsonString dataUsingEncoding:NSASCIIStringEncoding];
+                NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:jData options:NSJSONReadingAllowFragments error:nil];
+                NSArray *ary = jsonObject[@"order_ids"];
+                PayViewController *payVC = [[PayViewController alloc] init];
+                payVC.orderTyp = ary[0];
+                self.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:payVC animated:YES];
+                self.hidesBottomBarWhenPushed = YES;
+                self.resultLab.text = @"0";
+                self.cellAllary = nil;
+                [self.mainTab reloadData];
             }
+            
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         }];
     }

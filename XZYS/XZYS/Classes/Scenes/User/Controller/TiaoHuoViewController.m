@@ -51,7 +51,6 @@
 
 - (void)callBack{
     [self requestAllData];
-    NSLog(@"取消调货 get it");
 }
 
 - (void)setTab {
@@ -92,7 +91,9 @@
     model = self.allDataArray[indexPath.row];
     thVC.orderID = model.ID;
     [self.mainTab deselectRowAtIndexPath:indexPath animated:NO];
+    self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:thVC animated:YES];
+    self.hidesBottomBarWhenPushed = YES;
 }
 
 

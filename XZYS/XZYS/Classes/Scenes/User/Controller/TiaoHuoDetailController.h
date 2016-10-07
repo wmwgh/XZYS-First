@@ -22,5 +22,6 @@
 @property (nonatomic , strong) TiaoHuoDetailModel *model;
 @property (strong, nonatomic) IBOutlet UILabel *goodsName;
 @property (strong, nonatomic) IBOutlet UILabel *colorLabel;
+
 @property (nonatomic , copy) NSString *orderID;
 @end

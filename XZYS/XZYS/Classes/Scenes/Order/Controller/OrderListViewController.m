@@ -22,6 +22,7 @@
 #import "RequestShouHouController.h"
 #import "ShopViewController.h"
 #import "PayViewController.h"
+#import "XIangQingViewController.h"
 
 static NSString *headerID = @"cityHeaderSectionID";
 static NSString *footerID = @"cityFooterSectionID";
@@ -59,6 +60,24 @@ static NSString *footerID = @"cityFooterSectionID";
     }
     return _idDic;
 }
+
+#pragma pay  =======================
+- (void)payButtonClick:(UIButton *)sender {
+    AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
+    self.params = [NSMutableDictionary dictionary];
+    self.params[@"uid"] = appDele.userIdTag;
+    self.params[@"order_id"] = [NSString stringWithFormat:@"%ld", sender.tag];
+//    [self orderAction];
+    PayViewController *payVC = [[PayViewController alloc] init];
+    payVC.orderTyp = [NSString stringWithFormat:@"%ld", sender.tag];
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:payVC animated:YES
+     ];
+    self.hidesBottomBarWhenPushed = YES;
+    
+    NSLog(@"PAY");
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -229,7 +248,6 @@ static NSString *footerID = @"cityFooterSectionID";
     allModel = self.titleArray[section];
     OrderDetailViewController *detailVC = [[OrderDetailViewController alloc] init];
     detailVC.orderID = allModel.ID;;
-    
     NSArray *arr = self.cellAllay[section];
     return arr.count;
 }
@@ -302,21 +320,6 @@ static NSString *footerID = @"cityFooterSectionID";
     [self.navigationController pushViewController:detailVC animated:YES];
 }
 
-#pragma pay========================
-- (void)payButtonClick:(UIButton *)sender {
-    AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
-    self.params = [NSMutableDictionary dictionary];
-    self.params[@"uid"] = appDele.userIdTag;
-    self.params[@"order_id"] = [NSString stringWithFormat:@"%ld", sender.tag];
-//    [self orderAction];
-    PayViewController *payVC = [[PayViewController alloc] init];
-    payVC.payDic = self.params;
-    self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:payVC animated:YES
-     ];
-    self.hidesBottomBarWhenPushed = YES;
-    NSLog(@"PAY");
-}
 
 - (void)sureButtonClick:(UIButton *)sender {
     self.params = [NSMutableDictionary dictionary];
@@ -362,6 +365,13 @@ static NSString *footerID = @"cityFooterSectionID";
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.mainTab deselectRowAtIndexPath:indexPath animated:NO];
+    XIangQingViewController *xqVC = [[XIangQingViewController alloc] init];
+    NSArray *ar = self.cellAllay[indexPath.section];
+    SonLislModel *model = ar[indexPath.row];
+    xqVC.passID = model.goods_id;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:xqVC animated:YES];
+    self.hidesBottomBarWhenPushed = YES;
 }
 
 - (IBAction)allOrder:(id)sender {
@@ -494,13 +504,13 @@ static NSString *footerID = @"cityFooterSectionID";
     _footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 32)];
     _footView.backgroundColor = [UIColor whiteColor];
     [_footerView addSubview:_footView];
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 50, 30)];
-    priceLabel.font = [UIFont systemFontOfSize:11];
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 60, 30)];
+    priceLabel.font = [UIFont systemFontOfSize:12];
     priceLabel.text = @"订单金额:";
     [_footView addSubview:priceLabel];
-    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(65, 0, 60, 30)];
+    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(68, 0, 70, 30)];
     priceLabel1.textColor = XZYSPinkColor;
-    priceLabel1.font = [UIFont systemFontOfSize:11];
+    priceLabel1.font = [UIFont systemFontOfSize:12];
     priceLabel1.text = model.total_price;
     [_footView addSubview:priceLabel1];
     _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
