@@ -12,7 +12,7 @@
 #define IS_IOS_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 
 #define DEFAULT_BACKGROUND_COLOR            [UIColor clearColor];
-#define DEFAULT_TEXT_FONT                   [UIFont systemFontOfSize:14.0f]
+#define DEFAULT_TEXT_FONT                   [UIFont systemFontOfSize:16.0f]
 #define DEFAULT_TEXT_COLOR                  [UIColor blackColor]
 #define DEFAULT_SELECTION_INDICATOR_COLOR   [UIColor colorWithRed:52.0f/255.0f green:181.0f/255.0f blue:229.0f/255.0f alpha:1.0f]
 #define DEFAULT_SEGMENT_EDGE_INSET          UIEdgeInsetsMake(5, 5, 5, 5);

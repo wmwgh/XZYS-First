@@ -40,7 +40,7 @@
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
 @property (strong, nonatomic) UITextField *searchText;
-
+@property (nonatomic , strong) UIView *redView;
 // 主头视图
 @property (nonatomic, strong) UIView *headerBackView;
 
@@ -370,8 +370,11 @@ static NSString *const secondID = @"secondHeader";//字和线
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
-    
-    
+    self.redView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 13, 11, 6, 6)];
+    self.redView.backgroundColor = [UIColor redColor];
+    self.redView.layer.cornerRadius = 3;
+    self.redView.hidden = YES;
+    [backImageView addSubview:self.redView];
     self.searchText = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, SCREEN_WIDTH - 90, 30)];
     self.searchText.placeholder = @"搜索...";
     self.searchText.textColor = [UIColor lightGrayColor];
@@ -437,7 +440,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 #pragma mark --- 协议里面方法，点击某一页
 -(void)didClickPage:(FzhScrollViewAndPageView *)view atIndex:(NSInteger)index
 {
-    NSLog(@"点击了第%ld页",index);
+//    NSLog(@"点击了第%ld页",index);
 }
 
 - (void)addRefresh {
@@ -446,7 +449,25 @@ static NSString *const secondID = @"secondHeader";//字和线
     [self.rootView.collectionView.mj_header beginRefreshing];
 }
 
-
+- (void)setReadView {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSArray *ar = @[@"0", @"1", @"2"];
+    params[@"uid"] = appDelegate.userIdTag;
+    for (int i = 0; i < ar.count; i++) {
+        params[@"status"] = ar[i];
+        [manager POST:@"http://www.xiezhongyunshang.com/App/Msg/getMsgUnreadNum" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSString *str = responseObject[@"data"];
+            if ([str isEqualToString:@"0"]) {
+                self.redView.hidden = YES;
+            } else {
+                self.redView.hidden = NO;
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        }];
+    }
+}
 #pragma mark - 三大专区数据
 // 请求数据
 - (void)requestData {
@@ -458,7 +479,6 @@ static NSString *const secondID = @"secondHeader";//字和线
         NSArray *dataArray = responseObject[@"data"];
         if (dataArray.count > 0) {
             for (NSDictionary *dict in dataArray) {
-//                NSLog(@"%@", dict);
                 SDZCModel *model = [[SDZCModel alloc] init];
                 [model setValuesForKeysWithDictionary:dict];
                 [weakSelf.SDQArray addObject:model];
@@ -468,9 +488,6 @@ static NSString *const secondID = @"secondHeader";//字和线
         [weakSelf showCollection];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-
-        // 请求失败
-        NSLog(@"失败：%@", [error localizedDescription]);
     }];
     
 #pragma mark - 轮播图数据
@@ -481,7 +498,6 @@ static NSString *const secondID = @"secondHeader";//字和线
         NSArray *dataArray = responseObject[@"data"];
         if (dataArray.count > 0) {
             for (NSDictionary *dict in dataArray) {
-//                NSLog(@"%@", dict);
                 LBTModel *model = [[LBTModel alloc] init];
                 [model setValuesForKeysWithDictionary:dict];
                 [weakSelf.LBTArray addObject:model];
@@ -491,8 +507,6 @@ static NSString *const secondID = @"secondHeader";//字和线
         [weakSelf LBTView];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
-        NSLog(@"失败：%@", [error localizedDescription]);
     }];
     
 }
@@ -687,6 +701,10 @@ static NSString *const secondID = @"secondHeader";//字和线
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setReadView];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

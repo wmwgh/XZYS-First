@@ -15,12 +15,12 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HON-5t-DgT">
-                        <rect key="frame" x="93" y="5" width="275" height="16.5"/>
+                        <rect key="frame" x="93" y="5" width="275" height="17.5"/>
                         <attributedString key="attributedText">
                             <fragment content="Label">
                                 <attributes>
                                     <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                    <font key="NSFont" size="15" name="HelveticaNeue"/>
                                 </attributes>
                             </fragment>
                         </attributedString>
@@ -34,7 +34,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QjY-fv-6mu">
-                        <rect key="frame" x="93" y="46.5" width="60" height="20"/>
+                        <rect key="frame" x="93" y="47.5" width="60" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="5fm-qL-boh"/>
                             <constraint firstAttribute="width" constant="60" id="GYt-rp-oJj"/>

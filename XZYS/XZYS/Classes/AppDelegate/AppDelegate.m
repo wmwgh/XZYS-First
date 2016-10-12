@@ -14,6 +14,8 @@
 #import "UserViewController.h"
 #import "LoginViewController.h"
 #import <AlipaySDK/AlipaySDK.h>
+#import "EMSDK.h"
+#import "EaseUI.h"
 
 
 @interface AppDelegate ()
@@ -60,6 +62,9 @@
     
     // 将导航控制器对象添加到数组中
     self.mainTab.viewControllers = @[homeNVC,classNVC,shoppingNVC,userNVC];
+    
+    // 初始化EaseUI
+    [[EaseSDKHelper shareHelper] easemobApplication:application didFinishLaunchingWithOptions:launchOptions appkey:@"jiuguankeji#xzyskf" apnsCertName:nil otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     
     return YES;
 }

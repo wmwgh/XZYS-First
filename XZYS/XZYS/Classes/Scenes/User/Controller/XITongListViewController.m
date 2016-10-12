@@ -101,7 +101,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     params[@"uid"] = appDelegate.userIdTag;
-    params[@"id"] = _model.ID;
+    params[@"type"] = [NSString stringWithFormat:@"%@", _model.ID];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Msg/getPushMsgList" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
         if ([str isEqualToString:@"-101"]) {
@@ -119,7 +119,6 @@
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:1.5];
         }
-        NSLog(@"%@", _xiTongArray);
         [self.mainTableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         

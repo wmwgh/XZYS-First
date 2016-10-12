@@ -16,14 +16,44 @@
 #import <MBProgressHUD.h>
 #import "AppDelegate.h"
 #import "BDImagePicker.h"
-
+#import "EMSDK.h"
 
 @interface RegiestViewController ()<UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate>
 @property (nonatomic , strong) RegiestView *regiestView;
+@property (nonatomic , strong) NSMutableDictionary *dataParams;
+@property (nonatomic , strong) NSData *zzImgData;
+@property (nonatomic , strong) NSData *sfzbImgData;
+@property (nonatomic , strong) NSData *sfzaImgData;
+@property (nonatomic , strong) NSMutableArray *imageDataArray;
+@property (nonatomic , strong) NSMutableArray *imageNameArray;
 
+@property (nonatomic , copy) NSString *zzStr;
+@property (nonatomic , copy) NSString *sfzbStr;
+@property (nonatomic , copy) NSString *sfzaStr;
 @end
 
 @implementation RegiestViewController
+
+- (NSMutableDictionary *)dataParams {
+    if (!_dataParams) {
+        _dataParams = [NSMutableDictionary dictionary];
+    }
+    return _dataParams;
+}
+
+- (NSMutableArray *)imageDataArray {
+    if (!_imageDataArray) {
+        _imageDataArray = [NSMutableArray array];
+    }
+    return _imageDataArray;
+}
+
+- (NSMutableArray *)imageNameArray {
+    if (!_imageNameArray) {
+        _imageNameArray = [NSMutableArray array];
+    }
+    return _imageNameArray;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -70,24 +100,58 @@
     
 }
 
+#warning =============
 - (void)zhengjianImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.zhizhaoImg.image) {
-            self.regiestView.zhizhaoImg.image = image;
+            if (image) {
+                self.regiestView.zhizhaoImg.image = image;
+                self.zzImgData = UIImageJPEGRepresentation(image, 0.5);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                // 设置时间格式
+                formatter.dateFormat = @"yyyyMMddHHmmss";
+                NSString *str1 = [formatter stringFromDate:[NSDate date]];
+                NSString *str = [NSString stringWithFormat:@"zz-%@", str1];
+                self.zzStr = str;
+                [self.imageDataArray addObject:self.zzImgData];
+                [self.imageNameArray addObject:@"business_img"];
+            }
         }
     }];
 }
 - (void)sfzBeforeImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.sfzImgBefore.image) {
-            self.regiestView.sfzImgBefore.image = image;
+            if (image) {
+                self.regiestView.sfzImgBefore.image = image;
+                self.sfzbImgData = UIImageJPEGRepresentation(image, 0.5);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                // 设置时间格式
+                formatter.dateFormat = @"yyyyMMddHHmmss";
+                NSString *str1 = [formatter stringFromDate:[NSDate date]];
+                NSString *str = [NSString stringWithFormat:@"sfzb-%@", str1];
+                self.sfzbStr = str;
+                [self.imageDataArray addObject:self.sfzbImgData];
+                [self.imageNameArray addObject:@"legal_img_a"];
+            }
         }
     }];
 }
 - (void)sfzAfterImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.sfzImgAfter.image) {
-            self.regiestView.sfzImgAfter.image = image;
+            if (image) {
+                self.regiestView.sfzImgAfter.image = image;
+                self.sfzaImgData = UIImageJPEGRepresentation(image, 0.5);
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                // 设置时间格式
+                formatter.dateFormat = @"yyyyMMddHHmmss";
+                NSString *str1 = [formatter stringFromDate:[NSDate date]];
+                NSString *str = [NSString stringWithFormat:@"sfza-%@", str1];
+                self.sfzaStr = str;
+                [self.imageDataArray addObject:self.sfzaImgData];
+                [self.imageNameArray addObject:@"legal_img_b"];
+            }
         }
     }];
 }
@@ -105,7 +169,6 @@
 //    NSLog(@"%d", a);
 //    [params setObject:[NSNumber numberWithInt:a] forKey:@"username"];
     [params setObject:self.regiestView.phoneNum.text forKey:@"username"];
-    NSLog(@"%@", params);
     [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调
         NSError *error;
@@ -170,43 +233,65 @@
         // 注册调用的网址
         NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/registe";
         manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-        // 默认的方式
-        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        self.dataParams[@"username"] = self.regiestView.phoneNum.text;
+        self.dataParams[@"password"] = self.regiestView.passWord.text;
+        self.dataParams[@"repassword"] = self.regiestView.passWordAgain.text;
+        self.dataParams[@"verify"] = self.regiestView.yanZhengMa.text;
+        self.dataParams[@"legal_name"] = self.regiestView.farenName.text;
+        self.dataParams[@"business_img"] = self.zzStr;
+        self.dataParams[@"legal_img_a"] = self.sfzbStr;
+        self.dataParams[@"legal_img_b"] = self.sfzaStr;
         
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        params[@"username"] = self.regiestView.phoneNum.text;
-        params[@"password"] = self.regiestView.passWord.text;
-        params[@"repassword"] = self.regiestView.passWordAgain.text;
-        params[@"verify"] = self.regiestView.yanZhengMa.text;
-        params[@"legal_name"] = self.regiestView.farenName.text;
-//        parms[@"legal_img_a"] = self.regiestView.passWord.text;
-//        parms[@"legal_img_b"] = self.regiestView.passWordAgain.text;
-//        parms[@"business_img"] = self.regiestView.yanZhengMa.text;
-
-        [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            // 数据加载完后回调.
-            NSError *error;
-            NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
-            NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-            NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+        if (self.zzStr != nil && self.sfzbStr != nil && self.sfzaStr != nil) {
+            [manager POST:urlString parameters:self.dataParams constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+                // 上传文件
+                // 上传 多张图片
+                for(NSInteger i = 0; i < self.imageDataArray.count; i++)
+                {
+                    NSData *imageData = [self.imageDataArray objectAtIndex: i];
+                    // 上传的参数名
+                    NSString *name = [NSString stringWithFormat:@"%@", self.imageNameArray[i]];
+                    
+                    [formData appendPartWithFileData:imageData name:name fileName:@"image.jpg" mimeType:@"image/jpg"];
+                }
+                
+            } progress:^(NSProgress * _Nonnull uploadProgress) {
+                
+            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                
+                NSString *result = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"status"]];
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                if ([result isEqualToString:@"-526"]) {
+                    hud.labelText = responseObject[@"msg"];
+                    hud.removeFromSuperViewOnHide = YES;
+                    [hud hide:YES afterDelay:1.5];
+#pragma mark -- 环信注册
+                    NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.regiestView.phoneNum.text];
+                    NSString *loginWord = @"xzyspassword";
+                    EMError *error = [[EMClient sharedClient] registerWithUsername:loginId password:loginWord];
+                    if (!error) {
+                        NSLog(@"huanxin注册成功");
+                        
+                    } else {
+                        NSLog(@"huanxin注册失败 %d  %@", error.code, error.description);
+                    }
+                    //注册成功后调用
+                    [self registerSuccess];
+                } else {
+                    hud.labelText = responseObject[@"msg"];
+                    hud.removeFromSuperViewOnHide = YES;
+                    [hud hide:YES afterDelay:1.5];
+                }
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            }];
+        } else {
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
-            if ([result isEqualToString:@"-526"]) {
-                hud.labelText = dic[@"msg"];
-                hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
-                //注册成功后调用
-                [self registerSuccess];
-            } else {
-                hud.labelText = dic[@"msg"];
-                hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
-            }
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            //数据加载失败回调.
-            NSLog(@"注册失败: %@",error);
-        }];
+            hud.labelText = @"请完善信息";
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1];
+        }
     }
 }
 
@@ -327,6 +412,8 @@
     self.navigationController.navigationBarHidden = YES;
     [super viewWillDisappear:animated];
 }
+
+
 
 /*
 #pragma mark - Navigation

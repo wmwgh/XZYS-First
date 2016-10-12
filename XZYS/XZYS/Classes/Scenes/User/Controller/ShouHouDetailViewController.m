@@ -33,33 +33,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"售后详情";
+    self.reasonLab.layer.borderWidth = 1;
+    self.reasonLab.layer.borderColor = XZYSRGBColor(234, 234, 234).CGColor;
     [self requestAllData];
     // Do any additional setup after loading the view from its nib.
 }
 
-
-- (IBAction)sureButton:(UIButton *)sender {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    params[@"uid"] = appDelegate.userIdTag;
-    params[@"order_id"] = self.receiveOrder;
-    params[@"act"] = @"shipping_complete";
-    
-    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Order/orderOperationReception.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSString *order = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
-        if ([order isEqualToString:@"-101"]) {
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            hud.mode = MBProgressHUDModeText;
-            hud.labelText = responseObject[@"msg"];
-            hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
-        }
-        NSLog(@"shouhoudingdan");
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
-}
 
 #pragma mark - 数据区
 // 获取全部数据
@@ -100,7 +79,6 @@
     int b = [model.num floatValue];
     float c = a * b;
     NSString *str = [NSString stringWithFormat:@"%.2f", c];
-    self.hejiLab.text = str;
     self.heji1.text = str;
     self.reasonLab.text = model.reason;
     [self.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, model.goods_img]]];
@@ -116,9 +94,9 @@
                 if (i == 0) {
                     [self.img1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, strin]]];
                 } else if (i == 1) {
-                    [self.img1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, strin]]];
+                    [self.img2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, strin]]];
                 } else if (i == 2) {
-                    [self.img1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, strin]]];
+                    [self.img3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, strin]]];
                 }
             }
     }

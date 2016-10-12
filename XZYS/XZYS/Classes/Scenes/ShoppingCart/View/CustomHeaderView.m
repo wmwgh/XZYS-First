@@ -70,7 +70,7 @@
 
 -(UILabel *)titleLable{
     if (_titleLable == nil) {
-        _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(45, 20, 120, 20)];
+        _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(45, 20, 200, 20)];
         _titleLable.text = @"店铺名称";
         _titleLable.font = [UIFont systemFontOfSize:16];
     }
@@ -79,7 +79,6 @@
 
 #pragma mark --- Clicked event
 - (void)clicked{
-    NSLog(@"店铺按钮被点击");
     if (self.delegate && [self.delegate respondsToSelector:@selector(clickedWhichHeaderView:)]) {
         [self.delegate clickedWhichHeaderView:self.tag];
     }

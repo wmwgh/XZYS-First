@@ -74,8 +74,6 @@ static NSString *footerID = @"cityFooterSectionID";
     [self.navigationController pushViewController:payVC animated:YES
      ];
     self.hidesBottomBarWhenPushed = YES;
-    
-    NSLog(@"PAY");
 }
 
 
@@ -109,9 +107,23 @@ static NSString *footerID = @"cityFooterSectionID";
                                              selector:@selector(sureCallBack:)
                                                  name:@"收获刷新UI"
                                                object:nil];
+    // 通知中心
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(payCallBack:)  name:@"notifPayFinish"
+//                                               object:nil];
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
+
+//- (void)payCallBack:(NSNotification *)text {
+//    NSLog(@"%@", text.userInfo[@"sid"]);
+//    NSString *str = text.userInfo[@"sid"];
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.mode = MBProgressHUDModeText;
+//    hud.labelText = str;
+//    hud.removeFromSuperViewOnHide = YES;
+//    [hud hide:YES afterDelay:1.5];
+//}
 
 - (void)sureCallBack:(NSNotification *)text {
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -331,8 +343,6 @@ static NSString *footerID = @"cityFooterSectionID";
 - (void)orderAction {
     AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
     _params[@"uid"] = appDele.userIdTag;
-//    _params[@"uid"] = @"1";
-    NSLog(@"%@", _params);
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Order/orderOperationReception.html" parameters:_params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 数据加载完后回调.
         NSDictionary *dic = responseObject;
@@ -345,7 +355,6 @@ static NSString *footerID = @"cityFooterSectionID";
         } else {
             hud.labelText = dic[@"msg"];
         }
-        NSLog(@"request:%@", dic[@"msg"]);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
@@ -440,12 +449,12 @@ static NSString *footerID = @"cityFooterSectionID";
     _titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 140, 40);
     UILabel *titLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, SCREEN_WIDTH - 145, 40)];
-    titLabel.font = [UIFont systemFontOfSize:14];
+    titLabel.font = [UIFont systemFontOfSize:16];
     [backView bringSubviewToFront:titLabel];
     [backView addSubview:titLabel];
     [_titleButton setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [_titleButton addTarget:self action:@selector(titleBT:) forControlEvents:UIControlEventTouchUpInside];
-    _titleButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    _titleButton.titleLabel.font = [UIFont systemFontOfSize: 16.0];
     [_titleButton.titleLabel setTextAlignment:NSTextAlignmentLeft];
     [backView addSubview:_titleButton];
     UIImageView *jianimage = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_titleButton.frame), 12, 15, 17)];
@@ -453,7 +462,7 @@ static NSString *footerID = @"cityFooterSectionID";
     [backView addSubview:jianimage];
     self.nomalLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 58, 7, 50, 30)];
     self.nomalLabel.textColor = XZYSPinkColor;
-    self.nomalLabel.font = [UIFont systemFontOfSize:14];
+    self.nomalLabel.font = [UIFont systemFontOfSize:16];
     [backView addSubview:self.nomalLabel];
     if (_orderType == 1) {
         AllListModel *model = [[AllListModel alloc] init];
@@ -504,24 +513,24 @@ static NSString *footerID = @"cityFooterSectionID";
     _footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 32)];
     _footView.backgroundColor = [UIColor whiteColor];
     [_footerView addSubview:_footView];
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 60, 30)];
-    priceLabel.font = [UIFont systemFontOfSize:12];
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 65, 30)];
+    priceLabel.font = [UIFont systemFontOfSize:13];
     priceLabel.text = @"订单金额:";
     [_footView addSubview:priceLabel];
-    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(68, 0, 70, 30)];
+    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, 90, 30)];
     priceLabel1.textColor = XZYSPinkColor;
-    priceLabel1.font = [UIFont systemFontOfSize:12];
+    priceLabel1.font = [UIFont systemFontOfSize:13];
     priceLabel1.text = model.total_price;
     [_footView addSubview:priceLabel1];
     _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_deleteButton setTitle:@"取消订单" forState:UIControlStateNormal];
-    _deleteButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
+    _deleteButton.titleLabel.font = [UIFont systemFontOfSize: 12.0];
     [_deleteButton addTarget:self action:@selector(deleteButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_deleteButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
     [_deleteButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     _orderButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_orderButton setTitle:@"订单详情" forState:UIControlStateNormal];
-    _orderButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
+    _orderButton.titleLabel.font = [UIFont systemFontOfSize: 12.0];
     [_orderButton addTarget:self action:@selector(orderButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_orderButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
     [_orderButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
@@ -530,20 +539,20 @@ static NSString *footerID = @"cityFooterSectionID";
     [_payButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [_payButton addTarget:self action:@selector(payButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_payButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
-    _payButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
+    _payButton.titleLabel.font = [UIFont systemFontOfSize: 12.0];
     _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_sureButton setTitle:@"确认收货" forState:UIControlStateNormal];
-    _sureButton.titleLabel.font = [UIFont systemFontOfSize: 11.0];
+    _sureButton.titleLabel.font = [UIFont systemFontOfSize: 12.0];
     [_sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [_sureButton setBackgroundImage:[UIImage imageNamed:@"dd_bk"] forState:UIControlStateNormal];
     [_sureButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     
     if (_orderType == 1) {
-        _deleteButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+        _deleteButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_deleteButton];
-        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6.5 - 20, 4, SCREEN_WIDTH / 6.5, 22);
+        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6 - 20, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_orderButton];
-        _payButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 3 / 6.5 - 30, 4, SCREEN_WIDTH / 6.5, 22);
+        _payButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 3 / 6 - 30, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_payButton];
         _deleteButton.tag = [model.ID integerValue];
         _payButton.tag = [model.ID integerValue];
@@ -551,7 +560,7 @@ static NSString *footerID = @"cityFooterSectionID";
         _sureButton.tag = [model.ID integerValue];
         return _footerView;
     } else if (_orderType == 2) {
-        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_orderButton];
         _deleteButton.tag = [model.ID integerValue];
         _payButton.tag = [model.ID integerValue];
@@ -559,9 +568,9 @@ static NSString *footerID = @"cityFooterSectionID";
         _sureButton.tag = [model.ID integerValue];
         return _footerView;
     } else if (_orderType == 3) {
-        _sureButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+        _sureButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_sureButton];
-        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6.5 - 20, 4, SCREEN_WIDTH / 6.5, 22);
+        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6 - 20, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_orderButton];
         _deleteButton.tag = [model.ID integerValue];
         _payButton.tag = [model.ID integerValue];
@@ -569,7 +578,7 @@ static NSString *footerID = @"cityFooterSectionID";
         _sureButton.tag = [model.ID integerValue];
         return _footerView;
     } else if (_orderType == 4) {
-        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+        _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
         [_footView addSubview:_orderButton];
         _deleteButton.tag = [model.ID integerValue];
         _payButton.tag = [model.ID integerValue];
@@ -578,11 +587,11 @@ static NSString *footerID = @"cityFooterSectionID";
         return _footerView;
     } else {
         if ([model.order_status_text isEqualToString:@"未付款"]) {
-            _deleteButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+            _deleteButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
             [_footView addSubview:_deleteButton];
-            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6.5 - 20, 4, SCREEN_WIDTH / 6.5, 22);
+            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6 - 20, 4, SCREEN_WIDTH / 6, 22);
             [_footView addSubview:_orderButton];
-            _payButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 3 / 6.5 - 30, 4, SCREEN_WIDTH / 6.5, 22);
+            _payButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 3 / 6 - 30, 4, SCREEN_WIDTH / 6, 22);
             [_footView addSubview:_payButton];
             _deleteButton.tag = [model.ID integerValue];
             _payButton.tag = [model.ID integerValue];
@@ -590,23 +599,23 @@ static NSString *footerID = @"cityFooterSectionID";
             _sureButton.tag = [model.ID integerValue];
             return _footerView;
         } else if ([model.order_status_text isEqualToString:@"已发货"]) {
-            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
             _deleteButton.tag = [model.ID integerValue];
             _payButton.tag = [model.ID integerValue];
             _orderButton.tag = [model.ID integerValue];
             _sureButton.tag = [model.ID integerValue];            [_footView addSubview:_orderButton];
             return _footerView;
         } else if ([model.order_status_text isEqualToString:@"已完成"]) {
-            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
             _deleteButton.tag = [model.ID integerValue];
             _payButton.tag = [model.ID integerValue];
             _orderButton.tag = [model.ID integerValue];
             _sureButton.tag = [model.ID integerValue];            [_footView addSubview:_orderButton];
             return _footerView;
         } else if ([model.order_status_text isEqualToString:@"已付款"]) {
-            _sureButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6.5 - 10, 4, SCREEN_WIDTH / 6.5, 22);
+            _sureButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH / 6 - 10, 4, SCREEN_WIDTH / 6, 22);
             [_footView addSubview:_sureButton];
-            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6.5 - 20, 4, SCREEN_WIDTH / 6.5, 22);
+            _orderButton.frame = CGRectMake(SCREEN_WIDTH - SCREEN_WIDTH * 2 / 6 - 20, 4, SCREEN_WIDTH / 6, 22);
             _deleteButton.tag = [model.ID integerValue];
             _payButton.tag = [model.ID integerValue];
             _orderButton.tag = [model.ID integerValue];

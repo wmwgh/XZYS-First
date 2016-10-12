@@ -15,7 +15,6 @@
 #import "AllListModel.h"
 #import "SonLislModel.h"
 #import "AllOrderListCell.h"
-#import "OrderDetailViewController.h"
 #import "ShopViewController.h"
 
 static NSString *headerID = @"cityHeaderSectionID";
@@ -56,7 +55,7 @@ static NSString *footerID = @"cityFooterSectionID";
 }
 
 - (void)setTab {
-    self.mainTab = [[UITableView alloc] initWithFrame:CGRectMake(0, 174, SCREEN_WIDTH, SCREEN_HEIGHT - 174) style:UITableViewStyleGrouped];
+    self.mainTab = [[UITableView alloc] initWithFrame:CGRectMake(0, 184, SCREEN_WIDTH, SCREEN_HEIGHT - 174) style:UITableViewStyleGrouped];
     [self.mainTab registerNib:[UINib nibWithNibName:NSStringFromClass([AllOrderListCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
     self.mainTab.delegate = self;
     self.mainTab.dataSource = self;
@@ -106,7 +105,7 @@ static NSString *footerID = @"cityFooterSectionID";
     dpImage.image = [UIImage imageNamed:@"dp_sd"];
     [backView addSubview:dpImage];
     UILabel *titLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, SCREEN_WIDTH - 145, 40)];
-    titLabel.font = [UIFont systemFontOfSize:14];
+    titLabel.font = [UIFont systemFontOfSize:16];
     [backView bringSubviewToFront:titLabel];
     [backView addSubview:titLabel];
     
@@ -114,7 +113,7 @@ static NSString *footerID = @"cityFooterSectionID";
     titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 140, 40);
     [titleButton setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [titleButton addTarget:self action:@selector(titleBT:) forControlEvents:UIControlEventTouchUpInside];
-    titleButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    titleButton.titleLabel.font = [UIFont systemFontOfSize: 16.0];
     [titleButton.titleLabel setTextAlignment:NSTextAlignmentLeft];
     [backView addSubview:titleButton];
     

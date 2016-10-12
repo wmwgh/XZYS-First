@@ -190,7 +190,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     
     self.headView = [[ShopHeadReusableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 247)];
     self.collectButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.collectButton.frame = CGRectMake(SCREEN_WIDTH - 45, 179, 30, 30);
+    self.collectButton.frame = CGRectMake(SCREEN_WIDTH - 45, 179, 36, 36);
     [self.collectButton setImage:[UIImage imageNamed:@"dp_scc.png"] forState:UIControlStateNormal];
     [self.collectButton addTarget:self action:@selector(collect:) forControlEvents:UIControlEventTouchUpInside];
     [self.headView bringSubviewToFront:self.collectButton];
@@ -269,14 +269,12 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             hud.labelText = dic[@"msg"];
             [self.collectButton setImage:[UIImage imageNamed:@"dp_scc"] forState:UIControlStateNormal];
         }
-        NSLog(@"request:%@", dic[@"msg"]);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
-    NSLog(@"234");
 }
 
 - (void)numButtonClick:(UIButton *)sender {
@@ -362,9 +360,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [_collectionArray removeAllObjects];
     __weak typeof(self) weakSelf = self;
     [weakSelf.param setValue:weakSelf.shopID forKey:@"shop_id"];
-    NSLog(@"%@", weakSelf.param);
     [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"%@", responseObject);
         NSArray *dataArray = [responseObject objectForKey:@"data"];
         
         for (NSDictionary *dic in dataArray) {
@@ -412,13 +408,11 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             // 请求失败
             // 显示加载错误信息
             [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
-            NSLog(@"%@", error);
         }];
         
         
         /// collection 数据请求
         [weakSelf.param setValue:weakSelf.shopID forKey:@"shop_id"];
-        NSLog(@"%@", weakSelf.param);
         [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 请求成功，解析数据
             NSArray *dataArr = responseObject[@"data"];
@@ -434,7 +428,6 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             // 请求失败
             // 显示加载错误信息
             [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
-            NSLog(@"%@", error);
         }];
     } else {
         // 显示加载错误信息

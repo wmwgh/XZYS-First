@@ -23,6 +23,7 @@
 @property (nonatomic , copy) NSString *goods_color;
 // 商品尺码
 @property (nonatomic , copy) NSString *goods_size;
+@property (nonatomic , copy) NSString *cotton_id;
 // 购买数量
 @property (nonatomic , copy) NSString *num;
 // 商品价格

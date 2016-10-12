@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong)AllGucModel * model;
 
+@property (strong, nonatomic) IBOutlet UILabel *nlLab;
 @property (weak, nonatomic) IBOutlet UIButton *leftBtn;
 @property (weak, nonatomic) IBOutlet UILabel *goodsTitle;
 @property (weak, nonatomic) IBOutlet UILabel *priceLable;

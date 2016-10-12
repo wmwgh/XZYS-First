@@ -119,18 +119,27 @@
             NSString *resultMsg = @"";
             
             if (resultStatus == 9000) {//交易成功
-                resultMsg = @"success";
+                resultMsg = @"交易成功";
             } else if (resultStatus == 8000) {
                 resultMsg = @"订单正在处理中";
+            } else if (resultStatus == 4000) {
+                resultMsg = @"订单支付失败";
+            } else if (resultStatus == 6001) {
+                resultMsg = @"用户中途取消";
+            } else if (resultStatus == 6002) {
+                resultMsg = @"网络连接出错";
             } else {
                 resultMsg = @"交易失败";
             }
 //            if (resultStatus != 6001) {//交易成功 用户取消
-//                OrderListViewController *orderVC = [[OrderListViewController alloc] init];
-//                self.hidesBottomBarWhenPushed = YES;
-//                [self.navigationController pushViewController:orderVC animated:YES];
-//                self.hidesBottomBarWhenPushed = YES;
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinish" object:resultMsg];
+//            OrderListViewController *orderVC = [[OrderListViewController alloc] init];
+//            self.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:orderVC animated:YES];
+//            self.hidesBottomBarWhenPushed = YES;
+//            //发出通知
+//            [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinish" object:self userInfo:[NSDictionary dictionaryWithObject:resultMsg forKey:@"sid"]];
+//            
+//            [self.navigationController ;  popViewControllerAnimated:YES];
 //            }
             self.mainLab.text = resultMsg;
             self.mainLab.hidden = NO;

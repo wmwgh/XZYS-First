@@ -36,6 +36,7 @@
 // 修改密码
 - (IBAction)changePassWord:(id)sender {
     PassWordViewController *passVC = [[PassWordViewController alloc] init];
+    passVC.orderTypeId = @"2";
     passVC.hidesBottomBarWhenPushed = YES;
     [self.owner.navigationController  pushViewController:passVC animated:YES];
 }

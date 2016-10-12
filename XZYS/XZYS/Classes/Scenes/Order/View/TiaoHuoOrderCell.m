@@ -44,7 +44,6 @@
     params[@"uid"] = appDelegate.userIdTag;
     params[@"id"] = _model.ID;
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsDel.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@", responseObject);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.labelText = responseObject[@"msg"];

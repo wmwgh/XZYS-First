@@ -46,7 +46,6 @@
     param[@"contact_name"] = self.contectText.text;
     param[@"contact_mobile"] = self.telText.text;
     param[@"address"] = self.addressText.text;
-    NSLog(@"%@", param);
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoods.html" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;

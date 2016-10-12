@@ -74,7 +74,7 @@
     labt.backgroundColor = [UIColor whiteColor];
     [labt setTitle:@"品牌" forState:UIControlStateNormal];
     [labt setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    labt.titleLabel.font = [UIFont systemFontOfSize:14];
+    labt.titleLabel.font = [UIFont systemFontOfSize:16];
     [labt addTarget:self action:@selector(pinPai) forControlEvents:UIControlEventTouchUpInside];
 //    [pinView addSubview:labt];
     [self.view addSubview:labt];
@@ -195,7 +195,7 @@
     qweButton.frame = CGRectMake(SCREEN_WIDTH - 160, 8, 80, 20);
     [qweButton setTitle:@"查看全部>>" forState:UIControlStateNormal];
     [qweButton setTitleColor:XZYSRGBColor(239, 124, 180) forState:UIControlStateNormal];
-    qweButton.titleLabel.font = [UIFont systemFontOfSize:12];
+    qweButton.titleLabel.font = [UIFont systemFontOfSize:14];
     [qweButton addTarget:self action:@selector(qweClock:) forControlEvents:UIControlEventTouchUpInside];
     [self.mianCollectionView addSubview:qweButton];
     
@@ -209,7 +209,7 @@
 
 //设置头视图的大小
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
-    return CGSizeMake(SCREEN_WIDTH, 26);
+    return CGSizeMake(SCREEN_WIDTH, 30);
 }
 
 //设置组头图
@@ -219,7 +219,7 @@
     UICollectionReusableView *headerCell = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"header" forIndexPath:indexPath];
     //添加label
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(5, 7, 80, 20)];
-    label.font = [UIFont systemFontOfSize:14];
+    label.font = [UIFont systemFontOfSize:16];
     
     label.text = sectionTitleArray[indexPath.section];
     
@@ -237,7 +237,6 @@
     FLModel *model = [[FLModel alloc] init];
     model = FCidArray[index];
     _URLStr = [NSMutableString stringWithFormat:@"%@%@", XZYS_FLZDH_URL, model.cid];
-    NSLog(@"%@", _URLStr);
     // 显示指示器
     [SVProgressHUD showWithStatus:@"正在加载数据......"];
     // 获取导航栏
@@ -395,7 +394,7 @@
 // 点击item
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSLog(@"dianji:%ld", (long)indexPath.row);
+//    NSLog(@"dianji:%ld", (long)indexPath.row);
     
     XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
     FLModel *model = [[FLModel alloc] init];

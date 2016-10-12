@@ -21,7 +21,6 @@
 
 - (IBAction)colorAction:(UIButton *)sender {
     NSString *str = [NSString stringWithFormat:@"%ld", sender.tag];
-    NSLog(@"%@", str);
     //发出通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"zcBt" object:self userInfo:[NSDictionary dictionaryWithObject:str forKey:@"sid"]];
 }

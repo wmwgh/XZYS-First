@@ -16,7 +16,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kyv-2d-s42">
-                        <rect key="frame" x="96" y="8" width="14" height="16.5"/>
+                        <rect key="frame" x="96" y="8" width="15" height="16.5"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16.5" id="AyC-uH-s5a"/>
                         </constraints>
@@ -24,7 +24,7 @@
                             <fragment content="鞋">
                                 <attributes>
                                     <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <font key="NSFont" size="14" name="PingFangSC-Regular"/>
+                                    <font key="NSFont" size="15" name="PingFangSC-Regular"/>
                                     <font key="NSOriginalFont" size="14" name="HelveticaNeue"/>
                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
@@ -91,12 +91,12 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aqC-no-57j">
-                        <rect key="frame" x="377" y="66" width="56" height="22"/>
+                        <rect key="frame" x="363" y="61" width="70" height="25"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="22" id="jAB-DR-LNb"/>
-                            <constraint firstAttribute="width" constant="56" id="yKp-xW-E9X"/>
+                            <constraint firstAttribute="height" constant="25" id="jAB-DR-LNb"/>
+                            <constraint firstAttribute="width" constant="70" id="yKp-xW-E9X"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <state key="normal" title="取消调货" backgroundImage="dd_bk.png"/>
                         <connections>
                             <action selector="cancel:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="rUW-sf-fBr"/>
@@ -138,7 +138,7 @@
                     <constraint firstItem="ht8-EM-fDJ" firstAttribute="top" secondItem="kyv-2d-s42" secondAttribute="bottom" constant="10" id="e1R-Kn-24T"/>
                     <constraint firstItem="s9Y-1m-h0I" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="fvb-4f-6lT"/>
                     <constraint firstItem="afg-kx-XLz" firstAttribute="top" secondItem="gkh-r7-ci7" secondAttribute="bottom" constant="5" id="j4k-YN-bA1"/>
-                    <constraint firstItem="aqC-no-57j" firstAttribute="top" secondItem="afg-kx-XLz" secondAttribute="bottom" constant="13" id="kih-kF-Zum"/>
+                    <constraint firstItem="aqC-no-57j" firstAttribute="top" secondItem="afg-kx-XLz" secondAttribute="bottom" constant="8" id="kih-kF-Zum"/>
                     <constraint firstAttribute="trailingMargin" secondItem="aqC-no-57j" secondAttribute="trailing" id="m18-ML-133"/>
                     <constraint firstItem="4hV-bV-YW0" firstAttribute="leading" secondItem="FS4-5S-yl0" secondAttribute="trailing" constant="25" id="qmi-l1-60D"/>
                     <constraint firstItem="s9Y-1m-h0I" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="xwL-i4-a9i"/>

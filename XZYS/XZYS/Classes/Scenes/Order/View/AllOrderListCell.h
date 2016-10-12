@@ -10,6 +10,7 @@
 #import "SonLislModel.h"
 
 @interface AllOrderListCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UILabel *nlLab;
 @property (strong, nonatomic) IBOutlet UIImageView *goodsImg;
 @property (strong, nonatomic) IBOutlet UILabel *goodsTitle;
 @property (strong, nonatomic) IBOutlet UILabel *colorLabel;

@@ -411,7 +411,6 @@ static NSString *const identifier_cell = @"identifier_cell";
     NSDictionary *dic = text.userInfo[@"sid"];
     self.price1 = dic[@"1"];
     self.price2 = dic[@"2"];
-    NSLog(@"%@-%@", self.price1, self.price2);
 }
 
 - (void)setTableView {
@@ -710,7 +709,6 @@ static NSString *const identifier_cell = @"identifier_cell";
     [_allDataArray removeAllObjects];
     __weak typeof(self) weakSelf = self;
     [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        //        NSLog(@"%@", responseObject);
         NSArray *dataArray = [responseObject objectForKey:@"data"];
         
         for (NSDictionary *dic in dataArray) {
@@ -1057,7 +1055,6 @@ static NSString *const identifier_cell = @"identifier_cell";
     if (self.str7 != nil) {
         [self.resultArray addObject:self.str7];
     }
-    NSLog(@"%@", self.resultArray);
     self.underView.hidden = YES;
     [self searchRequest];
 }

@@ -72,8 +72,7 @@
 }
 
 - (void)dateEnsureAction {
-    NSString *str = [NSString stringWithFormat:@"%@ %@ %@", self.provinceID, self.cityID, self.sectionID];
-    NSLog(@"%@", str);
+//    NSString *str = [NSString stringWithFormat:@"%@ %@ %@", self.provinceID, self.cityID, self.sectionID];
     self.sectionLabel.text = [NSString stringWithFormat:@"%@ %@ %@", self.provinceIDText, self.cityIDtText, self.sectionIDText];
     self.mainBack.hidden = YES;
 }
@@ -352,7 +351,7 @@
 - (void)setAddresss {
     self.params[@"shop_address"] = self.addressLabel.text;
     if (self.params[@"shop_address"] != nil && ![self.params[@"shop_address"] isKindOfClass:[NSNull class]] && ![self.params[@"shop_address"] isEqualToString:@""]) {
-//        [self changeInfo];
+        [self changeInfo];
     } else {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -378,7 +377,6 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"uid"] = appDelegate.userIdTag;
-    NSLog(@"%@", params);
     if (!params) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -398,18 +396,18 @@
             hud.mode = MBProgressHUDModeText;
             if([result isEqualToString:@"-107"]){
                 hud.labelText = dic[@"msg"];
-                NSLog(@"out----success");
                 appDelegate.isLogin = @"No";
                 appDelegate.userIdTag = @"0";
                 [self getNotofocation];
                 UINavigationController *loginVC = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
                 loginVC.navigationBarHidden = YES;
                 self.tabBarController.selectedIndex = 0;
-                
+                EMError *error = [[EMClient sharedClient] logout:YES];
+                if (!error) {
+                }
                 [self.navigationController presentViewController:loginVC animated:NO completion:nil];
             } else {
                 hud.labelText = dic[@"msg"];
-                NSLog(@"faile");
             }
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
@@ -471,7 +469,6 @@
         //支持访问相机与相册情况
         alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         [alertController addAction:[UIAlertAction actionWithTitle:@"从相册中选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"点击从相册中选取");
             //相册
             blockSourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
@@ -481,7 +478,6 @@
             [self presentViewController:imagePickerController animated:YES completion:nil];
         }]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"点击拍照");
             //相机
             blockSourceType = UIImagePickerControllerSourceTypeCamera;
             UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
@@ -491,7 +487,6 @@
             [self presentViewController:imagePickerController animated:YES completion:nil];
         }]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"点击取消");
             // 取消
             return;
         }]];
@@ -502,7 +497,6 @@
         //只支持访问相册情况
         alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         [alertController addAction:[UIAlertAction actionWithTitle:@"从相册中选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"点击从相册中选取");
             //相册
             blockSourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             
@@ -514,14 +508,12 @@
             }];
         }]];
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            NSLog(@"点击取消");
             // 取消
             return;
         }]];
         [self presentViewController:alertController animated:YES completion:nil];
     }
 }
-
 
 #pragma mark - 选择图片后,回调选择
 
@@ -531,22 +523,31 @@
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     [_iconBtn setImage:image forState:UIControlStateNormal];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    // 设置时间格式
-    formatter.dateFormat = @"yyyyMMddHHmmss";
-    NSString *str = [formatter stringFromDate:[NSDate date]];
-    NSString *fileName = [NSString stringWithFormat:@"header%@.jpg", str];
-    [self saveImage:image withName:fileName];
 
-    NSLog(@"%@", fileName);
-#warning img ++++++++++++++++++++
-    
-//    [self changeInfo:fileName];
-    
+    self.imageData = UIImageJPEGRepresentation(image, 0.5);
+    // 设置时间格式
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyyMMddHHmmss";
+    NSString *str1 = [formatter stringFromDate:[NSDate date]];
+    NSString *str = [NSString stringWithFormat:@"header%@", str1];
+    self.params[@"member_picture"] = str;
 }
 
-//- (void)changeInfo:(NSString *)fileName {
-//}
+- (void)changeInfo {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSString *url = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";//放上传图片的网址
+    [manager POST:url parameters:self.params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        // 上传文件
+        [formData appendPartWithFileData:self.imageData name:@"member_picture" fileName:@"image.jpg" mimeType:@"image/jpg"];
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+}
 
 #pragma mark - 保存图片至本地沙盒
 
@@ -556,35 +557,9 @@
     // 获取沙盒目录
     NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
 //    self.params[@"member_picture"] = fullPath;
-    NSLog(@"%@", self.params);
     // 将图片写入文件
     [imageData writeToFile:fullPath atomically:NO];
-    
-#warning tyui++++++++++++++++++
-    NSString *url = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";//放上传图片的网址
-    NSString *mimType = [NSString stringWithFormat:@"%@%@", @"image/", [fullPath pathExtension]];
-    NSURL *fileUrl = [[NSBundle mainBundle] URLForResource:fullPath withExtension:nil];
-    NSLog(@"=====%@", fullPath);
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:url parameters:self.params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        // 上传文件
-        [formData appendPartWithFileURL:fileUrl name:@"member_picture" fileName:@"image.jpg" mimeType:mimType error:nil];
-        
-    } progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"上传陈宫");
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"上传失败");
-    }];
-    
 }
-
-
-//- (void)setInfoImg:(UIImage *)image {
-
-//}
-
 
 
 - (void)didReceiveMemoryWarning {

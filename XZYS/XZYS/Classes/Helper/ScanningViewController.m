@@ -164,7 +164,6 @@
     }
     NSString *astr = [stringValue substringFromIndex:9];
     NSString *bstr = [stringValue substringToIndex:9];
-    NSLog(@"%@, %@", astr,bstr);
     if ([bstr isEqualToString:@"goods_id:"]) {
         XIangQingViewController *searchVC = [[XIangQingViewController alloc] init];
         searchVC.passID = astr;

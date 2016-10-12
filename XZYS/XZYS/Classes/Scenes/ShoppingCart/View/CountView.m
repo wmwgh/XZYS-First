@@ -108,7 +108,6 @@
         dic[@"id"] = strTag;
         //发出通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"textCall" object:self userInfo:dic];
-        NSLog(@"%d", [textField.text intValue]);
     }
 }
 
@@ -137,7 +136,6 @@
         dic[@"id"] = strTag;
         //发出通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"minCall" object:self userInfo:dic];
-        NSLog(@"%ld", count);
     }
 }
 
@@ -155,8 +153,6 @@
         dic[@"id"] = strTag;
         //发出通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"plusCall" object:self userInfo:dic];
-        NSLog(@"%ld", count);
-        NSLog(@"%@", strTag);
     }
 }
 

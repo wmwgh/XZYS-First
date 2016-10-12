@@ -64,7 +64,6 @@
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"从相册中选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            NSLog(@"点击从相册中选取");
             //相册
             blockSourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             
@@ -81,7 +80,6 @@
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            NSLog(@"点击拍照");
             //相机
             blockSourceType = UIImagePickerControllerSourceTypeCamera;
             
@@ -98,7 +96,6 @@
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
-            NSLog(@"点击取消");
             // 取消
             return;
         }]];
@@ -112,7 +109,6 @@
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"从相册中选取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            NSLog(@"点击从相册中选取");
             //相册
             blockSourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             
@@ -131,7 +127,6 @@
         
         [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             
-            NSLog(@"点击取消");
             // 取消
             return;
         }]];
@@ -172,7 +167,6 @@
     
     // 获取沙盒目录
     NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
-    NSLog(@"%@", fullPath);
     // 将图片写入文件
     [imageData writeToFile:fullPath atomically:NO];
 }

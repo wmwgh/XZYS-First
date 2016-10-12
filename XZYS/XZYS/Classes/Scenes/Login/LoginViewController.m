@@ -14,9 +14,11 @@
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
 #import "AppDelegate.h"
+#import "EMSDK.h"
+#import "EaseUI.h"
 
 //NSString * const isLogin = @"Y";
-@interface LoginViewController ()
+@interface LoginViewController ()<EMContactManagerDelegate>
 
 @end
 
@@ -24,11 +26,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.passWord.secureTextEntry = YES;
     self.title = @"登录";
+    //注册好友回调
+    [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
     
-//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//    self.phoneNum.text = [defaults objectForKey:@"userName"];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.phoneNum.text = [defaults objectForKey:@"userName"];
 //    BOOL autoLogin = [defaults boolForKey:@"auto_login"];
 //    NSLog(@"%@ -- %d", self.phoneNum.text, autoLogin);
     
@@ -63,13 +67,12 @@
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             // 2.存储数据
             [defaults setObject:self.phoneNum.text forKey:@"userName"];
-            [defaults setObject:self.passWord.text forKey:@"passWord"];
-            [defaults setBool:YES forKey:@"auto_login"];
+//            [defaults setObject:self.passWord.text forKey:@"passWord"];
+//            [defaults setBool:YES forKey:@"auto_login"];
             // 3.立刻同步
             [defaults synchronize];
             self.userId = dataDic[@"uid"];
         } else {
-            NSLog(@"userId = nil");
         }
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -78,18 +81,34 @@
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             appDelegate.isLogin = @"Yes";
             appDelegate.userIdTag = self.userId;
+#pragma mark -- 环信登录
+            NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.phoneNum.text];
+            NSString *loginWord = @"xzyspassword";
+            EMError *error = [[EMClient sharedClient] loginWithUsername:loginId password:loginWord];
+            if (!error) {
+            } else {
+                
+#pragma mark -- 环信注册
+                NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.phoneNum.text];
+                NSString *loginWord = @"xzyspassword";
+                EMError *error = [[EMClient sharedClient] registerWithUsername:loginId password:loginWord];
+                if (!error) {
+                    EMError *error = [[EMClient sharedClient] loginWithUsername:loginId password:loginWord];
+                    if (!error) {
+                    } else {
+                    }
+                } else {
+                }
+            }
             [self.navigationController dismissViewControllerAnimated:NO completion:nil];
-            
         } else {
             hud.labelText = dic[@"msg"];
         }
-        NSLog(@"request:%@", dic[@"msg"]);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 数据加载失败回调.
-        NSLog(@"登录失败: %@",error);
     }];
 }
 
@@ -99,13 +118,13 @@
     RegiestViewController *regiestVC = [[RegiestViewController alloc] init];
     [self.navigationController pushViewController:regiestVC animated:YES];
     self.hidesBottomBarWhenPushed = YES;
-    NSLog(@"wdfashdjfm");
 }
 
 // 忘记密码
 - (IBAction)forgetPassWord:(id)sender {
     self.hidesBottomBarWhenPushed = YES;
     PassWordViewController *passWord = [[PassWordViewController alloc] init];
+    passWord.orderTypeId = @"1";
     [self.navigationController pushViewController:passWord animated:YES];
     self.hidesBottomBarWhenPushed = YES;
 }

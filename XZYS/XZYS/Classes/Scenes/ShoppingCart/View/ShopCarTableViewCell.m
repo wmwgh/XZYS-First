@@ -22,7 +22,6 @@
     self.countview.CountBlock = ^(NSInteger num){
         if (MySelf.delegate && [self.delegate respondsToSelector:@selector(changeTheShopCount:count:)]) {
             [MySelf.delegate changeTheShopCount:MySelf count:num];
-            NSLog(@"num=================%ld", num);
         }
     };
 }
@@ -33,6 +32,14 @@
     self.priceLable.text = [NSString stringWithFormat:@"￥%@", _model.price];
     self.colorTittle.text = [NSString stringWithFormat:@"颜色分类:%@", _model.goods_color];
     self.sizeLb.text = [NSString stringWithFormat:@"尺寸:%@", _model.goods_size];
+    NSString *strnl = nil;
+    if ([_model.cotton_id isEqualToString:@"1"]) {
+        strnl = @"单里";
+    } else {
+        strnl = @"棉里";
+    }
+    
+    self.nlLab.text = [NSString stringWithFormat:@"内里:%@", strnl];
     [self.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _model.goods_img]]];
     self.countview.leftBtn.tag = [_model.ID intValue];
     self.countview.rightBtn.tag = [_model.ID intValue];

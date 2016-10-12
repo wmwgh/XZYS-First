@@ -12,8 +12,6 @@
 #import "UserViewCell.h"
 #import "UserHeaderView.h"
 #import "UIView+LoadFromNib.h"
-#import <AFHTTPSessionManager.h>
-#import <AFNetworking/AFNetworking.h>
 #import <UIImageView+WebCache.h>
 
 #import "CollectViewController.h"
@@ -26,6 +24,8 @@
 #import "OrderListViewController.h"
 #import "YiJianViewController.h"
 #import "PassWordViewController.h"
+#import <AFHTTPSessionManager.h>
+#import <AFNetworking/AFNetworking.h>
 #import "AppDelegate.h"
 
 @interface UserViewController ()<UITableViewDataSource, UITableViewDelegate>
@@ -81,67 +81,89 @@
     self.headerView.owner = self;
     self.headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 222);
     self.tableView.tableHeaderView = self.headerView;
-    self.headerView.headerImg.layer.cornerRadius = 55 / 2;
+    self.headerView.headerImg.layer.cornerRadius = 60 / 2;
     self.headerView.headerImg.layer.masksToBounds = YES;
-    // 通知中心
-    [[NSNotificationCenter defaultCenter] addObserver: self
-                                             selector: @selector(callBack)
-                                                 name: @"退出登录刷新UI"
-                                               object: nil];
     
+    self.headerView.lab1.layer.cornerRadius = 19 / 2;
+    self.headerView.lab1.layer.masksToBounds = YES;
+    self.headerView.lab2.layer.cornerRadius = 19 / 2;
+    self.headerView.lab2.layer.masksToBounds = YES;
+    self.headerView.lab3.layer.cornerRadius = 19 / 2;
+    self.headerView.lab3.layer.masksToBounds = YES;
+    self.headerView.lab4.layer.cornerRadius = 19 / 2;
+    self.headerView.lab4.layer.masksToBounds = YES;
+    self.headerView.lab5.layer.cornerRadius = 19 / 2;
+    self.headerView.lab5.layer.masksToBounds = YES;
+    self.headerView.lab1.hidden = YES;
+    self.headerView.lab2.hidden = YES;
+    self.headerView.lab3.hidden = YES;
+    self.headerView.lab4.hidden = YES;
+    self.headerView.lab5.hidden = YES;
+    
+    
+    [self setOrderNum];
     // 按钮设置
 //    [self setButton];
 }
 
-//- (void)setButton {
-//    [self.headerView.changeInfo addTarget:self action:@selector(changeInfo:) forControlEvents:UIControlEventTouchUpInside];
-//    self.headerView.changeInfo.userInteractionEnabled = YES;
-//    [self.headerView.changePassWord addTarget:self action:@selector(changePassWord:) forControlEvents:UIControlEventTouchUpInside];
-//    self.headerView.allListButton.userInteractionEnabled = YES;
-//    [self.headerView.allListButton addTarget:self action:@selector(allListButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.headerView.daiPayButton addTarget:self action:@selector(daiPayButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.headerView.daiReceiveButton addTarget:self action:@selector(daiReceiveButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.headerView.yiPayButton addTarget:self action:@selector(yiPayButton:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.headerView.yiComplateButton addTarget:self action:@selector(yiComplateButton:) forControlEvents:UIControlEventTouchUpInside];
-//}
-
-//- (void)changeInfo:(UIButton *)sender {
-//    NSLog(@"asdasdasd");
-//    PassWordViewController *listVC = [[PassWordViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-//- (void)changePassWord:(UIButton *)sender {
-//    PassWordViewController *listVC = [[PassWordViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-//- (void)allListButton:(UIButton *)sender {
-//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-//- (void)daiPayButton:(UIButton *)sender {
-//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-//- (void)daiReceiveButton:(UIButton *)sender {
-//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-//- (void)yiPayButton:(UIButton *)sender {
-//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-//- (void)yiComplateButton:(UIButton *)sender {
-//    OrderListViewController *listVC = [[OrderListViewController alloc] init];
-//    [self.navigationController pushViewController:listVC animated:YES];
-//}
-
-- (void)callBack{
-     NSLog(@"get it");
+- (void)setOrderNum {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSArray *ar = @[@"1",@"100",@"102",@"112",@"122"];
+    params[@"uid"] = appDelegate.userIdTag;
+    for (int i = 0; i < ar.count; i++) {
+        params[@"status"] = ar[i];
+        [manager POST:@"http://www.xiezhongyunshang.com/App/Order/getOrderStatusCountNum" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSString *str = responseObject[@"data"];
+            if (i == 0) {
+                if ([str isEqualToString:@"0"]) {
+                    self.headerView.lab1.hidden = YES;
+                } else {
+                    self.headerView.lab1.text = str;
+                    self.headerView.lab1.hidden = NO;
+                }
+            } else if (i == 1) {
+                if ([str isEqualToString:@"0"]) {
+                    self.headerView.lab2.hidden = YES;
+                } else {
+                    self.headerView.lab2.text = str;
+                    self.headerView.lab2.hidden = NO;
+                }
+            } else if (i == 2) {
+                if ([str isEqualToString:@"0"]) {
+                    self.headerView.lab3.hidden = YES;
+                } else {
+                    self.headerView.lab3.text = str;
+                    self.headerView.lab3.hidden = NO;
+                }
+            } else if (i == 3) {
+                if ([str isEqualToString:@"0"]) {
+                    self.headerView.lab4.hidden = YES;
+                } else {
+                    self.headerView.lab4.text = str;
+                    self.headerView.lab4.hidden = NO;
+                }
+            } else if (i == 4) {
+                if ([str isEqualToString:@"0"]) {
+                    self.headerView.lab5.hidden = YES;
+                } else {
+                    self.headerView.lab5.text = str;
+                    self.headerView.lab5.hidden = NO;
+                }
+            }
+    
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        }];
+    }
 }
+
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self resqusetInfoData];
+    [self setOrderNum];
 }
 
 - (void)setInfoMessage {
@@ -156,18 +178,14 @@
 - (void)resqusetInfoData {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-    // 默认的方式
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     self.params[@"uid"] = appDelegate.userIdTag;
     [manager POST:XZYS_Info_URL parameters:self.params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        // 数据加载完后回调.
-        NSError *error;
-        NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
-        NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        self.infoDic = dic[@"data"];
-        NSLog(@"----------%@", self.infoDic[@"member_picture"]);
+//        // 数据加载完后回调.
+//        NSError *error;
+//        NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
+//        NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
+//        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        self.infoDic = responseObject[@"data"];
         [self setInfoMessage];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];

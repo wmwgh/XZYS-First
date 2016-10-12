@@ -13,5 +13,5 @@
 @property (strong, nonatomic) IBOutlet UITextField *passWord;
 @property (strong, nonatomic) IBOutlet UITextField *passWordAgain;
 @property (strong, nonatomic) IBOutlet UITextField *yanZhengMa;
-
+@property (nonatomic , copy) NSString *orderTypeId;
 @end

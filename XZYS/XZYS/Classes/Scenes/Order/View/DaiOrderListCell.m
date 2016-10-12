@@ -30,6 +30,13 @@
     _sizeLabel.text = _model.goods_size;
     _numLabel.text = [NSString stringWithFormat:@"X%@", _model.num];
     _priceLabel.text = [NSString stringWithFormat:@"￥%@", _model.price];
+    NSString *strnl = nil;
+    if ([_model.cotton_id isEqualToString:@"1"]) {
+        strnl = @"单里";
+    } else if ([_model.cotton_id isEqualToString:@"2"]){
+        strnl = @"棉里";
+    } 
+    self.nlLab.text = [NSString stringWithFormat:@"内里:%@", strnl];
     _priceLabel.textColor = XZYSPinkColor;
     _numLabel.textColor = XZYSBlueColor;
     [_goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _model.goods_img]]];

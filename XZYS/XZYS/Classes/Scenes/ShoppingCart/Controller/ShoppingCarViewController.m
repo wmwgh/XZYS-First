@@ -366,8 +366,6 @@ static NSString * indentifier = @"shopCarCell";
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:2];
         } else {
-//            NSLog(@"选择了商品，进行结算，进入商品详情页面");
-//            NSLog(@"要传给下一个订单详情页面的数据模型是%@", _totalSelectedAry);
             AddOrderViewController *AddVC = [[AddOrderViewController alloc] init];
             AddVC.cellAllary = _carAry;
             AddVC.orderAllary = _totalSelectedAry;

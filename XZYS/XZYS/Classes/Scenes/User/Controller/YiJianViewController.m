@@ -47,10 +47,8 @@
         hud.mode = MBProgressHUDModeText;
         if([result isEqualToString:@"-800"]){
             hud.labelText = dic[@"msg"];
-            NSLog(@"success");
         } else {
             hud.labelText = dic[@"msg"];
-            NSLog(@"faile");
         }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;

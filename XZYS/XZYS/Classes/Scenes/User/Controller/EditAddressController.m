@@ -38,7 +38,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.btType = @"0";
-    NSLog(@"addressID:%@", self.addressID);
     self.title = @"编辑地址";
     self.addressLab.layer.borderWidth = 1;
     self.addressLab.layer.cornerRadius = 5;
@@ -124,8 +123,7 @@
 }
 
 - (void)dateEnsureAction {
-    NSString *str = [NSString stringWithFormat:@"%@ %@ %@", self.provinceID, self.cityID, self.sectionID];
-    NSLog(@"%@", str);
+//    NSString *str = [NSString stringWithFormat:@"%@ %@ %@", self.provinceID, self.cityID, self.sectionID];
     self.sectionCityLab.text = [NSString stringWithFormat:@"%@ %@ %@", self.provinceIDText, self.cityIDtText, self.sectionIDText];
     self.mainBack.hidden = YES;
 }

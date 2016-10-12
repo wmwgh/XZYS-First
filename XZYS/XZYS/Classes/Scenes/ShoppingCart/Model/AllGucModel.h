@@ -32,6 +32,8 @@
 /// 购物车创建时间戳
 @property (nonatomic, copy)NSString * create_time;
 
+@property (nonatomic, copy)NSString * cotton_id;
+
 @property (nonatomic, assign)BOOL selected;//店铺中的单个商品被选中
 @property (nonatomic, assign) NSInteger count;
 

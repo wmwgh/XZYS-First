@@ -29,41 +29,42 @@
     self.headImageView.backgroundColor = XZYSRGBColor(234, 234, 234);
     [self addSubview:self.headImageView];
     
-    UILabel *lab1 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headImageView.frame)+ 5, CGRectGetMinY(tmpimg.frame), 40, 25)];
-    lab1.font = [UIFont systemFontOfSize:9];
+    UILabel *lab1 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headImageView.frame)+ 5, CGRectGetMinY(tmpimg.frame), 50, 25)];
+    lab1.font = [UIFont systemFontOfSize:11];
     lab1.text = @"商品数量:";
     lab1.textColor = [UIColor whiteColor];
     [self addSubview:lab1];
 
-    self.numLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab1.frame), CGRectGetMinY(tmpimg.frame), 35, 25)];
-    self.numLabel.font = [UIFont systemFontOfSize:9];
+    self.numLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab1.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
+    self.numLabel.font = [UIFont systemFontOfSize:11];
     self.numLabel.textColor = [UIColor whiteColor];
     [self addSubview:self.numLabel];
     
-    UILabel *lab2 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.numLabel.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
-    lab2.font = [UIFont systemFontOfSize:9];
+    UILabel *lab2 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.numLabel.frame), CGRectGetMinY(tmpimg.frame), 50, 25)];
+    lab2.font = [UIFont systemFontOfSize:11];
     lab2.textColor = [UIColor whiteColor];
     lab2.text = @"商品销量:";
     [self addSubview:lab2];
     
-    self.goodsCollect = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab2.frame), CGRectGetMinY(tmpimg.frame), 35, 25)];
+    self.goodsCollect = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab2.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
     self.goodsCollect.textColor = [UIColor whiteColor];
-    self.goodsCollect.font = [UIFont systemFontOfSize:9];
+    self.goodsCollect.font = [UIFont systemFontOfSize:11];
     [self addSubview:self.goodsCollect];
     
-    UILabel *lab3 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.goodsCollect.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
-    lab3.font = [UIFont systemFontOfSize:9];
+    UILabel *lab3 = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.goodsCollect.frame), CGRectGetMinY(tmpimg.frame), 50, 25)];
+    lab3.font = [UIFont systemFontOfSize:11];
     lab3.textColor = [UIColor whiteColor];
     lab3.text = @"收藏数量:";
     [self addSubview:lab3];
     
-    self.dianPuCollect = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab3.frame), CGRectGetMinY(tmpimg.frame), 35, 25)];
+    self.dianPuCollect = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab3.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
     self.dianPuCollect.textColor = [UIColor whiteColor];
-    self.dianPuCollect.font = [UIFont systemFontOfSize:9];
+    self.dianPuCollect.font = [UIFont systemFontOfSize:11];
     [self addSubview:self.dianPuCollect];
     
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headImageView.frame) + 5, CGRectGetMaxY(tmpimg.frame), SCREEN_WIDTH - 140, 30)];
-    self.titleLabel.font = [UIFont systemFontOfSize:11];
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headImageView.frame) + 5, CGRectGetMaxY(tmpimg.frame), SCREEN_WIDTH - 140, 40)];
+    self.titleLabel.font = [UIFont systemFontOfSize:13];
+    self.titleLabel.numberOfLines = 2;
     [self addSubview:self.titleLabel];
     
     self.pickBackView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headImageView.frame), SCREEN_WIDTH, 35)];

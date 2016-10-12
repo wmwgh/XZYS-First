@@ -23,5 +23,12 @@
 
 @property (nonatomic,strong) UIViewController *owner;
 
+@property (strong, nonatomic) IBOutlet UILabel *lab1;
+@property (strong, nonatomic) IBOutlet UILabel *lab2;
+@property (strong, nonatomic) IBOutlet UILabel *lab3;
+@property (strong, nonatomic) IBOutlet UILabel *lab4;
+@property (strong, nonatomic) IBOutlet UILabel *lab5;
+
+
 
 @end
