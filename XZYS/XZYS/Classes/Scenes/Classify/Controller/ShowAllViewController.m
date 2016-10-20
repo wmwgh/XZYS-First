@@ -21,6 +21,8 @@
 #import "OneTableViewCell.h"
 #import <UIImageView+WebCache.h>
 #import "XIangQingViewController.h"
+#import <UIImageView+WebCache.h>
+#import <MJRefresh.h>
 #import "SDFQModel.h"
 #import "ShaiXuanViewCell.h"
 #import "ShaiXuanHeaderView.h"
@@ -39,6 +41,7 @@
 @property (strong , nonatomic) UITextField *searchText;
 @property (nonatomic , strong) ShowAllDoubleView *rootView;
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
+//@property (nonatomic ,strong) NSMutableArray *allTabDataArray;
 @property (nonatomic , strong) ShaiXuanHeaderView *firstHeaderView;
 @property (nonatomic , strong) UIButton *MButton;
 @property (nonatomic , strong) UIButton *priceButton;
@@ -54,7 +57,8 @@
 @property (nonatomic , strong) UIView *pickerBackView;
 @property (nonatomic , strong) UIView *underView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *myFlowLayout;
-
+/** 页码*/
+@property (nonatomic, assign) int page;
 @property (nonatomic , copy) NSString *price1;
 @property (nonatomic , copy) NSString *price2;
 @property (nonatomic , strong) NSMutableArray *resultArray;
@@ -124,6 +128,12 @@ static NSString *const identifier_cell = @"identifier_cell";
     }
     return _allDataArray;
 }
+//- (NSMutableArray *)allTabDataArray {
+//    if (!_allDataArray) {
+//        _allDataArray = [NSMutableArray array];
+//    }
+//    return _allDataArray;
+//}
 - (NSMutableArray *)yanse {
     if (!_yanse) {
         _yanse = [NSMutableArray array];
@@ -180,8 +190,15 @@ static NSString *const identifier_cell = @"identifier_cell";
     return _param;
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    self.lanmuID = nil;
+    self.param = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.page = 2;
     _picStr = @"qh_01";
     self.cellView = [[UIView alloc] initWithFrame:CGRectMake(0, 100, SCREEN_WIDTH, SCREEN_HEIGHT - 157)];
     [self requestSXData];
@@ -191,10 +208,13 @@ static NSString *const identifier_cell = @"identifier_cell";
     }
     [self.view addSubview:self.cellView];
     // Do any additional setup after loading the view from its nib.
-    [self requestAllData];
+//    [self requestAllData];
     [self setNavigation];
     [self setCollectionView];
+    [self setTableView];
     [self setShaiXuanView];
+    // 添加顶部刷新
+    [self addRefresh];
     // 通知中心
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(zcCallBack:)
@@ -228,45 +248,162 @@ static NSString *const identifier_cell = @"identifier_cell";
                                              selector:@selector(jgCallBack:)
                                                  name:@"jgBt"
                                                object:nil];
-    // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
 }
+
+- (void)addRefresh {
+    self.rootView.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestAllData)];
+    self.rootView.collectionView.mj_header.automaticallyChangeAlpha = YES;
+    [self.rootView.collectionView.mj_header beginRefreshing];
+    self.rootView.collectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+    [self.allDataArray removeAllObjects];
+    self.mainTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestAllData)];
+    self.mainTableView.mj_header.automaticallyChangeAlpha = YES;
+    [self.mainTableView.mj_header beginRefreshing];
+    self.mainTableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+}
+
+
+#pragma mark 加载更多数据
+-(void)loadMoreData {
+    if (![self.lanmuID isEqual:[NSNull null]] && ![self.lanmuID isKindOfClass:[NSNull class]] && self.lanmuID != nil) {
+        self.param[@"cate_id"] = self.lanmuID;
+    }
+        self.param[@"page"] = [NSString stringWithFormat:@"%d", self.page];
+        // 发送请求给服务器
+        [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:self.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+            NSArray *dataArray = [responseObject objectForKey:@"data"];
+            if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+                if ([str isEqualToString:@"-101"]) {
+                    self.page++;
+                    for (NSDictionary *dic in dataArray) {
+                        SDFQModel *model = [[SDFQModel alloc] init];
+                        [model setValuesForKeysWithDictionary:dic];
+                        [self.allDataArray addObject:model];
+                    }
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.labelText = responseObject[@"msg"];
+                    hud.removeFromSuperViewOnHide = YES;
+                    [hud hide:YES afterDelay:1];
+                    [self.rootView.collectionView reloadData];
+                    [self.mainTableView reloadData];
+                } else {
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.labelText = responseObject[@"msg"];
+                    hud.removeFromSuperViewOnHide = YES;
+                    [hud hide:YES afterDelay:1.5];
+                }
+            } else {
+                //结束刷新
+                [self.rootView.collectionView.mj_footer endRefreshing];
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.labelText = @"商品已全部更新";
+                hud.removeFromSuperViewOnHide = YES;
+                [hud hide:YES afterDelay:1.5];
+            }
+            //刷新表格
+            [self.rootView.collectionView reloadData];
+            //结束刷新
+            [self.rootView.collectionView.mj_footer endRefreshing];
+            //刷新表格
+            [self.mainTableView reloadData];
+            //        //结束刷新
+            [self.mainTableView.mj_footer endRefreshing];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            // 请求失败
+            // 显示加载错误信息
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"网络异常，加载失败！";
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }];
+}
+
+#pragma mark - 数据区
+// 获取全部数据
+- (void)requestAllData {
+    __weak typeof(self) weakSelf = self;
+    [weakSelf.param removeAllObjects];
+    if (![self.lanmuID isEqual:[NSNull null]] && ![self.lanmuID isKindOfClass:[NSNull class]] && self.lanmuID != nil) {
+        weakSelf.param[@"cate_id"] = self.lanmuID;
+    }
+    _allDataArray = [NSMutableArray array];
+    [_allDataArray removeAllObjects];
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSArray *dataArray = [responseObject objectForKey:@"data"];
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [weakSelf.allDataArray addObject:model];
+            }
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide = YES;
+            // 1秒之后再消失
+            [hud hide:YES afterDelay:1.5];
+        }
+        
+        [self.rootView.collectionView reloadData];
+        [self.mainTableView reloadData];
+        //结束刷新
+        [self.mainTableView.mj_header endRefreshing];
+        [self.rootView.collectionView.mj_header endRefreshing];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        // 显示加载错误信息
+        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+    }];
+}
+
 
 - (void)searchRequest {
     __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    [weakSelf.allDataArray removeAllObjects];
-    
     if (weakSelf.str1 != nil) {
-        dic[@"app_space_id"] = weakSelf.str1;
+        weakSelf.param[@"app_space_id"] = weakSelf.str1;
     }
     if (weakSelf.str2 != nil) {
-        dic[@"app_model_id"] = weakSelf.str2;
+        weakSelf.param[@"app_model_id"] = weakSelf.str2;
     }
     if (weakSelf.str3 != nil) {
-        dic[@"material_id"] = weakSelf.str3;
+        weakSelf.param[@"material_id"] = weakSelf.str3;
     }
     if (weakSelf.str4 != nil) {
-        dic[@"linmater_id"] = weakSelf.str4;
+        weakSelf.param[@"linmater_id"] = weakSelf.str4;
     }
     if (weakSelf.str5 != nil) {
-        dic[@"heel_id"] = weakSelf.str5;
+        weakSelf.param[@"heel_id"] = weakSelf.str5;
     }
     if (weakSelf.str6 != nil) {
-        dic[@"season_id"] = weakSelf.str6;
+        weakSelf.param[@"season_id"] = weakSelf.str6;
     }
     if (weakSelf.str7 != nil) {
-        dic[@"color_id"] = weakSelf.str7;
+        weakSelf.param[@"color_id"] = weakSelf.str7;
     }
     if (weakSelf.price1 != nil) {
-        dic[@"start_price"] = weakSelf.price1;
+        weakSelf.param[@"start_price"] = weakSelf.price1;
     }
     if (weakSelf.price2 != nil) {
-        dic[@"end_price"] = weakSelf.price2;
+        weakSelf.param[@"end_price"] = weakSelf.price2;
     }
-    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    if (![self.lanmuID isEqual:[NSNull null]] && [self.lanmuID isKindOfClass:[NSNull class]] && self.lanmuID != nil) {
+        weakSelf.param[@"cate_id"] = self.lanmuID;
+    }
+    [weakSelf.param removeObjectForKey:@"page"];
+    
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
         if ([str isEqualToString:@"-101"]) {
+            [weakSelf.allDataArray removeAllObjects];
             NSArray *dataArray = [responseObject objectForKey:@"data"];
             for (NSDictionary *dic in dataArray) {
                 SDFQModel *model = [[SDFQModel alloc] init];
@@ -286,9 +423,8 @@ static NSString *const identifier_cell = @"identifier_cell";
             hud.labelText = responseObject[@"msg"];
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:1.5];
+            [self refreshbtn];
         }
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
@@ -414,12 +550,13 @@ static NSString *const identifier_cell = @"identifier_cell";
 }
 
 - (void)setTableView {
-    [self.rootView.collectionView removeFromSuperview];
     self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 6, SCREEN_WIDTH, SCREEN_HEIGHT - 106)];
     [self.mainTableView registerNib:[UINib nibWithNibName:NSStringFromClass([OneTableViewCell class]) bundle:nil] forCellReuseIdentifier:@"cell"];
     self.mainTableView.delegate = self;
     self.mainTableView.dataSource = self;
+    self.mainTableView.separatorStyle = NO;
     [self.cellView addSubview:self.mainTableView];
+    self.mainTableView.hidden = YES;
 }
 
 #pragma mark - Table view data source
@@ -476,31 +613,6 @@ static NSString *const identifier_cell = @"identifier_cell";
     [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
 }
 
-- (void)setCollection {
-    [self.mainTableView removeFromSuperview];
-    self.rootView = [[ShowAllDoubleView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 115)];
-    [self.cellView addSubview:self.rootView];
-    // 设置代理
-    self.rootView.collectionView.dataSource = self;
-    self.rootView.collectionView.delegate = self;
-    
-    // 第一步：注册cell
-    [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
-
-}
-
-- (void)setCollectionb {
-    [self.mainTableView removeFromSuperview];
-    self.rootView = [[ShowAllDoubleView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 70)];
-    [self.cellView addSubview:self.rootView];
-    // 设置代理
-    self.rootView.collectionView.dataSource = self;
-    self.rootView.collectionView.delegate = self;
-    
-    // 第一步：注册cell
-    [self.rootView.collectionView registerClass:[RootCell class] forCellWithReuseIdentifier:identifier_cell];
-    
-}
 
 #pragma mark UICollectionViewDataSource Method----
 
@@ -702,32 +814,7 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 }
 
-#pragma mark - 数据区
-// 获取全部数据
-- (void)requestAllData {
-    _allDataArray = [NSMutableArray array];
-    [_allDataArray removeAllObjects];
-    __weak typeof(self) weakSelf = self;
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSArray *dataArray = [responseObject objectForKey:@"data"];
-        
-        for (NSDictionary *dic in dataArray) {
-            SDFQModel *model = [[SDFQModel alloc] init];
-            [model setValuesForKeysWithDictionary:dic];
-            [weakSelf.allDataArray addObject:model];
-        }
-        
-        [self.rootView.collectionView reloadData];
-        [self.mainTableView reloadData];
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
-        // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
-    }];
-}
+
 
 - (void)setNavigation {
     
@@ -776,7 +863,7 @@ static NSString *const identifier_cell = @"identifier_cell";
     self.priceButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.priceButton.frame = CGRectMake(SCREEN_WIDTH / 4 - 15, 0, SCREEN_WIDTH / 4, 36);
     [self.priceButton setTitle:@"价 格" forState:UIControlStateNormal];
-    self.image1 = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 37, 10, 8, 16)];
+    self.image1 = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 35, 10, 8, 16)];
     self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [pickBackView addSubview:self.image1];
     self.priceButton.titleLabel.font = [UIFont systemFontOfSize: 16];
@@ -831,12 +918,14 @@ static NSString *const identifier_cell = @"identifier_cell";
     if ([_picStr isEqualToString:@"qh_01"]) {
         [self.MButton setImage:[UIImage imageNamed:@"qh_02"] forState:UIControlStateNormal];
         _picStr = @"qh_02";
-        [self setTableView];
+        self.mainTableView.hidden = NO;
+        self.rootView.collectionView.hidden = YES;
         [self.mainTableView reloadData];
     } else if ([_picStr isEqualToString:@"qh_02"]) {
         [self.MButton setImage:[UIImage imageNamed:@"qh_01"] forState:UIControlStateNormal];
         _picStr = @"qh_01";
-        [self setCollectionb];
+        self.rootView.collectionView.hidden = NO;
+        self.mainTableView.hidden = YES;
         [self.rootView.collectionView reloadData];
     }
 
@@ -857,16 +946,18 @@ static NSString *const identifier_cell = @"identifier_cell";
 
 - (void)numButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"sales";
+    self.page = 2;
     self.priceButton1.hidden = YES;
     self.priceButton.hidden  = NO;
     self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
-    [self requestAllData];
+    [self searchRequest];
 }
 - (void)priceButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"up_price";
+    self.page = 2;
     self.priceButton1.hidden = NO;
     self.priceButton.hidden = YES;
     [self.priceButton1 setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
@@ -874,28 +965,30 @@ static NSString *const identifier_cell = @"identifier_cell";
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
 
-    [self requestAllData];
+    [self searchRequest];
 }
 - (void)priceButton1Click:(UIButton *)sender {
     self.param[@"order"] = @"down_price";
+    self.page = 2;
     self.priceButton1.hidden = YES;
     self.priceButton.hidden = NO;
     self.image1.image = [UIImage imageNamed:@"lb_jta"];
     [self.priceButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self.timeButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [self requestAllData];
+    [self searchRequest];
 }
 
 - (void)timeButtonClick:(UIButton *)sender {
     self.param[@"order"] = @"create_time";
+    self.page = 2;
     self.priceButton1.hidden = YES;
     self.priceButton.hidden  = NO;
     self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.numButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.timeButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
-    [self requestAllData];
+    [self searchRequest];
 }
 - (void)sxButtonClick:(UIButton *)sender {
     self.priceButton1.hidden = YES;
@@ -1031,6 +1124,7 @@ static NSString *const identifier_cell = @"identifier_cell";
     self.str5 = nil;
     self.str6 = nil;
     self.str7 = nil;
+    [self.param removeAllObjects];
 }
 - (void)sureBtn {
     self.resultArray = [NSMutableArray array];
@@ -1056,6 +1150,9 @@ static NSString *const identifier_cell = @"identifier_cell";
         [self.resultArray addObject:self.str7];
     }
     self.underView.hidden = YES;
+    if (![self.lanmuID isEqual:[NSNull null]] && ![self.lanmuID isKindOfClass:[NSNull class]] && self.lanmuID != nil) {
+        self.param[@"cate_id"] = self.lanmuID;
+    }
     [self searchRequest];
 }
 
@@ -1253,6 +1350,11 @@ static NSString *const identifier_cell = @"identifier_cell";
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 /*

@@ -19,5 +19,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *sfzImgBefore;
 @property (strong, nonatomic) IBOutlet UIImageView *sfzImgAfter;
 @property (strong, nonatomic) IBOutlet UIImageView *zhizhaoImg;
+@property (strong, nonatomic) IBOutlet UIButton *useProBtn;
+@property (strong, nonatomic) IBOutlet UIButton *personBtn;
 
 @end

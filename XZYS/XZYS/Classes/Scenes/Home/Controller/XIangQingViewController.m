@@ -417,96 +417,113 @@ static NSString *const pickNl_cell = @"pickNl_cell";
 }
 
 - (void)addGoodsToCell {
-//    if (self.sizeColorNum.count == 0) {
-        NSMutableArray *arr = [NSMutableArray array];
-        if ((self.colorStr != nil && self.sizeStr != nil && self.nlStr != nil) || (self.colorStr != NULL && self.sizeStr != NULL && self.nlStr != NULL)) {
+    
+    if ((self.colorStr != nil && self.sizeStr != nil && self.nlStr != nil) || (self.colorStr != NULL && self.sizeStr != NULL && self.nlStr != NULL)) {
+        NSString *strOrderId = @"0";
+        NSString *numAdd = nil;
+        int asd = 0;
+        NSMutableArray *arar = [NSMutableArray array];
+        NSMutableArray *arrTp = [NSMutableArray array];
+        [arar addObjectsFromArray:self.sizeColorNum];
+        if (arar.count == 0) {
+
+            NSMutableArray *arr = [NSMutableArray array];
             [arr addObject:self.nlStr];
             [arr addObject:self.colorStr];
             [arr addObject:self.sizeStr];
             [arr addObject:self.numText.text];
             [self.sizeColorNum addObject:arr];
-        }
-//    }
-//    else {
-//        if ((self.colorStr != nil || self.colorStr != NULL) && (self.sizeStr != nil || self.sizeStr != NULL)) {
-//            NSLog(@"count==%ld", self.sizeColorNum.count);
-//            for (int i = 0; i < self.sizeColorNum.count; i++) {
-//                NSMutableArray *arrTp = [NSMutableArray array];
-//                NSArray *tempAry = self.sizeColorNum[i];
-//                NSLog(@"%@", tempAry);
-//                NSString *colostr = tempAry[0];
-//                NSString *sizestr = tempAry[1];
-//                NSString *numstr = tempAry[2];
-//                NSLog(@"%@-%@-%@", colostr, sizestr, numstr);
-//                int a = [numstr intValue];
-//                int b = [self.numText.text intValue];
-//                if ([self.colorStr isEqualToString:colostr] && [self.sizeStr isEqualToString:sizestr]) {
-//                    NSString *numAdd = [NSString stringWithFormat:@"%d", a+b];
-//                    [arrTp addObject:self.colorStr];
-//                    [arrTp addObject:self.sizeStr];
-//                    [arrTp addObject:numAdd];
-//                    [self.sizeColorNum removeObjectAtIndex:i];
-//                    [self.sizeColorNum addObject:arrTp];
-//                } else {
-//                    if ((self.colorStr != nil || self.colorStr != NULL) && (self.sizeStr != nil || self.sizeStr != NULL)) {
-//                        NSMutableArray *arr = [NSMutableArray array];
-//                        [arr addObject:self.colorStr];
-//                        [arr addObject:self.sizeStr];
-//                        [arr addObject:self.numText.text];
-//                        [self.sizeColorNum addObject:arr];
-//                    }
+        } else {
+            for (int i = 0; i < arar.count; i++) {
+                NSArray *tempAry = arar[i];
+                NSString *nlStr = [NSString stringWithFormat:@"%@", tempAry[0]];
+                NSString *colostr = [NSString stringWithFormat:@"%@", tempAry[1]];
+                NSString *sizestr = [NSString stringWithFormat:@"%@", tempAry[2]];
+                NSString *numstr = [NSString stringWithFormat:@"%@", tempAry[3]];
+                int a = [numstr intValue];
+                int b = [self.numText.text intValue];
+                numAdd = [NSString stringWithFormat:@"%d", a+b];
+                
+                if ([self.colorStr isEqualToString:colostr] && [self.sizeStr isEqualToString:sizestr] && [self.nlStr isEqualToString:nlStr]) {
+                    strOrderId = @"1";
+                    asd = i;
+                    break;
+                }
+//                else {
+//                    strOrderId = @"0";
 //                }
-//            }
-//        }
-//    }
+            }
+            if ([strOrderId isEqualToString:@"1"]) {
+                [arrTp addObject:self.nlStr];
+                [arrTp addObject:self.colorStr];
+                [arrTp addObject:self.sizeStr];
+                [arrTp addObject:numAdd];
+                [arar replaceObjectAtIndex:asd withObject:arrTp];
+//                [arar removeObjectAtIndex:asd];
+//                [arar addObject:arrTp];
+            } else {
+                NSMutableArray *arr = [NSMutableArray array];
+                [arr addObject:self.nlStr];
+                [arr addObject:self.colorStr];
+                [arr addObject:self.sizeStr];
+                [arr addObject:self.numText.text];
+                [arar addObject:arr];
+            }
+            self.sizeColorNum = arar;
+        }
+    }
     
-    
-    NSMutableArray *arr1 = [NSMutableArray array];
-//    if (self.sizeColorNumChn.count == 0) {
-        if ((self.colorStr != nil && self.sizeStr != nil && self.nlStr != nil) || (self.colorStr != NULL && self.sizeStr != NULL && self.nlStr != NULL)) {
+    if ((self.colorStrChn != nil && self.sizeStrChn != nil && self.nlStrChn != nil) || (self.colorStrChn != NULL && self.sizeStrChn != NULL && self.nlStrChn != NULL)) {
+        NSString *strOrderId = @"0";
+        NSString *numAdd = nil;
+        int asd = 0;
+        NSMutableArray *arrTp = [NSMutableArray array];
+        NSMutableArray *arar = [NSMutableArray array];
+        [arar addObjectsFromArray:self.sizeColorNumChn];
+        NSMutableArray *arr1 = [NSMutableArray array];
+        if (arar.count == 0) {
             [arr1 addObject:self.nlStrChn];
             [arr1 addObject:self.colorStrChn];
             [arr1 addObject:self.sizeStrChn];
             [arr1 addObject:self.numText.text];
             [self.sizeColorNumChn addObject:arr1];
-//        }
+        } else {
+            for (int i = 0; i < arar.count; i++) {
+                NSArray *tempAry = arar[i];
+                NSString *nlsta = [NSString stringWithFormat:@"%@", tempAry[0]];
+                NSString *colostr = [NSString stringWithFormat:@"%@", tempAry[1]];
+                NSString *sizestr = [NSString stringWithFormat:@"%@", tempAry[2]];
+                NSString *numstr = [NSString stringWithFormat:@"%@", tempAry[3]];
+                int a = [numstr intValue];
+                int b = [self.numText.text intValue];
+                numAdd = [NSString stringWithFormat:@"%d", a+b];
+                
+                if ([self.colorStrChn isEqualToString:colostr] && [self.sizeStrChn isEqualToString:sizestr] && [self.nlStrChn isEqualToString:nlsta]) {
+                    strOrderId = @"1";
+                    asd = i;
+                    break;
+                }
+            }
+            if ([strOrderId isEqualToString:@"1"]) {
+                [arrTp addObject:self.nlStrChn];
+                [arrTp addObject:self.colorStrChn];
+                [arrTp addObject:self.sizeStrChn];
+                [arrTp addObject:numAdd];
+                [arar replaceObjectAtIndex:asd withObject:arrTp];
+            } else {
+                NSMutableArray *arr = [NSMutableArray array];
+                [arr addObject:self.nlStrChn];
+                [arr addObject:self.colorStrChn];
+                [arr addObject:self.sizeStrChn];
+                [arr addObject:self.numText.text];
+                [arar addObject:arr];
+            }
+            self.sizeColorNumChn = arar;
+        }
     }
-//    else {
-//        if ((self.colorStrChn != nil || self.colorStrChn != NULL) && (self.sizeStrChn != nil || self.sizeStrChn != NULL)) {
-//            NSLog(@"count==%ld", self.sizeColorNumChn.count);
-//            for (int i = 0; i < self.sizeColorNumChn.count; i++) {
-//                NSMutableArray *arrTp = [NSMutableArray array];
-//                NSArray *tempAry = self.sizeColorNumChn[i];
-//                NSLog(@"%@", tempAry);
-//                NSString *colostr = tempAry[0];
-//                NSString *sizestr = tempAry[1];
-//                NSString *numstr = tempAry[2];
-//                NSLog(@"%@-%@-%@", colostr, sizestr, numstr);
-//                int a = [numstr intValue];
-//                int b = [self.numText.text intValue];
-//                if ([self.colorStrChn isEqualToString:colostr] && [self.sizeStrChn isEqualToString:sizestr]) {
-//                    NSString *numAdd = [NSString stringWithFormat:@"%d", a+b];
-//                    [arrTp addObject:self.colorStrChn];
-//                    [arrTp addObject:self.sizeStrChn];
-//                    [arrTp addObject:numAdd];
-//                    [self.sizeColorNumChn removeObjectAtIndex:i];
-//                    [self.sizeColorNumChn addObject:arrTp];
-//                } else {
-//                    if ((self.colorStrChn != nil || self.colorStrChn != NULL) && (self.sizeStrChn != nil || self.sizeStrChn != NULL)) {
-//                        NSMutableArray *arr = [NSMutableArray array];
-//                        [arr addObject:self.colorStrChn];
-//                        [arr addObject:self.sizeStrChn];
-//                        [arr addObject:self.numText.text];
-//                        [self.sizeColorNumChn addObject:arr];
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
     [self.chooseTab reloadData];
 }
-    
+
 - (void)addGoods {
     [self.dictArray removeAllObjects];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -592,7 +609,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
 
 - (void)pickAction:(UIButton *)sender {
     [self.view addSubview:self.underView];
-    self.pickerBackView.frame = CGRectMake(70, 0, SCREEN_WIDTH - 70, self.underNum + 230);
+    self.pickerBackView.frame = CGRectMake(70, 0, SCREEN_WIDTH - 70, self.underNum + 160);
     [self.underView addSubview:self.pickerBackView];
 }
 
@@ -636,30 +653,30 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     
     int height = 0;
     if (_SpxqColorArray.count < 4) {
-        height = 70;
+        height = 60;
     } else if (_SpxqColorArray.count < 7) {
-        height = 105;
+        height = 95;
     } else if (_SpxqColorArray.count < 10) {
-        height = 140;
+        height = 130;
     } else if (_SpxqColorArray.count < 13) {
-        height = 175;
+        height = 165;
     } else if (_SpxqColorArray.count < 15) {
-        height = 210;
+        height = 200;
     } else if (_SpxqColorArray.count < 18) {
-        height = 245;
+        height = 235;
     }
     if (_SpxqSizeArray.count < 4) {
-        height += 70;
+        height += 60;
     } else if (_SpxqSizeArray.count < 7) {
-        height += 105;
+        height += 95;
     } else if (_SpxqSizeArray.count < 10) {
-        height += 140;
+        height += 130;
     } else if (_SpxqSizeArray.count < 13) {
-        height += 175;
+        height += 165;
     } else if (_SpxqSizeArray.count < 15) {
-        height += 210;
+        height += 200;
     } else if (_SpxqSizeArray.count < 18) {
-        height += 245;
+        height += 235;
     }
     if (_SpxqNLArray.count < 4) {
         height += 70;
@@ -695,7 +712,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     //   注册头视图
     [self.colorCollectionView registerClass:[PickerViewHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"picker"];
     
-    UILabel *numLb = [[UILabel alloc] initWithFrame: CGRectMake(5, CGRectGetMaxY(self.colorCollectionView.frame) + 6, 200, 20)];
+    UILabel *numLb = [[UILabel alloc] initWithFrame: CGRectMake(5, CGRectGetMaxY(self.colorCollectionView.frame) + 3, 200, 20)];
     numLb.text = @"数量";
     numLb.textColor = XZYSPinkColor;
     numLb.font = [UIFont systemFontOfSize:15];
@@ -724,7 +741,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     self.numText.text = @"1";
     [self.pickerBackView addSubview:self.numText];
     
-    self.chooseTab = [[UITableView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(minBt.frame) + 10, SCREEN_WIDTH - 80, 170) style:UITableViewStylePlain];
+    self.chooseTab = [[UITableView alloc] initWithFrame:CGRectMake(5, CGRectGetMaxY(minBt.frame) + 10, SCREEN_WIDTH - 80, 100) style:UITableViewStylePlain];
     self.chooseTab.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.chooseTab.layer.cornerRadius = 5;
     self.chooseTab.backgroundColor = XZYSRGBColor(234, 234, 234);
@@ -806,7 +823,6 @@ static NSString *const pickNl_cell = @"pickNl_cell";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%ld", indexPath.row);
 }
 
 // 返回头视图和尾视图

@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "BDImagePicker.h"
 #import "EMSDK.h"
+#import "UserProViewController.h"
 
 @interface RegiestViewController ()<UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate>
 @property (nonatomic , strong) RegiestView *regiestView;
@@ -60,14 +61,14 @@
     self.title = @"注册中心";
     // Do any additional setup after loading the view from its nib.
     UIScrollView *backView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-    backView.contentSize = CGSizeMake(SCREEN_WIDTH, 630);
+    backView.contentSize = CGSizeMake(SCREEN_WIDTH, 660);
     backView.delegate = self;
     backView.showsHorizontalScrollIndicator = NO;
     backView.pagingEnabled = NO;
     backView.bounces = NO;
     [self.view addSubview:backView];
     self.regiestView = [RegiestView loadFromNib];
-    self.regiestView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 630);
+    self.regiestView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 660);
     [backView addSubview:self.regiestView];
     
     
@@ -84,9 +85,27 @@
     // 注册按钮
     [self.regiestView.regiestButton addTarget:self action:@selector(registeBtnAction) forControlEvents:UIControlEventTouchUpInside];
     
+    // 使用条款
+    [self.regiestView.useProBtn addTarget:self action:@selector(useProBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.regiestView.personBtn addTarget:self action:@selector(personBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    
     [self setTap];
 }
 
+- (void)useProBtnAction {
+    NSLog(@"123123");
+    UserProViewController *userVC= [[UserProViewController alloc] init];
+    userVC.titName = @"使用协议";
+    userVC.urlType = @"http://www.baidu.com";
+    [self.navigationController pushViewController:userVC animated:YES];
+}
+- (void)personBtnAction {
+    NSLog(@"890890");
+    UserProViewController *userVC= [[UserProViewController alloc] init];
+    userVC.titName = @"隐私条款";
+    userVC.urlType = @"http://www.xiezhongyunshang.com";
+    [self.navigationController pushViewController:userVC animated:YES];
+}
 #pragma mark --- 手势设置
 
 - (void)setTap {
@@ -100,7 +119,6 @@
     
 }
 
-#warning =============
 - (void)zhengjianImg:(UIButton *)sender {
     [BDImagePicker showImagePickerFromViewController:self allowsEditing:YES finishAction:^(UIImage *image) {
         if (self.regiestView.zhizhaoImg.image) {
@@ -188,7 +206,7 @@
         [hud hide:YES afterDelay:1.5];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 失败的原因可能有多种，常见的是用户名已经存在。
-        NSLog(@"发送验证失败 %@", error);
+//        NSLog(@"发送验证失败 %@", error);
     }];
 }
 
@@ -267,15 +285,15 @@
                     hud.removeFromSuperViewOnHide = YES;
                     [hud hide:YES afterDelay:1.5];
 #pragma mark -- 环信注册
-                    NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.regiestView.phoneNum.text];
-                    NSString *loginWord = @"xzyspassword";
-                    EMError *error = [[EMClient sharedClient] registerWithUsername:loginId password:loginWord];
-                    if (!error) {
-                        NSLog(@"huanxin注册成功");
+//                    NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.regiestView.phoneNum.text];
+//                    NSString *loginWord = @"xzyspassword";
+//                    EMError *error = [[EMClient sharedClient] registerWithUsername:loginId password:loginWord];
+//                    if (!error) {
+//                        NSLog(@"huanxin注册成功");
                         
-                    } else {
-                        NSLog(@"huanxin注册失败 %d  %@", error.code, error.description);
-                    }
+//                    } else {
+//                        NSLog(@"huanxin注册失败 %d  %@", error.code, error.description);
+//                    }
                     //注册成功后调用
                     [self registerSuccess];
                 } else {
@@ -324,7 +342,7 @@
         NSString *result1 = [[NSString alloc] initWithData:responseObject  encoding:NSUTF8StringEncoding];
         NSData *data = [result1 dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-        NSLog(@"%@", dic);
+//        NSLog(@"%@", dic);
         NSString *result = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
         NSDictionary *dataDic = dic[@"data"];
         if (![dataDic isEqual:@""]) {
@@ -333,12 +351,11 @@
             // 2.存储数据
             [defaults setObject:self.regiestView.phoneNum.text forKey:@"userName"];
             [defaults setObject:self.regiestView.passWord.text forKey:@"passWord"];
-            [defaults setBool:YES forKey:@"auto_login"];
             // 3.立刻同步
             [defaults synchronize];
             self.userId = dataDic[@"uid"];
         } else {
-            NSLog(@"userId = nil");
+//            NSLog(@"userId = nil");
         }
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -352,13 +369,13 @@
         } else {
             hud.labelText = dic[@"msg"];
         }
-        NSLog(@"request:%@", dic[@"msg"]);
+//        NSLog(@"request:%@", dic[@"msg"]);
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         [hud hide:YES afterDelay:1.5];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 数据加载失败回调.
-        NSLog(@"登录失败: %@",error);
+//        NSLog(@"登录失败: %@",error);
     }];
 }
 

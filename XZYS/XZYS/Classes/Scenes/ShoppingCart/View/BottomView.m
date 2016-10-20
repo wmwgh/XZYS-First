@@ -55,7 +55,7 @@
     if (_titleLable == nil) {
         _titleLable = [[UILabel alloc] initWithFrame:CGRectMake(40, 15, 100, 20)];
         _titleLable.text = @"全选";
-        _titleLable.font = [UIFont systemFontOfSize:15];
+        _titleLable.font = [UIFont systemFontOfSize:14];
     }
     return _titleLable;
 }
@@ -74,9 +74,9 @@
 
 -(UILabel *)totalLable{
     if (_totalLable == nil) {
-        self.totalLable = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width/2 - 100, 15, self.frame.size.width/2 - 50, 20)];
+        self.totalLable = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 120 - self.frame.size.width/2 + 50, 15, self.frame.size.width/2 - 50, 20)];
         NSString * string = [NSString stringWithFormat:@"合计:￥0.00"];
-        _totalLable.font = [UIFont systemFontOfSize:15];
+        _totalLable.font = [UIFont systemFontOfSize:14];
         _totalLable.textAlignment = NSTextAlignmentRight;
         _totalLable.textColor = [UIColor redColor];
 //        _totalLable.backgroundColor = [UIColor yellowColor];

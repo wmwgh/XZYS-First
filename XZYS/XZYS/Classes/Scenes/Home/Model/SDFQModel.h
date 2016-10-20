@@ -28,6 +28,6 @@
 /// 商品销量
 @property (nonatomic, copy) NSString *sales_num;
 @property (nonatomic, copy) NSString *goods_album;
-
+@property (nonatomic, copy) NSString *num;
 
 @end

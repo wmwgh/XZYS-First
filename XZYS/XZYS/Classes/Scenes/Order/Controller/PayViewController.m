@@ -112,9 +112,9 @@
     if (orderInfo != nil) {
         orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
                        orderInfo, privateKey, @"RSA"];
-        
+        NSLog(@"=============%@", orderString);
         [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
-            NSLog(@"reslut = %@",resultDic);
+            NSLog(@"reslut =========================================================================================================== %@",resultDic);
             NSInteger resultStatus = [[resultDic objectForKey:@"resultStatus"] integerValue];
             NSString *resultMsg = @"";
             
@@ -132,17 +132,14 @@
                 resultMsg = @"交易失败";
             }
 //            if (resultStatus != 6001) {//交易成功 用户取消
-//            OrderListViewController *orderVC = [[OrderListViewController alloc] init];
-//            self.hidesBottomBarWhenPushed = YES;
-//            [self.navigationController pushViewController:orderVC animated:YES];
-//            self.hidesBottomBarWhenPushed = YES;
+//
 //            //发出通知
 //            [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinish" object:self userInfo:[NSDictionary dictionaryWithObject:resultMsg forKey:@"sid"]];
-//            
-//            [self.navigationController ;  popViewControllerAnimated:YES];
+
 //            }
             self.mainLab.text = resultMsg;
             self.mainLab.hidden = NO;
+            NSLog(@"%@", resultMsg);
         }];
     }
     

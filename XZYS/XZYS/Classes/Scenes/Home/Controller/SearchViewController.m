@@ -13,8 +13,8 @@
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
 #import "XZYS_URL.h"
-#import <SVProgressHUD.h>
 #import <MBProgressHUD.h>
+#import <MJRefresh.h>
 
 @interface SearchViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic , strong) UILabel *lab;
@@ -22,20 +22,29 @@
 @property (strong, nonatomic) UITextField *searchText;
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
 @property (nonatomic , strong) ShowAllDoubleView *rootView;
-
+@property (nonatomic, assign) int page;
 @end
 
 @implementation SearchViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.page = 2;
     // Do any additional setup after loading the view from its nib.
-    [self requestData];
+//    [self requestData];
     [self setNavigation];
     //创建UICollectionView
     [self setCollectionView];
-    // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
+    // 添加顶部刷新
+    [self addRefresh];
+
+}
+
+- (void)addRefresh {
+    self.rootView.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestData)];
+    self.rootView.collectionView.mj_header.automaticallyChangeAlpha = YES;
+    [self.rootView.collectionView.mj_header beginRefreshing];
+    self.rootView.collectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
 }
 
 - (void)requestData {
@@ -43,6 +52,7 @@
     dic[@"search"] = self.searchID;
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
+    self.page = 2;
     __weak typeof(self) weakSelf = self;
     [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
@@ -66,13 +76,47 @@
             hud.removeFromSuperViewOnHide = YES;
             [hud hide:YES afterDelay:1.5];
         }
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
         
+        //结束刷新
+        [self.rootView.collectionView.mj_header endRefreshing];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
-        // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+
+    }];
+}
+
+- (void)loadMoreData {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"search"] = self.searchID;
+    dic[@"page"] = [NSString stringWithFormat:@"%d", self.page];
+    __weak typeof(self) weakSelf = self;
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
+        if ([str isEqualToString:@"-101"]) {
+            self.page++;
+            NSArray *dataArray = [responseObject objectForKey:@"data"];
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [weakSelf.allDataArray addObject:model];
+            }
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1];
+            [self.rootView.collectionView reloadData];
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"商品已全部更新";
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }
+        
+        //结束刷新
+        [self.rootView.collectionView.mj_footer endRefreshing];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
     }];
 }
 

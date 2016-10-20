@@ -23,6 +23,8 @@
 #import "ShopViewController.h"
 #import "PayViewController.h"
 #import "XIangQingViewController.h"
+#import <MJRefresh.h>
+
 
 static NSString *headerID = @"cityHeaderSectionID";
 static NSString *footerID = @"cityFooterSectionID";
@@ -40,13 +42,25 @@ static NSString *footerID = @"cityFooterSectionID";
 @property (nonatomic , strong) UIButton *payButton;
 @property (nonatomic , strong) UIButton *sureButton;
 @property (nonatomic , strong) NSMutableDictionary *params;
+@property (nonatomic , strong) NSMutableDictionary *dataParams;
 @property (nonatomic , strong) NSMutableDictionary *idDic;
 @property (nonatomic , assign) NSInteger sectionID;
 @property (nonatomic , assign) NSInteger rowID;
 @property (nonatomic , strong) UIButton *titleButton;
+
+/** 页码*/
+@property (nonatomic, assign) int page;
+
 @end
 
 @implementation OrderListViewController
+- (NSMutableDictionary *)dataParams {
+    if (_dataParams) {
+        _dataParams = [NSMutableDictionary dictionary];
+    }
+    return _dataParams;
+}
+
 - (NSMutableArray *)allDataArray {
     if (_allDataArray) {
         _allDataArray = [NSMutableArray array];
@@ -80,9 +94,12 @@ static NSString *footerID = @"cityFooterSectionID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"订单管理";
+    self.page = 1;
     [self setButton];
     [self setNav];
-    [self requestAllData];
+//    [self requestAllData];
+    // 添加顶部刷新
+    [self addRefresh];
     // 通知中心
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(cellCallBack:)
@@ -111,8 +128,60 @@ static NSString *footerID = @"cityFooterSectionID";
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(payCallBack:)  name:@"notifPayFinish"
 //                                               object:nil];
-    // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
+}
+
+- (void)addRefresh {
+    
+    self.mainTab.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestAllData)];
+    self.mainTab.mj_header.automaticallyChangeAlpha = YES;
+    [self.mainTab.mj_header beginRefreshing];
+    self.mainTab.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(requestMoreDataShop)];
+}
+
+- (void)requestMoreDataShop {
+    __weak typeof(self) weakSelf = self;
+    self.page++;
+    //请求参数
+    weakSelf.dataParams[@"page"] = [NSString stringWithFormat:@"%d", self.page];
+    /// collection 数据请求
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Order/orderList.html" parameters:weakSelf.dataParams progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSArray *NVArray = responseObject[@"data"];
+        if (![NVArray isEqual:@""]) {
+            //获取数据源
+            for (NSDictionary *dic1 in NVArray) {
+                NSMutableArray *arra = [NSMutableArray array];
+                AllListModel *model = [[AllListModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic1];
+                [self.titleArray addObject:model];
+                NSArray *arr = dic1[@"goods_list"];
+                for (NSDictionary *dic2 in arr) {
+                    SonLislModel *sonModel = [[SonLislModel alloc] init];
+                    [sonModel setValuesForKeysWithDictionary:dic2];
+                    [arra addObject:sonModel];
+                }
+                [self.cellAllay addObject:arra];
+            }
+        } else {
+            //结束刷新
+            [self.mainTab.mj_footer endRefreshing];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"商品已全部更新";
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }
+        [self.mainTab reloadData];
+        [self.mainTab.mj_header endRefreshing];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        // 显示加载错误信息
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"网络异常，加载失败！";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    }];
 }
 
 //- (void)payCallBack:(NSNotification *)text {
@@ -182,8 +251,6 @@ static NSString *footerID = @"cityFooterSectionID";
 }
 
 - (void)requestAllData {
-    // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
     _titleArray = [NSMutableArray array];
     [_titleArray removeAllObjects];
     _cellAllay = [NSMutableArray array];
@@ -200,9 +267,12 @@ static NSString *footerID = @"cityFooterSectionID";
     } else if (_orderType == 4) {
         params[@"status"] = @"122";
     }
-    
+    self.page++;
+    //请求参数
+    params[@"page"] = [NSString stringWithFormat:@"%d", self.page];
     AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
     params[@"uid"] = appDele.userIdTag;
+    
         [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Order/orderList.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *NVArray = responseObject[@"data"];
             if (![NVArray isEqual:@""]) {
@@ -213,12 +283,14 @@ static NSString *footerID = @"cityFooterSectionID";
                     [model setValuesForKeysWithDictionary:dic1];
                     [self.titleArray addObject:model];
                     NSArray *arr = dic1[@"goods_list"];
-                    for (NSDictionary *dic2 in arr) {
-                        SonLislModel *sonModel = [[SonLislModel alloc] init];
-                        [sonModel setValuesForKeysWithDictionary:dic2];
-                        [arra addObject:sonModel];
-                    }
-                    [self.cellAllay addObject:arra];
+                    if (arr != nil && ![arr isKindOfClass:[NSNull class]] && arr.count != 0) {
+                        for (NSDictionary *dic2 in arr) {
+                            SonLislModel *sonModel = [[SonLislModel alloc] init];
+                            [sonModel setValuesForKeysWithDictionary:dic2];
+                            [arra addObject:sonModel];
+                        }
+                        [self.cellAllay addObject:arra];
+                    } 
                 }
             } else {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -228,14 +300,17 @@ static NSString *footerID = @"cityFooterSectionID";
                 hud.removeFromSuperViewOnHide = YES;
                 [hud hide:YES afterDelay:1.5];
             }
-        // 隐藏指示器
-        [SVProgressHUD dismiss];
-        
         [self.mainTab reloadData];
+        [self.mainTab.mj_header endRefreshing];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"网络异常，加载失败！";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
     }];
 }
 
@@ -384,6 +459,7 @@ static NSString *footerID = @"cityFooterSectionID";
 }
 
 - (IBAction)allOrder:(id)sender {
+    self.page = 1;
     _orderType = 0;
     [self.allButton setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [self.daiPay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -394,6 +470,7 @@ static NSString *footerID = @"cityFooterSectionID";
     [self requestAllData];
 }
 - (IBAction)daiPay:(id)sender {
+    self.page = 1;
     _orderType = 1;
     [self.allButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.daiPay setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
@@ -404,6 +481,7 @@ static NSString *footerID = @"cityFooterSectionID";
     [self requestAllData];
 }
 - (IBAction)yiPay:(id)sender {
+    self.page = 1;
     _orderType = 3;
     [self.allButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.daiPay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -414,6 +492,7 @@ static NSString *footerID = @"cityFooterSectionID";
     [self requestAllData];
 }
 - (IBAction)daiReceive:(id)sender {
+    self.page = 1;
     _orderType = 2;
     [self.allButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.daiPay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -424,6 +503,7 @@ static NSString *footerID = @"cityFooterSectionID";
     [self requestAllData];
 }
 - (IBAction)yiComplate:(id)sender {
+    self.page = 1;
     _orderType = 4;
     [self.allButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.daiPay setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -513,11 +593,11 @@ static NSString *footerID = @"cityFooterSectionID";
     _footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 32)];
     _footView.backgroundColor = [UIColor whiteColor];
     [_footerView addSubview:_footView];
-    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 65, 30)];
+    UILabel *priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(7, 0, 65, 30)];
     priceLabel.font = [UIFont systemFontOfSize:13];
     priceLabel.text = @"订单金额:";
     [_footView addSubview:priceLabel];
-    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(75, 0, 90, 30)];
+    UILabel *priceLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(67, 0, 98, 30)];
     priceLabel1.textColor = XZYSPinkColor;
     priceLabel1.font = [UIFont systemFontOfSize:13];
     priceLabel1.text = model.total_price;

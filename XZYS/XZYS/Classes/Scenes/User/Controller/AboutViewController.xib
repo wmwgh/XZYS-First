@@ -33,17 +33,17 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copynight(c)2015-2016xiezhongyunshang all right reserverd" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MY0-5n-ZtE">
-                    <rect key="frame" x="20" y="627" width="335" height="20"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copynight(c)2015-2016xiezhongyunshang all right reserverd" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MY0-5n-ZtE">
+                    <rect key="frame" x="20" y="612" width="335" height="35"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="20" id="5g1-zj-8Lv"/>
+                        <constraint firstAttribute="height" constant="35" id="5g1-zj-8Lv"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="11"/>
                     <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="鞋众云商有限公司" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gCp-SU-Sbb">
-                    <rect key="frame" x="20" y="602" width="335" height="20"/>
+                    <rect key="frame" x="20" y="587" width="335" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Wl0-gU-Ve1"/>
                     </constraints>

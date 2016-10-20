@@ -57,7 +57,6 @@
 		8F331B5E1D7DD0DE007C2E22 /* loginbk.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B2A1D7DD0DE007C2E22 /* loginbk.png */; };
 		8F331B5F1D7DD0DE007C2E22 /* loginButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B2B1D7DD0DE007C2E22 /* loginButton.png */; };
 		8F331B601D7DD0DE007C2E22 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B2C1D7DD0DE007C2E22 /* logo.png */; };
-		8F331B611D7DD0DE007C2E22 /* open.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B2D1D7DD0DE007C2E22 /* open.jpg */; };
 		8F331B621D7DD0DE007C2E22 /* sc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B2E1D7DD0DE007C2E22 /* sc.png */; };
 		8F331B631D7DD0DE007C2E22 /* scanLine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B2F1D7DD0DE007C2E22 /* scanLine@2x.png */; };
 		8F331B641D7DD0DE007C2E22 /* scanLine@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F331B301D7DD0DE007C2E22 /* scanLine@3x.png */; };
@@ -191,6 +190,10 @@
 		8FAA831E1D780BE800F05542 /* LoadingImgViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAA831C1D780BE800F05542 /* LoadingImgViewController.m */; };
 		8FAA831F1D780BE800F05542 /* LoadingImgViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FAA831D1D780BE800F05542 /* LoadingImgViewController.xib */; };
 		8FAA83221D78176300F05542 /* BDImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAA83201D78176300F05542 /* BDImagePicker.m */; };
+		8FAC28841DB85784006DB303 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FAC28831DB85784006DB303 /* Images.xcassets */; };
+		8FAC28861DB85E64006DB303 /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FAC28851DB85E64006DB303 /* Images-2.xcassets */; };
+		8FAC288A1DB88901006DB303 /* Images-3.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FAC28891DB88901006DB303 /* Images-3.xcassets */; };
+		8FAC288D1DB8AFE1006DB303 /* UserProViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAC288C1DB8AFE1006DB303 /* UserProViewController.m */; };
 		8FAF551E1D6FD361000666A6 /* YHRegular.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF551D1D6FD361000666A6 /* YHRegular.m */; };
 		8FAF555F1D712909000666A6 /* AllOrderListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FAF554E1D712909000666A6 /* AllOrderListCell.m */; };
 		8FAF55601D712909000666A6 /* AllOrderListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FAF554F1D712909000666A6 /* AllOrderListCell.xib */; };
@@ -460,7 +463,6 @@
 		8F331B2A1D7DD0DE007C2E22 /* loginbk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginbk.png; sourceTree = "<group>"; };
 		8F331B2B1D7DD0DE007C2E22 /* loginButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginButton.png; sourceTree = "<group>"; };
 		8F331B2C1D7DD0DE007C2E22 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
-		8F331B2D1D7DD0DE007C2E22 /* open.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = open.jpg; sourceTree = "<group>"; };
 		8F331B2E1D7DD0DE007C2E22 /* sc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sc.png; sourceTree = "<group>"; };
 		8F331B2F1D7DD0DE007C2E22 /* scanLine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scanLine@2x.png"; sourceTree = "<group>"; };
 		8F331B301D7DD0DE007C2E22 /* scanLine@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scanLine@3x.png"; sourceTree = "<group>"; };
@@ -728,6 +730,11 @@
 		8FAA831D1D780BE800F05542 /* LoadingImgViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingImgViewController.xib; sourceTree = "<group>"; };
 		8FAA83201D78176300F05542 /* BDImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDImagePicker.m; sourceTree = "<group>"; };
 		8FAA83211D78176300F05542 /* BDImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDImagePicker.h; sourceTree = "<group>"; };
+		8FAC28831DB85784006DB303 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		8FAC28851DB85E64006DB303 /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Images-2.xcassets"; sourceTree = "<group>"; };
+		8FAC28891DB88901006DB303 /* Images-3.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Images-3.xcassets"; sourceTree = "<group>"; };
+		8FAC288B1DB8AFE1006DB303 /* UserProViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserProViewController.h; sourceTree = "<group>"; };
+		8FAC288C1DB8AFE1006DB303 /* UserProViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserProViewController.m; sourceTree = "<group>"; };
 		8FAF551C1D6FD361000666A6 /* YHRegular.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YHRegular.h; sourceTree = "<group>"; };
 		8FAF551D1D6FD361000666A6 /* YHRegular.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YHRegular.m; sourceTree = "<group>"; };
 		8FAF554D1D712909000666A6 /* AllOrderListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllOrderListCell.h; sourceTree = "<group>"; };
@@ -1266,7 +1273,6 @@
 				8F331B2A1D7DD0DE007C2E22 /* loginbk.png */,
 				8F331B2B1D7DD0DE007C2E22 /* loginButton.png */,
 				8F331B2C1D7DD0DE007C2E22 /* logo.png */,
-				8F331B2D1D7DD0DE007C2E22 /* open.jpg */,
 				8F331B2E1D7DD0DE007C2E22 /* sc.png */,
 				8F331B2F1D7DD0DE007C2E22 /* scanLine@2x.png */,
 				8F331B301D7DD0DE007C2E22 /* scanLine@3x.png */,
@@ -1437,6 +1443,9 @@
 				8FA9253F1D582D5200112FFD /* LaunchScreen.storyboard */,
 				8FA925421D582D5200112FFD /* Info.plist */,
 				8FA9253A1D582D5200112FFD /* XZYS.xcdatamodeld */,
+				8FAC28831DB85784006DB303 /* Images.xcassets */,
+				8FAC28851DB85E64006DB303 /* Images-2.xcassets */,
+				8FAC28891DB88901006DB303 /* Images-3.xcassets */,
 				8FA9252E1D582D5100112FFD /* Supporting Files */,
 			);
 			path = XZYS;
@@ -2003,6 +2012,8 @@
 				8F331B021D7D59D7007C2E22 /* ShaHeViewController.m */,
 				8FFA0D311DA9E90A0089FC4A /* EaseUsersViewController.h */,
 				8FFA0D321DA9E90A0089FC4A /* EaseUsersViewController.m */,
+				8FAC288B1DB8AFE1006DB303 /* UserProViewController.h */,
+				8FAC288C1DB8AFE1006DB303 /* UserProViewController.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -2673,6 +2684,7 @@
 				8F84212F1D6B1DC5007CE935 /* UserHeaderView.xib in Resources */,
 				8FA7D9311D82849D00296111 /* order__03.png in Resources */,
 				8F331B831D7DD0E7007C2E22 /* index_20.png in Resources */,
+				8FAC288A1DB88901006DB303 /* Images-3.xcassets in Resources */,
 				8FBFB71F1D951E7E0059E252 /* EditAddressController.xib in Resources */,
 				8FB3B1D51D6ECEDA00064C2C /* PassWordViewController.xib in Resources */,
 				8FD726991D5C03B10030E04B /* SearchViewController.xib in Resources */,
@@ -2680,6 +2692,7 @@
 				8FAF55641D712909000666A6 /* DaiOrderListCell.xib in Resources */,
 				8F331B801D7DD0E7007C2E22 /* index_07.png in Resources */,
 				8F331B8D1D7DD0E7007C2E22 /* tb_09.png in Resources */,
+				8FAC28861DB85E64006DB303 /* Images-2.xcassets in Resources */,
 				8FBFB7171D950FF20059E252 /* sh_sc.png in Resources */,
 				8F331B9B1D7DD47D007C2E22 /* bj_01.jpg in Resources */,
 				8F9FAE421D9A39F50009E8BB /* ShaiXuanViewCell.xib in Resources */,
@@ -2694,6 +2707,7 @@
 				8F331B391D7DD0DE007C2E22 /* back_white.png in Resources */,
 				8FB3B1A81D6E781800064C2C /* XITongListCell.xib in Resources */,
 				8F331B3E1D7DD0DE007C2E22 /* djb.png in Resources */,
+				8FAC28841DB85784006DB303 /* Images.xcassets in Resources */,
 				8F331B8A1D7DD0E7007C2E22 /* tb_06.png in Resources */,
 				8F331B3A1D7DD0DE007C2E22 /* backButton.png in Resources */,
 				8F331B4D1D7DD0DE007C2E22 /* info_04.png in Resources */,
@@ -2702,7 +2716,6 @@
 				8F331B551D7DD0DE007C2E22 /* info_53.png in Resources */,
 				8FAF556C1D712968000666A6 /* OrderListViewController.xib in Resources */,
 				8F331B4C1D7DD0DE007C2E22 /* gyxz.png in Resources */,
-				8F331B611D7DD0DE007C2E22 /* open.jpg in Resources */,
 				8F331B4E1D7DD0DE007C2E22 /* info_07.png in Resources */,
 				8F331B5F1D7DD0DE007C2E22 /* loginButton.png in Resources */,
 				8FB3B1971D6D8B1900064C2C /* AboutViewController.xib in Resources */,
@@ -2950,6 +2963,7 @@
 				8FFA0D111DA9E41E0089FC4A /* EaseViewController.m in Sources */,
 				8FFA0D091DA9E41E0089FC4A /* EaseEmotionEscape.m in Sources */,
 				8FFA0CCE1DA9E41E0089FC4A /* EMCDDeviceManagerBase.m in Sources */,
+				8FAC288D1DB8AFE1006DB303 /* UserProViewController.m in Sources */,
 				8FFA0D0B1DA9E41E0089FC4A /* FixFopen.c in Sources */,
 				8FFA0CD11DA9E41E0089FC4A /* EMVoiceConverter.mm in Sources */,
 				8FB3B1961D6D8B1900064C2C /* AboutViewController.m in Sources */,
@@ -3087,7 +3101,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Liu (DAK8A3T8EH)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
@@ -3112,6 +3126,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "024a73b7-ddea-46fe-ab09-5e60cc562129";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3135,7 +3150,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Liu (DAK8A3T8EH)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -3153,6 +3168,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "024a73b7-ddea-46fe-ab09-5e60cc562129";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3164,8 +3180,9 @@
 			baseConfigurationReference = FB56387DDF61F242DF0B8204 /* Pods-XZYS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yang Liu (DAK8A3T8EH)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Liu (DAK8A3T8EH)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3194,6 +3211,7 @@
 					"\"$(SRCROOT)/XZYS/Classes/General\"",
 				);
 				INFOPLIST_FILE = XZYS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3299,9 +3317,10 @@
 					"\"UIKit\"",
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wmw.XZYS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wmw.xzysshoes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -3310,8 +3329,9 @@
 			baseConfigurationReference = AB902A70BC77E9345F443798 /* Pods-XZYS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yang Liu (DAK8A3T8EH)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yang Liu (DAK8A3T8EH)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3340,6 +3360,7 @@
 					"\"$(SRCROOT)/XZYS/Classes/General\"",
 				);
 				INFOPLIST_FILE = XZYS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3445,9 +3466,10 @@
 					"\"UIKit\"",
 					"-all_load",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wmw.XZYS;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wmw.xzysshoes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

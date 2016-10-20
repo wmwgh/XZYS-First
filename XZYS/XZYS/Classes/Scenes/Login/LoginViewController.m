@@ -33,8 +33,7 @@
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.phoneNum.text = [defaults objectForKey:@"userName"];
-//    BOOL autoLogin = [defaults boolForKey:@"auto_login"];
-//    NSLog(@"%@ -- %d", self.phoneNum.text, autoLogin);
+
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -42,10 +41,8 @@
 
 // 登录
 - (IBAction)loginButtonClick:(id)sender {
-#warning 固定账号
-    self.phoneNum.text = @"15046783721";
-    self.passWord.text = @"15046783721";
-
+//    self.phoneNum.text = @"15046783721";
+//    self.passWord.text = @"15046783721";
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/login";
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -67,10 +64,14 @@
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             // 2.存储数据
             [defaults setObject:self.phoneNum.text forKey:@"userName"];
-//            [defaults setObject:self.passWord.text forKey:@"passWord"];
-//            [defaults setBool:YES forKey:@"auto_login"];
+            [defaults setObject:self.passWord.text forKey:@"passWord"];
             // 3.立刻同步
             [defaults synchronize];
+#warning 删除保存的用户名
+//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"userName"];
+//            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"passWord"];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+            
             self.userId = dataDic[@"uid"];
         } else {
         }
@@ -85,21 +86,21 @@
             NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.phoneNum.text];
             NSString *loginWord = @"xzyspassword";
             EMError *error = [[EMClient sharedClient] loginWithUsername:loginId password:loginWord];
-            if (!error) {
-            } else {
-                
-#pragma mark -- 环信注册
-                NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.phoneNum.text];
-                NSString *loginWord = @"xzyspassword";
-                EMError *error = [[EMClient sharedClient] registerWithUsername:loginId password:loginWord];
-                if (!error) {
-                    EMError *error = [[EMClient sharedClient] loginWithUsername:loginId password:loginWord];
-                    if (!error) {
-                    } else {
-                    }
-                } else {
-                }
-            }
+//            if (!error) {
+//            } else {
+//                
+//#pragma mark -- 环信注册
+//                NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", self.phoneNum.text];
+//                NSString *loginWord = @"xzyspassword";
+//                EMError *error = [[EMClient sharedClient] registerWithUsername:loginId password:loginWord];
+//                if (!error) {
+//                    EMError *error = [[EMClient sharedClient] loginWithUsername:loginId password:loginWord];
+//                    if (!error) {
+//                    } else {
+//                    }
+//                } else {
+//                }
+//            }
             [self.navigationController dismissViewControllerAnimated:NO completion:nil];
         } else {
             hud.labelText = dic[@"msg"];

@@ -36,13 +36,17 @@
 #import "LoginViewController.h"
 #import "AppDelegate.h"
 #import "ShowAllViewController.h"
+#import "TiaoHuoDetailController.h"
+#import "SonLislModel.h"
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
 @property (strong, nonatomic) UITextField *searchText;
 @property (nonatomic , strong) UIView *redView;
+
 // 主头视图
 @property (nonatomic, strong) UIView *headerBackView;
+@property (nonatomic , strong) UIView *backView;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIPageControl *mypageControl;
@@ -60,7 +64,7 @@
 /// 搜索手势
 @property (nonatomic, strong) UITapGestureRecognizer *searchTap;
 @property (nonatomic, strong) RootView *rootView;
-
+@property (nonatomic, strong) NSMutableArray *THQdataArray;
 @end
 
 @implementation HomeViewController
@@ -71,6 +75,14 @@
         _SDQArray = [NSMutableArray array];
     }
     return _SDQArray;
+}
+
+- (NSMutableArray *)THQdataArray {
+    
+    if (!_THQdataArray) {
+        _THQdataArray = [NSMutableArray array];
+    }
+    return _THQdataArray;
 }
 
 - (NSMutableArray *)LBTArray {
@@ -113,7 +125,6 @@ static NSString *const secondID = @"secondHeader";//字和线
 
     // 请求数据
     [self requestData];
-//    [self requesdCollectionData];
     [self setCollection];
 
     // 导航栏
@@ -151,89 +162,56 @@ static NSString *const secondID = @"secondHeader";//字和线
     __weak typeof(self) weakSelf = self;
     [self.SPTArray removeAllObjects];
     [weakSelf.SPTTittleArray removeAllObjects];
-    
-    NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"app_model_id"] = @"1";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTTittleArray addObject:@"新品区"];
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
-            }
-            [weakSelf.SPTArray addObject:arr];
-        } else {
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
 
-    NSMutableDictionary *param1 = [NSMutableDictionary dictionary];
-    param1[@"app_model_id"] = @"2";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param1 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[AFHTTPSessionManager manager] GET:XZYS_SDQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         // 请求成功，解析数据
         NSArray *dataArray = responseObject[@"data"];
         if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTTittleArray addObject:@"爆款区"];
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
+            NSString *titStr = nil;
+            for (NSDictionary *dicty in dataArray) {
+                NSMutableArray *arr = [NSMutableArray array];
+                NSArray *dataar = dicty[@"goods_list"];
+                if (dataar != nil && ![dataar isKindOfClass:[NSNull class]] && dataar.count != 0) {
+                    titStr = dicty[@"name"];
+                    for (NSDictionary *dic in dataar) {
+                        SDFQModel *model = [[SDFQModel alloc] init];
+                        [model setValuesForKeysWithDictionary:dic];
+                        [arr addObject:model];
+                    }
+                    [weakSelf.SPTArray addObject:arr];
+                    [weakSelf.SPTTittleArray addObject:titStr];
+                }
             }
-            [weakSelf.SPTArray addObject:arr];
         } else {
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-    }];
-    
-    
-    NSMutableDictionary *param2 = [NSMutableDictionary dictionary];
-    param2[@"app_model_id"] = @"3";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param2 progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTTittleArray addObject:@"现货区"];
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
-            }
-            [weakSelf.SPTArray addObject:arr];
-        } else {
-        }
-        // 请求调货区数据
+        }// 请求调货区数据
         [self requestTHQData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
+
     
 }
 
 - (void)requestTHQData {
     __weak typeof(self) weakSelf = self;
-    NSMutableDictionary *param = [NSMutableDictionary dictionary];
-    param[@"app_model_id"] = @"4";
-    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[AFHTTPSessionManager manager] GET:XZYS_THQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 请求成功，解析数据
-        NSArray *dataArray = responseObject[@"data"];
-        
+        NSDictionary *dataDic = responseObject[@"data"];
+        NSArray *dataArray = dataDic[@"goods_list"];
         if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-            [weakSelf.SPTTittleArray addObject:@"调货区"];
+            NSString *titStr = nil;
+            titStr = dataDic[@"name"];
+            [weakSelf.SPTTittleArray addObject:titStr];
             NSMutableArray *arr = [NSMutableArray array];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [arr addObject:model];
+            if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+                for (NSDictionary *dic in dataArray) {
+                    SDFQModel *model = [[SDFQModel alloc] init];
+                    [model setValuesForKeysWithDictionary:dic];
+                    [arr addObject:model];
+                    [self.THQdataArray addObject:model];
+                }
+                [weakSelf.SPTArray addObject:arr];
             }
-            [weakSelf.SPTArray addObject:arr];
         } else {
         }
         [self.rootView.collectionView.mj_header endRefreshing];
@@ -298,10 +276,9 @@ static NSString *const secondID = @"secondHeader";//字和线
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         if (indexPath.section == 0){
             NSString *str = self.SPTTittleArray[0];
-            
             FirstHeaderReusableView *firstHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:firatID forIndexPath:indexPath];
             // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 369);
+            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH*2.7 / 3.1 + 60);
             [firstHeaderView addSubview:self.headerBackView];
             firstHeaderView.headerLabel.text = str;
             [self.rootView.collectionView bringSubviewToFront:firstHeaderView];
@@ -310,27 +287,22 @@ static NSString *const secondID = @"secondHeader";//字和线
         
         HeaderReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:secondID forIndexPath:indexPath];
         
+        // 布局头视图尺寸
+        self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
         if (indexPath.section == 1){
             NSString *str = self.SPTTittleArray[1];
-
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
             headerView.headerLabel.text = str;
             return headerView;
         }
         
         if (indexPath.section == 2){
             NSString *str = self.SPTTittleArray[2];
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
             headerView.headerLabel.text = str;
             return headerView;
         }
         
         if (indexPath.section == 3){
             NSString *str = self.SPTTittleArray[3];
-            // 布局头视图尺寸
-            self.rootView.myFlowLayout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, 35);
             headerView.headerLabel.text = str;
             return headerView;
         }
@@ -341,17 +313,36 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 // 点击item
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
-    NSArray *ar = self.SPTArray[indexPath.section];
-    SDFQModel *model = [[SDFQModel alloc] init];
-    model = ar[indexPath.row];
-    XXVC.model = model;
-    XXVC.passID = model.goods_id;
-    self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:XXVC animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
-
+    int indexId = 0;
+    int typeId = 0;
+    for (int i = 0; i < self.SPTTittleArray.count; i++) {
+        NSString *name = self.SPTTittleArray[i];
+        if ([name isEqualToString:@"调货区"]) {
+            indexId = i;
+            typeId = 1;
+        }
+    }
+    if (typeId == 1) {
+        if (indexPath.section == indexId) {
+            TiaoHuoDetailController *thVC = [[TiaoHuoDetailController alloc] init];
+            SonLislModel *model = [[SonLislModel alloc] init];
+            model = self.THQdataArray[indexPath.row];
+            thVC.orderID = model.ID;
+            self.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:thVC animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
+        }
+    } else {
+        XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+        NSArray *ar = self.SPTArray[indexPath.section];
+        SDFQModel *model = [[SDFQModel alloc] init];
+        model = ar[indexPath.row];
+        XXVC.model = model;
+        XXVC.passID = model.goods_id;
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:XXVC animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
+    }
 }
 
 - (void)setNavigation {
@@ -414,7 +405,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 #pragma mark --- 轮播图
 - (void)LBTView {
     // 创建view（view中包含UIScrollView、UIPageControl，设置frame）
-    _fzhView = [[FzhScrollViewAndPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 135)];
+    _fzhView = [[FzhScrollViewAndPageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH / 2.4)];
     // 把n张图片放到imageView上
     NSMutableArray *tempAry = [NSMutableArray array];
     for (int i = 0; i < 3; i++) {
@@ -446,8 +437,11 @@ static NSString *const secondID = @"secondHeader";//字和线
 - (void)addRefresh {
     
     self.rootView.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requesdCollectionData)];
+    self.rootView.collectionView.mj_header.automaticallyChangeAlpha = YES;
     [self.rootView.collectionView.mj_header beginRefreshing];
 }
+
+
 
 - (void)setReadView {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -516,8 +510,8 @@ static NSString *const secondID = @"secondHeader";//字和线
 // 按钮
 - (void)fourButton {
     
-    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 138, SCREEN_WIDTH, 55)];
-    [self.headerBackView addSubview:backView];
+    self.backView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_WIDTH / 2.4 + 5, SCREEN_WIDTH, 55)];
+    [self.headerBackView addSubview:self.backView];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom];
     //给定button在view上的位置
@@ -546,10 +540,10 @@ static NSString *const secondID = @"secondHeader";//字和线
     button4.backgroundColor = [UIColor clearColor];
     [button4 setImage:[UIImage imageNamed:@"index_25.png"] forState:UIControlStateNormal];
     [button4 addTarget:self action:@selector(button4Click) forControlEvents:UIControlEventTouchUpInside];
-    [backView addSubview:button1];
-    [backView addSubview:button2];
-    [backView addSubview:button3];
-    [backView addSubview:button4];
+    [self.backView addSubview:button1];
+    [self.backView addSubview:button2];
+    [self.backView addSubview:button3];
+    [self.backView addSubview:button4];
     
 }
 
@@ -583,7 +577,7 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 #pragma mark -  三个分区按钮
 - (void)showCollection {
-    UIView *collectionButtonView = [[UIView alloc] initWithFrame:CGRectMake(2, 196, SCREEN_WIDTH - 4, 140)];
+    UIView *collectionButtonView = [[UIView alloc] initWithFrame:CGRectMake(2, CGRectGetMaxY(self.backView.frame) + 5, SCREEN_WIDTH - 4, SCREEN_WIDTH / 3)];
     collectionButtonView.layer.cornerRadius = 4;
     collectionButtonView.backgroundColor = XZYSRGBColor(45, 190, 250);
     [self.headerBackView addSubview:collectionButtonView];
@@ -600,7 +594,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     
     // 男鞋
     UIImageView *manImageBT = [[UIImageView alloc] init];
-    manImageBT.frame = CGRectMake(2, 2, collectionButtonView.frame.size.width / 3 - 3, 136);
+    manImageBT.frame = CGRectMake(2, 2, collectionButtonView.frame.size.width / 3 - 3, collectionButtonView.frame.size.width / 3 - 3);
     NSString *aimage = tempAry[0];
     manImageBT.layer.cornerRadius = 3;
     manImageBT.layer.masksToBounds = YES;
@@ -611,7 +605,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     
     // 女鞋
     UIImageView *womanImageBT = [[UIImageView alloc] init];
-    womanImageBT.frame = CGRectMake(CGRectGetMaxX(manImageBT.frame) + 2, 2, collectionButtonView.frame.size.width / 3 - 2, 136);
+    womanImageBT.frame = CGRectMake(CGRectGetMaxX(manImageBT.frame) + 2, 2, collectionButtonView.frame.size.width / 3 - 2, collectionButtonView.frame.size.width / 3 - 3);
     NSString *bimage = tempAry[1];
     womanImageBT.layer.cornerRadius = 3;
     womanImageBT.layer.masksToBounds = YES;
@@ -623,7 +617,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     
     // 童鞋
     UIImageView *childImageBT = [[UIImageView alloc] init];
-    childImageBT.frame = CGRectMake(CGRectGetMaxX(womanImageBT.frame) + 2, 2, collectionButtonView.frame.size.width / 3 - 3, 136);
+    childImageBT.frame = CGRectMake(CGRectGetMaxX(womanImageBT.frame) + 2, 2, collectionButtonView.frame.size.width / 3 - 3, collectionButtonView.frame.size.width / 3 - 3);
     childImageBT.layer.cornerRadius = 3;
     childImageBT.layer.masksToBounds = YES;
     NSString *cimage = tempAry[2];

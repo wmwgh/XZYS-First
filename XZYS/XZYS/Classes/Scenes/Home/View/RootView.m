@@ -7,6 +7,7 @@
 //
 
 #import "RootView.h"
+#import "XZYS_Other.h"
 
 @implementation RootView
 
@@ -36,11 +37,11 @@
     
     self.myFlowLayout.sectionInset = UIEdgeInsetsMake(2, 2, 2, 2);
 //    // 布局头视图尺寸  移到了Home 头视图设置中
-    self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 369);
+    self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, SCREEN_WIDTH*2.7 / 3.1 + 60);
     // 2.布局collectionView
     
     // 创建对象并指定样式
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, self.frame.size.width, self.frame.size.height - 50) collectionViewLayout:self.myFlowLayout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, self.frame.size.width, self.frame.size.height - 52) collectionViewLayout:self.myFlowLayout];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     
     [self addSubview:self.collectionView];

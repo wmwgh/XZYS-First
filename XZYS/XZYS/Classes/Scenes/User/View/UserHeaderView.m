@@ -14,19 +14,6 @@
 #import "LoginViewController.h"
 @implementation UserHeaderView
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    
-    if (self = [super initWithFrame:frame]) {
-        // 添加子视图
-//        [self initLayout];
-    }
-    return self;
-}
-
-//- (void)initLayout {
-//    self.nameLabel.text = @"qsdcnssnodvbojefnefqvosjbvsojvbojevbwe";
-//}
-
 // 修改个人信息
 - (IBAction)changeMessage:(id)sender {
     ChangeInfoViewController *changeVC = [[ChangeInfoViewController alloc] init];

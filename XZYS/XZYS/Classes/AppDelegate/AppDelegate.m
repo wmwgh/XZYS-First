@@ -16,7 +16,9 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "EMSDK.h"
 #import "EaseUI.h"
-
+#import <AFHTTPSessionManager.h>
+#import <AFNetworking/AFNetworking.h>
+#import <MBProgressHUD.h>
 
 @interface AppDelegate ()
 
@@ -34,7 +36,6 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 
-    
     // 第二步：创建UITabBarController对象
     self.mainTab = [[UITabBarController alloc] init];
     
@@ -42,7 +43,7 @@
     self.window.rootViewController = self.mainTab;
     UINavigationController *loginVC = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     loginVC.navigationBarHidden = YES;
-    [self.mainTab presentViewController:loginVC animated:NO completion:nil];
+    
     // 控制器
     UINavigationController *homeNVC = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
     // 设置图片
@@ -66,38 +67,44 @@
     // 初始化EaseUI
     [[EaseSDKHelper shareHelper] easemobApplication:application didFinishLaunchingWithOptions:launchOptions appkey:@"jiuguankeji#xzyskf" apnsCertName:nil otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     
-    return YES;
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation
-{
-    if ([url.host isEqualToString:@"safepay"]) {
-        // 支付跳转支付宝钱包进行支付，处理支付结果
-        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"result = %@",resultDic);
-        }];
-        
-        // 授权跳转支付宝钱包进行支付，处理支付结果
-        [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"result = %@",resultDic);
-            // 解析 auth code
-            NSString *result = resultDic[@"result"];
-            NSString *authCode = nil;
-            if (result.length>0) {
-                NSArray *resultArr = [result componentsSeparatedByString:@"&"];
-                for (NSString *subResult in resultArr) {
-                    if (subResult.length > 10 && [subResult hasPrefix:@"auth_code="]) {
-                        authCode = [subResult substringFromIndex:10];
-                        break;
-                    }
-                }
+#pragma mark - 自动登录
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userName = [defaults objectForKey:@"userName"];
+    NSString *passWord = [defaults objectForKey:@"passWord"];
+    if (userName != nil && passWord != nil && ![userName isEqualToString:@""] && ![passWord isEqualToString:@""]) {
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/login";
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        params[@"username"] = userName;
+        params[@"password"] = passWord;
+        [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            // 数据加载完后回调.
+            NSString *result = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"status"]];
+            NSDictionary *dataDic = responseObject[@"data"];
+            if([result isEqualToString:@"-106"]){
+                self.isLogin = @"Yes";
+                self.userIdTag = dataDic[@"uid"];
+#pragma mark -- 环信登录
+                NSString *loginId = [NSString stringWithFormat:@"hx%@xzys", userName];
+                NSString *loginWord = @"xzyspassword";
+                EMError *error = [[EMClient sharedClient] loginWithUsername:loginId password:loginWord];
+            } else {
+                [self.mainTab presentViewController:loginVC animated:NO completion:nil];
+                MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:loginVC.view animated:YES];
+                hud.mode = MBProgressHUDModeText;
+                hud.labelText = @"登录失败，请重新登录";
+                // 隐藏时候从父控件中移除
+                hud.removeFromSuperViewOnHide = YES;
+                [hud hide:YES afterDelay:1.5];
             }
-            NSLog(@"授权结果 authCode = %@", authCode?:@"");
+
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            // 数据加载失败回调.
         }];
+    } else {
+        [self.mainTab presentViewController:loginVC animated:NO completion:nil];
     }
+    
     return YES;
 }
 
@@ -107,12 +114,10 @@
     if ([url.host isEqualToString:@"safepay"]) {
         // 支付跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"result = %@",resultDic);
         }];
         
         // 授权跳转支付宝钱包进行支付，处理支付结果
         [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-            NSLog(@"result = %@",resultDic);
             // 解析 auth code
             NSString *result = resultDic[@"result"];
             NSString *authCode = nil;
@@ -125,18 +130,15 @@
                     }
                 }
             }
-            NSLog(@"授权结果 authCode = %@", authCode?:@"");
         }];
     }
     return YES;
 }
 
-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
-
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.

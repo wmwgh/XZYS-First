@@ -13,7 +13,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "XZYS_URL.h"
 #import "XZYS_Other.h"
-#import <SVProgressHUD.h>
+#import <MJRefresh.h>
 #import "AppDelegate.h"
 #import "TiaoHuoOrderCell.h"
 #import <MBProgressHUD.h>
@@ -23,7 +23,8 @@
 @property (nonatomic , strong) UITableView *mainTab;
 @property (nonatomic , strong) ShowAllDoubleView *rootView;
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
-
+/** 页码*/
+@property (nonatomic, assign) int page;
 
 @end
 
@@ -39,6 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"调货区";
+    self.page = 1;
     [self setTab];
     [self requestAllData];
     // 通知中心
@@ -46,7 +48,56 @@
                                              selector:@selector(callBack)
                                                  name:@"取消调货刷新UI"
                                                object:nil];
+    // 添加顶部刷新
+    [self addRefresh];
     // Do any additional setup after loading the view from its nib.
+}
+
+- (void)addRefresh {
+    
+    self.mainTab.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestAllData)];
+    self.mainTab.mj_header.automaticallyChangeAlpha = YES;
+    [self.mainTab.mj_header beginRefreshing];
+    self.mainTab.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(requestMoreDataShop)];
+}
+
+- (void)requestMoreDataShop {
+    __weak typeof(self) weakSelf = self;
+    self.page++;
+    //请求参数
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"page"] = [NSString stringWithFormat:@"%d", self.page];
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsList.html" parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSArray *NVArray = responseObject[@"data"];
+        if (![NVArray isEqual:@""]) {
+            //获取数据源
+            for (NSDictionary *dic in NVArray) {
+                SonLislModel *model = [[SonLislModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [weakSelf.allDataArray addObject:model];
+            }
+        } else {
+            //结束刷新
+            [self.mainTab.mj_footer endRefreshing];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"商品已全部更新";
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }
+        [self.mainTab reloadData];
+        [self.mainTab.mj_header endRefreshing];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        // 显示加载错误信息
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"网络异常，加载失败！";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
+    }];
 }
 
 - (void)callBack{
@@ -100,8 +151,6 @@
 #pragma mark - 数据区
 // 获取全部数据
 - (void)requestAllData {
-    // 显示指示器
-    [SVProgressHUD showWithStatus:@"正在加载数据......"];
     __weak typeof(self) weakSelf = self;
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     _allDataArray = [NSMutableArray array];
@@ -117,9 +166,6 @@
                 [model setValuesForKeysWithDictionary:dic];
                 [weakSelf.allDataArray addObject:model];
             }
-            [self.mainTab reloadData];
-            // 隐藏指示器
-            [SVProgressHUD dismiss];
 
         } else {
             UILabel *aview = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, SCREEN_WIDTH, 50)];
@@ -131,15 +177,20 @@
             hud.labelText = responseObject[@"msg"];
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:2];
-            [self.mainTab reloadData];
-            // 隐藏指示器
-            [SVProgressHUD dismiss];
+            [hud hide:YES afterDelay:1.5];
         }
+        [self.mainTab reloadData];
+        [self.mainTab.mj_header endRefreshing];
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"网络异常，加载失败！";
+        // 隐藏时候从父控件中移除
+        hud.removeFromSuperViewOnHide = YES;
+        [hud hide:YES afterDelay:1.5];
     }];
 }
 

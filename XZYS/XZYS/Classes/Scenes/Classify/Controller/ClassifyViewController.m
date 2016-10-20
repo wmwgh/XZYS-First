@@ -20,7 +20,7 @@
 #import <MJRefresh.h>
 #import "ShowAllViewController.h"
 #import "HomeViewController.h"
-#import "XIangQingViewController.h"
+#import "ShowAllViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
 #import <MBProgressHUD.h>
@@ -45,7 +45,7 @@
 @property (nonatomic,retain) SMVerticalSegmentedControl *segmentedControl;
 /// 搜索
 @property (strong, nonatomic) UITextField *searchText;
-
+@property (nonatomic , assign) NSInteger qwe;
 @end
 
 @implementation ClassifyViewController
@@ -55,8 +55,13 @@
     // 获取导航栏
     [self loadsection];
     //设置默认的选中按钮
-    self.segmentedControl.selectedSegmentIndex = self.abc;
+    if (self.abc == 0) {
+        self.segmentedControl.selectedSegmentIndex = self.qwe;
+    } else {
+        self.segmentedControl.selectedSegmentIndex = self.abc;
+    }
     [self.mianCollectionView reloadData];
+    self.tabBarController.tabBar.hidden = NO;
 }
 
 
@@ -234,6 +239,7 @@
 
 //按钮改变时调用
 -(void)indexChangeBlock:(NSInteger)index{
+    self.qwe = index;
     FLModel *model = [[FLModel alloc] init];
     model = FCidArray[index];
     _URLStr = [NSMutableString stringWithFormat:@"%@%@", XZYS_FLZDH_URL, model.cid];
@@ -396,11 +402,11 @@
     
 //    NSLog(@"dianji:%ld", (long)indexPath.row);
     
-    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    ShowAllViewController *XXVC = [[ShowAllViewController alloc] init];
     FLModel *model = [[FLModel alloc] init];
     NSArray *arr = rowmodelArray[indexPath.section];
     model = arr[indexPath.row];
-    XXVC.passID = model.cid;
+    XXVC.lanmuID = model.cid;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:XXVC animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -415,6 +421,7 @@
     [self.navigationController pushViewController:showVC animated:YES];
     
 }
+
 
 /*
 #pragma mark - Navigation

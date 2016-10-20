@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ShowAllViewController : UIViewController
-
+@property (nonatomic , copy) NSString *lanmuID;
 @end

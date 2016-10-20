@@ -55,13 +55,19 @@
     
     _oneModel = oneModel;
     NSString *str = [NSString stringWithFormat:@"%@%@", XZYS_PJ_URL,oneModel.goods_img];
-    NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _oneModel.sales_num];
+    if (_oneModel.num == nil) {
+        NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _oneModel.sales_num];
+        _NumberLable.text = numStr;
+    } else if (_oneModel.sales_num == nil) {
+        NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _oneModel.num];
+        _NumberLable.text = numStr;
+    }
     NSString *priceStr = [NSString stringWithFormat:@"￥%@", _oneModel.price];
     [_photoImage sd_setImageWithURL:[NSURL URLWithString:str]];
     _tittleLable.text = _oneModel.goods_name;
     _priceLable.text = priceStr;
     _priceLable.textColor = XZYSBlueColor;
-    _NumberLable.text = numStr;
+    
     _NumberLable.textColor = XZYSPinkColor;
 }
 

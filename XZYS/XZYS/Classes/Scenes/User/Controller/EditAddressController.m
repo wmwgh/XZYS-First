@@ -145,18 +145,20 @@
     [cancleBtn setTitle:@"取消" forState:0];
     [cancleBtn setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     cancleBtn.frame = CGRectMake(0, 0, 60, 40);
+    cancleBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [cancleBtn addTarget:self action:@selector(dateCancleAction) forControlEvents:UIControlEventTouchUpInside];
     [self.back addSubview:cancleBtn];
     
     UIButton *ensureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [ensureBtn setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [ensureBtn setTitle:@"确定" forState:0];
+    ensureBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     ensureBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 0, 60, 40);
     [ensureBtn addTarget:self action:@selector(dateEnsureAction) forControlEvents:UIControlEventTouchUpInside];
     [self.back addSubview:ensureBtn];
     
     // 初始化pickerView
-    self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, 150)];
+    self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectMake(5, 40, [UIScreen mainScreen].bounds.size.width - 10, 150)];
     self.pickerView.backgroundColor = [UIColor whiteColor];
     [self.back addSubview:self.pickerView];
     //指定数据源和委托
@@ -164,6 +166,21 @@
     self.pickerView.dataSource = self;
 }
 
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel* pickerLabel = (UILabel*)view;
+    if (!pickerLabel){
+        pickerLabel = [[UILabel alloc] init];
+        // Setup label properties - frame, font, colors etc
+        //adjustsFontSizeToFitWidth property to YES
+        //        pickerLabel.adjustsFontSizeToFitWidth = YES;
+        pickerLabel.textAlignment = NSTextAlignmentCenter;
+        [pickerLabel setBackgroundColor:[UIColor clearColor]];
+        [pickerLabel setFont:[UIFont boldSystemFontOfSize:14]];
+    }
+    // Fill the label text here
+    pickerLabel.text=[self pickerView:pickerView titleForRow:row forComponent:component];
+    return pickerLabel;
+}
 - (void)getAddressInformation {
     self.provinceArrar = [NSMutableArray array];
     [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Area/getAreaProvince" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

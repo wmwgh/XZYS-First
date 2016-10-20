@@ -448,23 +448,23 @@
         [exportSession exportAsynchronouslyWithCompletionHandler:^{
             switch ([exportSession status]) {
                 case AVAssetExportSessionStatusFailed: {
-                    NSLog(@"failed, error:%@.", exportSession.error);
+//                    NSLog(@"failed, error:%@.", exportSession.error);
                 } break;
                 case AVAssetExportSessionStatusCancelled: {
-                    NSLog(@"cancelled.");
+//                    NSLog(@"cancelled.");
                 } break;
                 case AVAssetExportSessionStatusCompleted: {
-                    NSLog(@"completed.");
+//                    NSLog(@"completed.");
                 } break;
                 default: {
-                    NSLog(@"others.");
+//                    NSLog(@"others.");
                 } break;
             }
             dispatch_semaphore_signal(wait);
         }];
         long timeout = dispatch_semaphore_wait(wait, DISPATCH_TIME_FOREVER);
         if (timeout) {
-            NSLog(@"timeout.");
+//            NSLog(@"timeout.");
         }
         if (wait) {
             //dispatch_release(wait);
@@ -698,7 +698,7 @@
                     }
                     else
                     {
-                        NSLog(@"Read %@ failed!", localPath);
+//                        NSLog(@"Read %@ failed!", localPath);
                     }
                     return;
                 }
@@ -719,7 +719,7 @@
                         }
                         else
                         {
-                            NSLog(@"Read %@ failed!", localPath);
+//                            NSLog(@"Read %@ failed!", localPath);
                         }
                         return ;
                     }
@@ -1033,7 +1033,7 @@
             NSError *error = nil;
             [fileman removeItemAtURL:videoURL error:&error];
             if (error) {
-                NSLog(@"failed to remove file, error:%@.", error);
+//                NSLog(@"failed to remove file, error:%@.", error);
             }
         }
         [self sendVideoMessageWithURL:mp4];

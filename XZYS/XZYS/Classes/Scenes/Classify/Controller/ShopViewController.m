@@ -24,7 +24,7 @@
 #import "LoginViewController.h"
 #import "AppDelegate.h"
 #import <MBProgressHUD.h>
-
+#import <MJRefresh.h>
 #import "ShaiXuanViewCell.h"
 #import "ShaiXuanHeaderView.h"
 #import "PickerViewHeaderView.h"
@@ -42,6 +42,8 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 {
     UIButton *MButton;
 }
+/** 页码*/
+@property (nonatomic, assign) int page;
 @property (nonatomic , strong) NSMutableDictionary *param;
 @property (nonatomic , strong) UIButton *priceButton;
 @property (nonatomic , strong) UIButton *timeButton;
@@ -77,13 +79,22 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"店铺";
-    
+    self.page = 2;
     // 请求数据
-    [self requestData];
+//    [self requestData];
     [self setCollection];
     [self setNavigation];
-
+    // 添加顶部刷新
+    [self addRefresh];
     [self setSXView];
+}
+
+- (void)addRefresh {
+    
+    self.rootView.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestData)];
+    self.rootView.collectionView.mj_header.automaticallyChangeAlpha = YES;
+    [self.rootView.collectionView.mj_header beginRefreshing];
+    self.rootView.collectionView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(requestMoreDataShop)];
 }
 - (void)setSXView {
     self.underView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
@@ -135,17 +146,17 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     self.underView.hidden = YES;
 }
 - (void)sureBtnAction {
-    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+//    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [self.collectionArray removeAllObjects];
     self.price1 = self.textFileda.text;
     self.price2 = self.textFiledb.text;
     if (self.price1 != nil) {
-        dic[@"start_price"] = self.price1;
+        self.param[@"start_price"] = self.price1;
     }
     if (self.price2 != nil) {
-        dic[@"end_price"] = self.price2;
+        self.param[@"end_price"] = self.price2;
     }
-    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:self.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSString *str = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
         if ([str isEqualToString:@"-101"]) {
             NSArray *dataArray = [responseObject objectForKey:@"data"];
@@ -218,7 +229,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [self.priceButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [self.priceButton addTarget:self action:@selector(priceButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [pickBackView addSubview:self.priceButton];
-    self.image1 = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 33, 13, 8, 16)];
+    self.image1 = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 31, 13, 8, 16)];
     self.image1.image = [UIImage imageNamed:@"lb_jtc"];
     [pickBackView addSubview:self.image1];
     self.priceButton1 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -360,13 +371,15 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [_collectionArray removeAllObjects];
     __weak typeof(self) weakSelf = self;
     [weakSelf.param setValue:weakSelf.shopID forKey:@"shop_id"];
+    [weakSelf.param setValue:nil forKey:@"page"];
     [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *dataArray = [responseObject objectForKey:@"data"];
-        
-        for (NSDictionary *dic in dataArray) {
-            SDFQModel *model = [[SDFQModel alloc] init];
-            [model setValuesForKeysWithDictionary:dic];
-            [weakSelf.collectionArray addObject:model];
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            for (NSDictionary *dic in dataArray) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [weakSelf.collectionArray addObject:model];
+            }
         }
         
         [self.rootView.collectionView reloadData];
@@ -386,7 +399,9 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     weakSelf.dataArray = [NSMutableArray array];
     [weakSelf.collectionArray removeAllObjects];
     weakSelf.collectionArray = [NSMutableArray array];
-    
+    self.param = nil;
+    self.price1 = nil;
+    self.price2 = nil;
     if (weakSelf.shopID != nil) {
         NSString *urlStr = [NSString stringWithFormat:@"%@%@", XZYS_DP_URL, weakSelf.shopID];
         [[AFHTTPSessionManager manager] GET:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -412,8 +427,9 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         
         
         /// collection 数据请求
-        [weakSelf.param setValue:weakSelf.shopID forKey:@"shop_id"];
-        [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        dic[@"shop_id"] = weakSelf.shopID;
+        [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 请求成功，解析数据
             NSArray *dataArr = responseObject[@"data"];
             if (dataArr != nil && ![dataArr isKindOfClass:[NSNull class]] && dataArr.count != 0) {
@@ -424,6 +440,8 @@ static NSString *const firatID = @"firstHeader";//图和字和线
                 }
             }
             [self.rootView.collectionView reloadData];
+            //结束刷新
+            [self.rootView.collectionView.mj_header endRefreshing];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             // 请求失败
             // 显示加载错误信息
@@ -433,6 +451,40 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         // 显示加载错误信息
         [SVProgressHUD showErrorWithStatus:@"无法找到该店铺"];
     }
+}
+
+- (void)requestMoreDataShop {
+    __weak typeof(self) weakSelf = self;
+    //请求参数
+    weakSelf.param[@"page"] = [NSString stringWithFormat:@"%d", self.page];
+    /// collection 数据请求
+    [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        // 请求成功，解析数据
+        NSArray *dataArr = responseObject[@"data"];
+        if (dataArr != nil && ![dataArr isKindOfClass:[NSNull class]] && dataArr.count != 0) {
+            self.page++;
+            for (NSDictionary *dic in dataArr) {
+                SDFQModel *model = [[SDFQModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [weakSelf.collectionArray addObject:model];
+            }
+        } else {
+            //结束刷新
+            [self.rootView.collectionView.mj_footer endRefreshing];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"商品已全部更新";
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1.5];
+        }
+        [self.rootView.collectionView reloadData];
+        //结束刷新
+        [self.rootView.collectionView.mj_footer endRefreshing];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        // 显示加载错误信息
+        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
+    }];
 }
 
 
@@ -527,9 +579,6 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     XiTongViewController *messageVC = [[XiTongViewController alloc] init];
     [self.navigationController pushViewController:messageVC animated:YES];
 }
-
-#pragma mark ---------- 筛选部分
-
 
 
 

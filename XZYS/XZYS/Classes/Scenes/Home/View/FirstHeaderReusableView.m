@@ -21,9 +21,9 @@
 
 - (void)initLayout {
     
-    UIView *bbbbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 369)];
+    UIView *bbbbView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH*2.7 / 3.1 + 55)];
     
-    UIView *BView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width / 2 - 100, 341, 200, 31)];
+    UIView *BView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width / 2 - 100, SCREEN_WIDTH*2.7 / 3.1 + 55 - 28, 200, 31)];
     UIImageView *aimage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 15, 50, 1)];
     aimage.image = [UIImage imageNamed:@"index_01.jpg"];
     UIImageView *bimage = [[UIImageView alloc] initWithFrame:CGRectMake(150, 15, 50, 1)];

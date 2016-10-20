@@ -25,7 +25,7 @@
     UIImageView *tmpimg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 151, SCREEN_WIDTH, 25)];
     tmpimg.image = [UIImage imageNamed:@"tm.png"];
     [self addSubview:tmpimg];
-    self.headImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 145, 65, 65)];
+    self.headImageView = [[UIImageView alloc] initWithFrame:CGRectMake(7, 145, 65, 65)];
     self.headImageView.backgroundColor = XZYSRGBColor(234, 234, 234);
     [self addSubview:self.headImageView];
     
@@ -35,7 +35,7 @@
     lab1.textColor = [UIColor whiteColor];
     [self addSubview:lab1];
 
-    self.numLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab1.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
+    self.numLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab1.frame), CGRectGetMinY(tmpimg.frame), 30, 25)];
     self.numLabel.font = [UIFont systemFontOfSize:11];
     self.numLabel.textColor = [UIColor whiteColor];
     [self addSubview:self.numLabel];
@@ -46,7 +46,7 @@
     lab2.text = @"商品销量:";
     [self addSubview:lab2];
     
-    self.goodsCollect = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab2.frame), CGRectGetMinY(tmpimg.frame), 40, 25)];
+    self.goodsCollect = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(lab2.frame), CGRectGetMinY(tmpimg.frame), 30, 25)];
     self.goodsCollect.textColor = [UIColor whiteColor];
     self.goodsCollect.font = [UIFont systemFontOfSize:11];
     [self addSubview:self.goodsCollect];

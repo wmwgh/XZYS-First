@@ -116,24 +116,57 @@
     [cancleBtn setTitle:@"取消" forState:0];
     [cancleBtn setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     cancleBtn.frame = CGRectMake(0, 0, 60, 40);
+    cancleBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     [cancleBtn addTarget:self action:@selector(dateCancleAction) forControlEvents:UIControlEventTouchUpInside];
     [self.back addSubview:cancleBtn];
     
     UIButton *ensureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [ensureBtn setTitleColor:XZYSBlueColor forState:UIControlStateNormal];
     [ensureBtn setTitle:@"确定" forState:0];
+    ensureBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     ensureBtn.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 0, 60, 40);
     [ensureBtn addTarget:self action:@selector(dateEnsureAction) forControlEvents:UIControlEventTouchUpInside];
     [self.back addSubview:ensureBtn];
     
     // 初始化pickerView
-    self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, 150)];
+    self.pickerView = [[UIPickerView alloc]initWithFrame:CGRectMake(5, 40, [UIScreen mainScreen].bounds.size.width - 10, 150)];
     self.pickerView.backgroundColor = [UIColor whiteColor];
     [self.back addSubview:self.pickerView];
     //指定数据源和委托
     self.pickerView.delegate = self;
     self.pickerView.dataSource = self;
 }
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
+    UILabel* pickerLabel = (UILabel*)view;
+    if (!pickerLabel){
+        pickerLabel = [[UILabel alloc] init];
+        // Setup label properties - frame, font, colors etc
+        //adjustsFontSizeToFitWidth property to YES
+//        pickerLabel.adjustsFontSizeToFitWidth = YES;
+        pickerLabel.textAlignment = NSTextAlignmentCenter;
+        [pickerLabel setBackgroundColor:[UIColor clearColor]];
+        [pickerLabel setFont:[UIFont boldSystemFontOfSize:14]];
+    }
+    // Fill the label text here
+    pickerLabel.text=[self pickerView:pickerView titleForRow:row forComponent:component];
+    return pickerLabel;
+}
+
+//- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+//
+//{
+//    CGFloat componentWidth = 0.0;
+//    
+//    if (component == 0) {
+//        componentWidth = 100.0; // 第一个组键的宽度
+//    } else if (component == 1) {
+//        componentWidth = 150.0; // 第2个组键的宽度
+//    } else if (component == 2) {
+//        componentWidth = 150.0; // 第3个组键的宽度
+//    }
+//    return componentWidth;
+//}
 
 - (void)getAddressInformation {
     self.provinceArrar = [NSMutableArray array];
@@ -200,7 +233,7 @@
 
 //指定pickerview有几个表盘
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView{
-    return 3;//第一个展示字母、第二个展示数字
+    return 3;
 }
 
 //指定每个表盘上有几行数据
@@ -261,8 +294,8 @@
 // 只有通过手指选中某一行的时候才会调用
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    //获取对应列，对应行的数据
-    //赋值
+    // 获取对应列，对应行的数据
+    // 赋值
     if (0 == component) {
         PCTModel *model = [[PCTModel alloc] init];
         model = self.provinceArrar[row];

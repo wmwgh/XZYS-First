@@ -46,8 +46,8 @@
     [super viewDidLoad];
     self.orderType = nil;
     self.title = @"申请售后";
-    NSLog(@"orderID::::%@", self.orderID);
-    NSLog(@"goodsID::::%@", self.goodsID);
+//    NSLog(@"orderID::::%@", self.orderID);
+//    NSLog(@"goodsID::::%@", self.goodsID);
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -96,7 +96,6 @@
     params[@"voucher_img2"] = self.img2Str;
     params[@"voucher_img3"] = self.img3Str;
     
-    NSLog(@"%@", params);
     if (self.img1Str != nil || self.img2Str != nil || self.img3Str != nil) {
         [manager POST:urlString parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             
@@ -110,7 +109,7 @@
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSString *result = [NSString stringWithFormat:@"%@",responseObject[@"status"]];
-            NSLog(@"%@", responseObject);
+//            NSLog(@"%@", responseObject);
             MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hud.mode = MBProgressHUDModeText;
             if ([result isEqualToString:@"-1600"]) {

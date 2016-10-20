@@ -23,7 +23,7 @@
     self.myFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     // 设置属性
     // 给定item的大小
-    self.myFlowLayout.itemSize = CGSizeMake([UIScreen mainScreen].bounds.size.width / 5, 30);
+    self.myFlowLayout.itemSize = CGSizeMake([UIScreen mainScreen].bounds.size.width / 5, 25);
     // 每两个item的最小间隙（垂直滚动）
     self.myFlowLayout.minimumInteritemSpacing = 5;
     // 每两个item的最小间隙（水平滚动方向）
