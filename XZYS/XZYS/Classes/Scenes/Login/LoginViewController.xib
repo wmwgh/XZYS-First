@@ -68,9 +68,9 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BCu-Wd-52f">
-                    <rect key="frame" x="50" y="451" width="60" height="30"/>
+                    <rect key="frame" x="50" y="451" width="80" height="30"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="60" id="Acd-rU-bah"/>
+                        <constraint firstAttribute="width" constant="80" id="Acd-rU-bah"/>
                         <constraint firstAttribute="height" constant="30" id="q9K-h0-1mP"/>
                     </constraints>
                     <state key="normal" title="快速注册">
@@ -78,19 +78,6 @@
                     </state>
                     <connections>
                         <action selector="regiestButtonClick:" destination="-1" eventType="touchUpInside" id="IWP-2k-5kw"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sdx-OJ-8aN">
-                    <rect key="frame" x="265" y="451" width="60" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="odc-xb-hKG"/>
-                        <constraint firstAttribute="width" constant="60" id="yoB-9Y-8Te"/>
-                    </constraints>
-                    <state key="normal" title="忘记密码">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="forgetPassWord:" destination="-1" eventType="touchUpInside" id="Br2-a2-Svm"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="手机号码:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XLa-oC-hbp">
@@ -132,6 +119,19 @@
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sdx-OJ-8aN">
+                    <rect key="frame" x="245" y="451" width="80" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="odc-xb-hKG"/>
+                        <constraint firstAttribute="width" constant="80" id="yoB-9Y-8Te"/>
+                    </constraints>
+                    <state key="normal" title="忘记密码">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="forgetPassWord:" destination="-1" eventType="touchUpInside" id="Br2-a2-Svm"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>

@@ -13,7 +13,7 @@
 /// 拼接
 #define XZYS_PJ_URL @"http://www.xiezhongyunshang.com"
 /// 接口头
-#define XZYS_JKT_URL = @"http://www.xiezhongyunshang.com/App/"
+#define XZYS_JKT_URL @"http://www.xiezhongyunshang.com/App/"
 /// 轮播图
 #define XZYS_LBT_URL @"http://www.xiezhongyunshang.com/App/Index/getCarousel"
 /// 获取三大专场数据
@@ -21,7 +21,7 @@
 /// 获取四大区数据集（除调货区之外）
 #define XZYS_SDQ_URL @"http://www.xiezhongyunshang.com/App/Index/getAppModel"
 /// 获取调货区数据集
-#define XZYS_THQ_URL @"http://www.xiezhongyunshang.com/App/Index/getAppDispatchGoodsModel"
+#define XZYS_THQ_URL @"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsList.html"
 /// 商品搜索
 #define XZYS_SPS_URL @"http://www.xiezhongyunshang.com/App/Search/searchGoods/search/测试"
 /// 搜索店铺

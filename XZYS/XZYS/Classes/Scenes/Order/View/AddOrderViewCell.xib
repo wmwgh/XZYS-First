@@ -27,7 +27,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fGl-gP-aNO">
-                        <rect key="frame" x="123" y="32" width="40" height="20"/>
+                        <rect key="frame" x="130" y="32" width="40" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="90S-6U-2Co"/>
                             <constraint firstAttribute="width" constant="40" id="IPb-lo-3s9"/>
@@ -37,10 +37,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="尺码:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RmX-EN-hNs">
-                        <rect key="frame" x="188" y="32" width="30" height="20"/>
+                        <rect key="frame" x="195" y="32" width="37" height="20"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="XTf-tU-vJg"/>
-                            <constraint firstAttribute="width" constant="30" id="vkH-fF-Gkp"/>
+                            <constraint firstAttribute="width" constant="37" id="vkH-fF-Gkp"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -66,16 +66,6 @@
                         <color key="textColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="颜色:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQ1-4c-2oN">
-                        <rect key="frame" x="93" y="32" width="30" height="20"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="30" id="1p5-Hd-Nn0"/>
-                            <constraint firstAttribute="height" constant="20" id="3m9-4y-qNa"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dEK-uf-TK8">
                         <rect key="frame" x="5" y="4" width="80" height="80"/>
                         <constraints>
@@ -84,7 +74,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c5L-99-TcS">
-                        <rect key="frame" x="218" y="32" width="40" height="20"/>
+                        <rect key="frame" x="232" y="32" width="40" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="40" id="6EL-aQ-R80"/>
                             <constraint firstAttribute="height" constant="20" id="asm-ZG-yUE"/>
@@ -98,6 +88,16 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="DCI-Yn-iPN"/>
                             <constraint firstAttribute="width" constant="80" id="GlY-ai-1F8"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="颜色:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQ1-4c-2oN">
+                        <rect key="frame" x="93" y="32" width="37" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="37" id="1p5-Hd-Nn0"/>
+                            <constraint firstAttribute="height" constant="20" id="3m9-4y-qNa"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>

@@ -28,6 +28,9 @@
 @property(nonatomic, copy) NSString * total_fee;
 @property(nonatomic, copy) NSString * _input_charset;
 
+//对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。
+@property (nonatomic, copy) NSString *body;
+
 @property(nonatomic, readonly) NSMutableDictionary * extraParams;
 
 @end

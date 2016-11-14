@@ -80,7 +80,7 @@
         hud.labelText = responseObject[@"msg"];
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
         //发出通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"取消调货刷新UI" object:self];
         [self.navigationController popViewControllerAnimated:YES];

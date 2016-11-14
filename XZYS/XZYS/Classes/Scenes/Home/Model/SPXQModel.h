@@ -77,5 +77,6 @@
 @property (nonatomic, copy) NSString *season;
 /// 颜色
 @property (nonatomic, copy) NSString *color_remark;
+@property (nonatomic, copy) NSString *material_remark;
 
 @end

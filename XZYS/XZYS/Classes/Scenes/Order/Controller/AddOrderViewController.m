@@ -122,7 +122,7 @@ static NSString *footerID = @"FooterSID";
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
             // 1秒之后再消失
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
             NSString *temp = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
             if ([temp isEqualToString:@"-1300"]) {
 #warning  tiao zhi fu
@@ -155,7 +155,7 @@ static NSString *footerID = @"FooterSID";
 }
 
 - (void)setCollection {
-    self.mainTab = [[UITableView alloc] initWithFrame:CGRectMake(0, 128, SCREEN_WIDTH, SCREEN_HEIGHT - 173) style:UITableViewStyleGrouped];
+    self.mainTab = [[UITableView alloc] initWithFrame:CGRectMake(0, 134, SCREEN_WIDTH, SCREEN_HEIGHT - 179) style:UITableViewStyleGrouped];
     self.mainTab.delegate = self;
     self.mainTab.dataSource = self;
     self.mainTab.backgroundColor = XZYSRGBColor(230, 230, 230);
@@ -163,7 +163,7 @@ static NSString *footerID = @"FooterSID";
     [self.view addSubview:self.mainTab];
 }
 
-#pragma mark - Table view data source
+#pragma mark - Table view data sourceƒ
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.cellAllary.count;
@@ -224,12 +224,12 @@ static NSString *footerID = @"FooterSID";
     [backView addSubview:dpImage];
     
     self.titLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 0, SCREEN_WIDTH - 145, 40)];
-    self.titLabel.font = [UIFont systemFontOfSize:14];
+    self.titLabel.font = [UIFont systemFontOfSize:16];
     [backView bringSubviewToFront:self.titLabel];
     [backView addSubview:self.titLabel];
     
     self.titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 140, 40);
+    self.titleButton.frame = CGRectMake(45, 0, SCREEN_WIDTH - 40, 40);
     [self.titleButton setTitleColor:[UIColor blackColor]forState:UIControlStateNormal];
     [self.titleButton addTarget:self action:@selector(titleSBT:) forControlEvents:UIControlEventTouchUpInside];
     self.titleButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
@@ -262,14 +262,14 @@ static NSString *footerID = @"FooterSID";
     _footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:footerID];
     _footerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:footerID];
     _footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 62)];
-    UILabel *maiLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 7, 42, 20)];
+    UILabel *maiLab = [[UILabel alloc] initWithFrame:CGRectMake(5, 7, 60, 18)];
     maiLab.text = @"买家留言";
-    maiLab.font = [UIFont systemFontOfSize:10];
+    maiLab.font = [UIFont systemFontOfSize:13];
     maiLab.textColor = XZYSPinkColor;
     [_footView addSubview:maiLab];
     self.messageText = [[UITextField alloc] init];
-    self.messageText.font = [UIFont systemFontOfSize:10];
-    self.messageText.frame = CGRectMake(55, 7, SCREEN_WIDTH - 60, 20);
+    self.messageText.font = [UIFont systemFontOfSize:13];
+    self.messageText.frame = CGRectMake(65, 7, SCREEN_WIDTH - 80, 18);
     self.messageText.placeholder = @"选填，方便您与卖家达成一致";
     self.messageText.tag = section;
     self.messageText.textColor = [UIColor lightGrayColor];
@@ -279,15 +279,15 @@ static NSString *footerID = @"FooterSID";
     underView.backgroundColor = XZYSRGBColor(234, 234, 234);
     [_footView addSubview:underView];
     
-    UILabel *heji = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 120, 38, 35, 20)];
+    UILabel *heji = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 140, 38, 35, 20)];
     heji.text = @"合计:";
-    heji.font = [UIFont systemFontOfSize:12];
+    heji.font = [UIFont systemFontOfSize:13];
     
     [_footView addSubview:heji];
     
-    UILabel *pric = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 90, 38, 90, 20)];
+    UILabel *pric = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 110, 38, 110, 20)];
     pric.text = [NSString stringWithFormat:@"￥%.2f", self.max];
-    pric.font = [UIFont systemFontOfSize:12];
+    pric.font = [UIFont systemFontOfSize:13];
     pric.textColor = XZYSPinkColor;
     [_footView addSubview:pric];
     _footView.backgroundColor = [UIColor whiteColor];

@@ -41,8 +41,6 @@
 
 // 登录
 - (IBAction)loginButtonClick:(id)sender {
-//    self.phoneNum.text = @"15046783721";
-//    self.passWord.text = @"15046783721";
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/login";
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -107,7 +105,7 @@
         }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 数据加载失败回调.
     }];

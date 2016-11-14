@@ -1,12 +1,12 @@
 //
-//  ShoppingCarViewController.m
-//  ZDCar
+//  CarShoppingViewController.m
+//  XZYS
 //
-//  Created by yangxuran on 16/7/22.
-//  Copyright © 2016年 boc. All rights reserved.
+//  Created by 杨利 on 16/10/21.
+//  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
-#import "ShoppingCarViewController.h"
+#import "CarShoppingViewController.h"
 #import "ShopCarTableViewCell.h"
 #import "CustomHeaderView.h"
 #import "BottomView.h"
@@ -27,8 +27,7 @@
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
 
-@interface ShoppingCarViewController ()<UITableViewDelegate,UITableViewDataSource,ShopCarTableViewCellDelegate, CustomHeaderViewDelegate, BottomViewDelegate, UIAlertViewDelegate>
-
+@interface CarShoppingViewController ()<UITableViewDelegate,UITableViewDataSource,ShopCarTableViewCellDelegate, CustomHeaderViewDelegate, BottomViewDelegate, UIAlertViewDelegate>
 @property (nonatomic, strong) UITableView * baseTable;
 @property (nonatomic, strong) BottomView * bottomView;
 @property (nonatomic, strong) BottomModel * bottomModel;
@@ -42,22 +41,20 @@
 @property (nonatomic , strong) NSMutableArray *carAry;
 @property (nonatomic , strong) NSMutableDictionary *jsonParam;
 @property (nonatomic , assign) float totalMoney;
-@property (nonatomic , copy) NSString *dataID;
+
 //测试
 @property (nonatomic, copy)NSMutableString * testString;
 @end
-
 static NSString * indentifier = @"shopCarCell";
-@implementation ShoppingCarViewController
+@implementation CarShoppingViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.title = @"购物车";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.baseTable];
     self.labe = [[UILabel alloc] initWithFrame:CGRectMake(100, 300, SCREEN_WIDTH - 200, 30)];
-    BottomView * bottomView = [[BottomView alloc] initWithFrame:CGRectMake(0, kHeight - 100, kWidth, 50)];
+    BottomView * bottomView = [[BottomView alloc] initWithFrame:CGRectMake(0, kHeight - 50, kWidth, 50)];
     bottomView.backgroundColor = [UIColor whiteColor];
     bottomView.delegate = self;
     self.bottomView = bottomView;
@@ -65,12 +62,12 @@ static NSString * indentifier = @"shopCarCell";
     self.bottomModel = [[BottomModel alloc] init];
     
     [self configerNavItemBtn];
-//    [self configerData];
-//    [self requestCartData];
+    //    [self configerData];
+    //    [self requestCartData];
     // 添加顶部刷新
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self addRefresh];
-//    });
+    });
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(callBack:)
                                                  name:@"titleCall"
@@ -90,7 +87,6 @@ static NSString * indentifier = @"shopCarCell";
 }
 
 - (void)addRefresh {
-    self.dataID = @"12";
     self.baseTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(requestCartData)];
     [self.baseTable.mj_header beginRefreshing];
 }
@@ -101,7 +97,7 @@ static NSString * indentifier = @"shopCarCell";
     param[@"uid"] = appdele.userIdTag;
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemNum" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSString *countStr = responseObject[@"data"];
+        //        NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -112,7 +108,7 @@ static NSString * indentifier = @"shopCarCell";
     param[@"uid"] = appdele.userIdTag;
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemMinus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSString *countStr = responseObject[@"data"];
+        //        NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -123,7 +119,7 @@ static NSString * indentifier = @"shopCarCell";
     param[@"uid"] = appdele.userIdTag;
     [param setValuesForKeysWithDictionary:text.userInfo];
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartItemPlus" parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSString *countStr = responseObject[@"data"];
+        //        NSString *countStr = responseObject[@"data"];
         [self GetTotalBill];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -154,7 +150,7 @@ static NSString * indentifier = @"shopCarCell";
                 ShopCarModel *shopModel = [[ShopCarModel alloc] init];
                 shopModel.shop_name = dict[@"shop_name"];
                 shopModel.shop_id = key;
-//                [self.shopNameArray addObject:dict[@"shop_name"]];
+                //                [self.shopNameArray addObject:dict[@"shop_name"]];
                 NSMutableArray *arra = dict[@"cart_list"];
                 NSMutableArray *dataAr = [NSMutableArray array];
                 for (NSDictionary *diction in arra) {
@@ -482,10 +478,7 @@ static NSString * indentifier = @"shopCarCell";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([self.dataID isEqualToString:@"21"]) {
-        [self requestCartData];
-    }
-    self.dataID = @"21";
+    [self requestCartData];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
 }
 
@@ -493,4 +486,15 @@ static NSString * indentifier = @"shopCarCell";
     self.navigationController.navigationBarHidden = YES;
     [super viewWillDisappear:animated];
 }
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
 @end

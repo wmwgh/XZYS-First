@@ -18,10 +18,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rx5-NY-KvU">
-                    <rect key="frame" x="20" y="460" width="335" height="40"/>
+                    <rect key="frame" x="20" y="441" width="335" height="40"/>
                     <color key="backgroundColor" red="0.35153477787574294" green="0.73073706795648796" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="TdD-cB-W3W"/>
+                        <constraint firstAttribute="height" constant="40" id="16Z-Cm-N3W"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <state key="normal" title="提     交">
@@ -31,25 +31,40 @@
                         <action selector="sendMessage:" destination="-1" eventType="touchUpInside" id="j5q-HS-p8l"/>
                     </connections>
                 </button>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="请输入您对我们的建议，我们会不断优化用户体验" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ny5-bi-v0b">
-                    <rect key="frame" x="20" y="80" width="335" height="350"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="ny5-bi-v0b">
+                    <rect key="frame" x="20" y="101" width="335" height="320"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="350" id="iad-Lh-eFB"/>
+                        <constraint firstAttribute="height" constant="320" id="X72-BJ-5sX"/>
                     </constraints>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p9M-Ir-6bm">
+                    <rect key="frame" x="20" y="72" width="335" height="21"/>
+                    <attributedString key="attributedText">
+                        <fragment content="请输入您对我们的建议，我们会不断优化用户体验">
+                            <attributes>
+                                <color key="NSColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <font key="NSFont" size="15" name="PingFangSC-Regular"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="ny5-bi-v0b" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="80" id="Eyx-hd-Bhc"/>
-                <constraint firstItem="rx5-NY-KvU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="OdL-RU-fBg"/>
-                <constraint firstAttribute="trailing" secondItem="rx5-NY-KvU" secondAttribute="trailing" constant="20" id="PNX-tw-gN1"/>
-                <constraint firstAttribute="trailing" secondItem="ny5-bi-v0b" secondAttribute="trailing" constant="20" id="b6g-4P-0li"/>
-                <constraint firstItem="rx5-NY-KvU" firstAttribute="top" secondItem="ny5-bi-v0b" secondAttribute="bottom" constant="30" id="kMJ-By-9tQ"/>
-                <constraint firstItem="ny5-bi-v0b" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="xYK-x1-xnf"/>
+                <constraint firstItem="ny5-bi-v0b" firstAttribute="top" secondItem="p9M-Ir-6bm" secondAttribute="bottom" constant="8" id="Nai-qF-dwm"/>
+                <constraint firstItem="p9M-Ir-6bm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="72" id="ORP-Ga-5v5"/>
+                <constraint firstAttribute="trailing" secondItem="p9M-Ir-6bm" secondAttribute="trailing" constant="20" id="bCU-0e-GNY"/>
+                <constraint firstItem="rx5-NY-KvU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="hWL-aB-Smw"/>
+                <constraint firstAttribute="trailing" secondItem="ny5-bi-v0b" secondAttribute="trailing" constant="20" id="nr1-aJ-dGY"/>
+                <constraint firstItem="rx5-NY-KvU" firstAttribute="top" secondItem="ny5-bi-v0b" secondAttribute="bottom" constant="20" id="oph-bq-1hE"/>
+                <constraint firstAttribute="trailing" secondItem="rx5-NY-KvU" secondAttribute="trailing" constant="20" id="qzf-tb-mC2"/>
+                <constraint firstItem="ny5-bi-v0b" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="uNw-Ff-V2i"/>
+                <constraint firstItem="p9M-Ir-6bm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="xbi-cZ-u0B"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>

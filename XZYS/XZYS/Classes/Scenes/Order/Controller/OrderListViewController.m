@@ -124,10 +124,6 @@ static NSString *footerID = @"cityFooterSectionID";
                                              selector:@selector(sureCallBack:)
                                                  name:@"收获刷新UI"
                                                object:nil];
-    // 通知中心
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(payCallBack:)  name:@"notifPayFinish"
-//                                               object:nil];
 }
 
 - (void)addRefresh {
@@ -168,7 +164,7 @@ static NSString *footerID = @"cityFooterSectionID";
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"商品已全部更新";
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         [self.mainTab reloadData];
         [self.mainTab.mj_header endRefreshing];
@@ -180,7 +176,7 @@ static NSString *footerID = @"cityFooterSectionID";
         hud.labelText = @"网络异常，加载失败！";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }];
 }
 
@@ -191,7 +187,7 @@ static NSString *footerID = @"cityFooterSectionID";
 //    hud.mode = MBProgressHUDModeText;
 //    hud.labelText = str;
 //    hud.removeFromSuperViewOnHide = YES;
-//    [hud hide:YES afterDelay:1.5];
+//    [hud hide:YES afterDelay:1];
 //}
 
 - (void)sureCallBack:(NSNotification *)text {
@@ -199,7 +195,7 @@ static NSString *footerID = @"cityFooterSectionID";
     hud.mode = MBProgressHUDModeText;
     hud.labelText = @"确认收货成功";
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1];
     
     self.params = [NSMutableDictionary dictionary];
     self.params[@"order_id"] = text.userInfo[@"sid"];
@@ -213,7 +209,7 @@ static NSString *footerID = @"cityFooterSectionID";
     hud.mode = MBProgressHUDModeText;
     hud.labelText = @"取消订单成功";
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1];
     
     self.params = [NSMutableDictionary dictionary];
     self.params[@"order_id"] = text.userInfo[@"sid"];
@@ -227,7 +223,7 @@ static NSString *footerID = @"cityFooterSectionID";
     hud.mode = MBProgressHUDModeText;
     hud.labelText = @"申请调货成功";
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1];
 }
 
 - (void)cellShouHou:(id)sender {
@@ -289,8 +285,20 @@ static NSString *footerID = @"cityFooterSectionID";
                             [sonModel setValuesForKeysWithDictionary:dic2];
                             [arra addObject:sonModel];
                         }
-                        [self.cellAllay addObject:arra];
-                    } 
+                    } else if (arr == nil && [arr isKindOfClass:[NSNull class]] && arr.count == 0) {
+                        SonLislModel *sonModel = [[SonLislModel alloc] init];
+                        sonModel.ID = @"";
+                        sonModel.goods_id = @"";
+                        sonModel.goods_name = @"正在等待审核";
+                        sonModel.goods_img = @"";
+                        sonModel.goods_color = @"";
+                        sonModel.goods_size = @"";
+                        sonModel.num = @"";
+                        sonModel.price = @"";
+                        sonModel.goods_subtotal = @"";
+                        [arra addObject:sonModel];
+                    }
+                    [self.cellAllay addObject:arra];
                 }
             } else {
                 MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -298,7 +306,7 @@ static NSString *footerID = @"cityFooterSectionID";
                 hud.labelText = @"还未添加任何商品";
                 // 隐藏时候从父控件中移除
                 hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
+                [hud hide:YES afterDelay:1];
             }
         [self.mainTab reloadData];
         [self.mainTab.mj_header endRefreshing];
@@ -310,7 +318,7 @@ static NSString *footerID = @"cityFooterSectionID";
         hud.labelText = @"网络异常，加载失败！";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }];
 }
 
@@ -432,7 +440,7 @@ static NSString *footerID = @"cityFooterSectionID";
         }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
         // 隐藏指示器
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败

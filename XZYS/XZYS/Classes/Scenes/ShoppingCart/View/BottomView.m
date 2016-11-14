@@ -64,7 +64,7 @@
     if (_rightBtn == nil) {
         self.rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _rightBtn.frame =CGRectMake(self.frame.size.width - 115, 3, 110, 45);
-        _rightBtn.backgroundColor = [UIColor redColor];
+        _rightBtn.backgroundColor = XZYSBlueColor;
         [_rightBtn setTitle:@"结算(0)" forState:UIControlStateNormal];
         _rightBtn.layer.cornerRadius = 5;
         [_rightBtn addTarget:self action:@selector(jieSuanClicked) forControlEvents:UIControlEventTouchUpInside];

@@ -116,7 +116,7 @@
             hud.labelText = responseObject[@"msg"];
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:2];
+            [hud hide:YES afterDelay:1];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];

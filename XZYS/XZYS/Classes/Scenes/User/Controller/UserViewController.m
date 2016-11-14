@@ -100,8 +100,10 @@
     self.headerView.lab4.hidden = YES;
     self.headerView.lab5.hidden = YES;
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self setOrderNum];
+    });
     
-    [self setOrderNum];
     // 按钮设置
 //    [self setButton];
 }
@@ -170,7 +172,7 @@
     ///////////
     [self.headerView.headerImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _infoDic[@"member_picture"]]]];
     self.headerView.nameLabel.text = _infoDic[@"nickname"];
-    self.headerView.jifen.text = [NSString stringWithFormat:@"积分：%@", _infoDic[@""]];
+//    self.headerView.jifen.text = [NSString stringWithFormat:@"积分：%@", _infoDic[@""]];
     [self.tableView reloadData];;
 }
 

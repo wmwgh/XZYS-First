@@ -23,6 +23,8 @@
 #import "LoginViewController.h"
 #import "AddressModel.h"
 #import "PCTModel.h"
+#import "XZYS_URL.h"
+#import <UIImageView+WebCache.h>
 
 @interface ChangeInfoViewController ()<UIPickerViewDataSource,UIPickerViewDelegate>
 {
@@ -35,6 +37,7 @@
 @property (nonatomic,strong) NSMutableArray *provinceArrar;
 @property (nonatomic,strong) NSMutableArray *cityArrar;
 @property (nonatomic,strong) NSMutableArray *sectionArrar;
+@property (nonatomic, strong) NSMutableDictionary *infoDic;
 @property (nonatomic,copy) NSString *cityID;
 @property (nonatomic,copy) NSString *provinceID;
 @property (nonatomic,copy) NSString *sectionID;
@@ -43,10 +46,18 @@
 @property (nonatomic,copy) NSString *sectionIDText;
 @property (nonatomic , strong) UIView *back;
 @property (nonatomic , strong) UIView *mainBack;
-
+@property (nonatomic , copy) NSString *sexID;
+@property (nonatomic , copy) NSString *imgID;
 @end
 
 @implementation ChangeInfoViewController
+
+- (NSMutableDictionary *)infoDic {
+    if (!_infoDic) {
+        _infoDic = [NSMutableDictionary dictionary];
+    }
+    return _infoDic;
+}
 
 - (NSMutableDictionary *)params {
     if (!_params) {
@@ -54,21 +65,82 @@
     }
     return _params;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.addressLabel.layer.borderWidth = 1;
     self.addressLabel.layer.cornerRadius = 5;
     self.addressLabel.layer.borderColor = XZYSRGBColor(231, 231, 231).CGColor;
     self.addressLabel.layer.masksToBounds = YES;
-
+    self.sectionLabel.text = @"点击选择您所在地区";
     self.title = @"修改资料";
     [self setIcornButton];
     //默认头像
     [_iconBtn setImage:[UIImage imageNamed:@"info_04"] forState:UIControlStateNormal];
-    //获取需要展示的数据
-    [self getAddressInformation];
+
     [self setPickerView];
     self.mainBack.hidden = YES;
+    [self resqusetInfoData];
+}
+
+
+- (void)resqusetInfoData {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    dic[@"uid"] = appDelegate.userIdTag;
+    [manager POST:XZYS_Info_URL parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        id poi = responseObject[@"data"];
+        if ([poi isKindOfClass:[NSDictionary class]]) {
+            self.infoDic = responseObject[@"data"];
+            [self setChangeInfoMessage];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+
+- (void)setChangeInfoMessage {
+    if (self.infoDic[@"nickname"] != nil && ![self.infoDic[@"nickname"] isEqualToString:@""]) {
+        self.nameLabel.text = self.infoDic[@"nickname"];
+    }
+    NSString *strimg = _infoDic[@"member_picture"];
+    if (![strimg isEqualToString:@""]) {
+        self.imgID = @"2";
+        UIImageView *imag = [[UIImageView alloc] init];
+        [imag sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _infoDic[@"member_picture"]]]];
+        [self.iconBtn setImage:imag.image forState:UIControlStateNormal];
+    } else {
+        self.imgID = @"1";
+    }
+    
+    if (self.infoDic[@"email"] != nil && ![self.infoDic[@"email"] isEqualToString:@""]) {
+        self.emailLabel.text = self.infoDic[@"email"];
+    }
+    self.addressLabel.text = self.infoDic[@"shop_address"];
+    self.sectionLabel.text = [NSString stringWithFormat:@"%@ %@ %@", self.infoDic[@"area_province_text"], self.infoDic[@"area_city_text"], self.infoDic[@"area_district_text"]];
+    self.sexID = self.infoDic[@"sex"];
+    if ([self.sexID isEqualToString:@"1"]) {
+        [self.manButton setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
+        [self.nvButton setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
+    } else {
+        [self.manButton setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
+        [self.nvButton setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
+    }
+    
+    self.params[@"member_picture"] = self.infoDic[@"member_picture"];
+    
+    self.provinceID = self.infoDic[@"area_province"];
+    self.cityID = self.infoDic[@"area_city"];
+    self.sectionID = self.infoDic[@"area_district"];
+    self.params[@"area_province"] = self.provinceID;
+    self.params[@"area_city"] = self.cityID;
+    self.params[@"area_district"] = self.sectionID;
+    
+//    self.params[@"nickname"] = self.nameLabel.text;
+    self.params[@"sex"] = self.sexID;
+//    self.params[@"shop_address"] = self.addressLabel.text;
+//    self.params[@"email"] = self.emailLabel.text;
+    
 }
 
 - (void)dateEnsureAction {
@@ -279,7 +351,9 @@
 }
 
 - (IBAction)AddressPickerClick:(id)sender {
-   self.mainBack.hidden = NO;
+    //获取需要展示的数据
+    [self getAddressInformation];
+    self.mainBack.hidden = NO;
 }
 
 
@@ -301,11 +375,13 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 - (void)setName {
-    self.params[@"nickname"] = self.nameLabel.text;
+    if (self.nameLabel.text != nil) {
+        self.params[@"nickname"] = self.nameLabel.text;
+    }
     if (self.params[@"nickname"] != nil && ![self.params[@"nickname"] isKindOfClass:[NSNull class]] && ![self.params[@"nickname"] isEqualToString:@""]) {
         [self setSex];
     } else {
@@ -315,7 +391,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 
@@ -329,13 +405,15 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 
 
 - (void)setEmail {
-    self.params[@"email"] = self.emailLabel.text;
+    if (self.emailLabel.text != nil) {
+        self.params[@"email"] = self.emailLabel.text;
+    }
     if ([YHRegular checkEmail:self.emailLabel.text]) {
         [self setSection];
     } else {
@@ -345,7 +423,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 - (void)setSection {
@@ -361,12 +439,14 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 
 - (void)setAddresss {
-    self.params[@"shop_address"] = self.addressLabel.text;
+    if (self.addressLabel.text != nil) {
+        self.params[@"shop_address"] = self.addressLabel.text;
+    }
     if (self.params[@"shop_address"] != nil && ![self.params[@"shop_address"] isKindOfClass:[NSNull class]] && ![self.params[@"shop_address"] isEqualToString:@""]) {
         [self changeInfo];
     } else {
@@ -376,7 +456,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 
@@ -400,7 +480,7 @@
         hud.labelText = @"您还没有登录";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } else {
         [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 数据加载完后回调.
@@ -430,7 +510,7 @@
             }
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         }];
     }
@@ -441,15 +521,19 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"退出登录刷新UI" object:self];
 }
 
+
+
 - (IBAction)manClick:(id)sender {
     [self.params removeObjectForKey:@"sex"];
-    self.params[@"sex"] = @"1";
+    self.sexID = @"1";
+    self.params[@"sex"] = self.sexID;
     [self.manButton setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
     [self.nvButton setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
 }
 - (IBAction)nvClick:(id)sender {
     [self.params removeObjectForKey:@"sex"];
-    self.params[@"sex"] = @"2";
+    self.sexID = @"2";
+    self.params[@"sex"] = self.sexID;
     [self.manButton setImage:[UIImage imageNamed:@"gw_10"] forState:UIControlStateNormal];
     [self.nvButton setImage:[UIImage imageNamed:@"gw_07"] forState:UIControlStateNormal];
 }
@@ -542,7 +626,7 @@
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     [_iconBtn setImage:image forState:UIControlStateNormal];
-
+    self.imgID = @"1";
     self.imageData = UIImageJPEGRepresentation(image, 0.5);
     // 设置时间格式
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -553,19 +637,29 @@
 }
 
 - (void)changeInfo {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    NSString *url = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";//放上传图片的网址
-    [manager POST:url parameters:self.params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        // 上传文件
-        [formData appendPartWithFileData:self.imageData name:@"member_picture" fileName:@"image.jpg" mimeType:@"image/jpg"];
-        
-    } progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
+    if ([self.imgID isEqualToString:@"1"]) {
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        NSString *url = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";//放上传图片的网址
+        [manager POST:url parameters:self.params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            // 上传文件
+            [formData appendPartWithFileData:self.imageData name:@"member_picture" fileName:@"image.jpg" mimeType:@"image/jpg"];
+            
+        } progress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            
+        }];
+    } else if ([self.imgID isEqualToString:@"2"]) {
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        NSString *url = @"http://www.xiezhongyunshang.com/App/User/memberInfoEdit";//放上传图片的网址
+        [manager POST:url parameters:self.params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            [self.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        }];
+    }
+    
 }
 
 #pragma mark - 保存图片至本地沙盒

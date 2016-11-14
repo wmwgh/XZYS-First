@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LastXTViewController">
+            <connections>
+                <outlet property="imaImageView" destination="RG4-ES-xjU" id="ZVl-hf-WBw"/>
+                <outlet property="noteLab" destination="U64-CY-J5a" id="Q6O-gx-XLG"/>
+                <outlet property="titLab" destination="Kkf-cp-oZE" id="wma-5y-lnP"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kkf-cp-oZE">
+                    <rect key="frame" x="20" y="72" width="335" height="19"/>
+                    <attributedString key="attributedText">
+                        <fragment content="Label">
+                            <attributes>
+                                <color key="NSColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <font key="NSFont" size="16" name="HelveticaNeue"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RG4-ES-xjU">
+                    <rect key="frame" x="20" y="96" width="335" height="150"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="150" id="vMn-AZ-J29"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U64-CY-J5a">
+                    <rect key="frame" x="20" y="252" width="335" height="16.5"/>
+                    <attributedString key="attributedText">
+                        <fragment content="Label">
+                            <attributes>
+                                <color key="NSColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <font key="NSFont" size="14" name="HelveticaNeue"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Kkf-cp-oZE" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="72" id="3SV-g4-RKb"/>
+                <constraint firstAttribute="trailing" secondItem="U64-CY-J5a" secondAttribute="trailing" constant="20" id="7jw-7Y-BUk"/>
+                <constraint firstItem="U64-CY-J5a" firstAttribute="top" secondItem="RG4-ES-xjU" secondAttribute="bottom" constant="6" id="Ay5-PS-jOF"/>
+                <constraint firstAttribute="trailing" secondItem="RG4-ES-xjU" secondAttribute="trailing" constant="20" id="KJk-Xf-RbX"/>
+                <constraint firstItem="RG4-ES-xjU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="KLE-eX-jOS"/>
+                <constraint firstAttribute="bottom" secondItem="U64-CY-J5a" secondAttribute="bottom" constant="10" id="SKR-mT-lpt"/>
+                <constraint firstAttribute="trailing" secondItem="Kkf-cp-oZE" secondAttribute="trailing" constant="20" id="X99-Ac-VLg"/>
+                <constraint firstItem="U64-CY-J5a" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="dBb-ef-SWW"/>
+                <constraint firstItem="RG4-ES-xjU" firstAttribute="top" secondItem="Kkf-cp-oZE" secondAttribute="bottom" constant="5" id="s3q-Fp-zDP"/>
+                <constraint firstItem="Kkf-cp-oZE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="uSh-do-heF"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="SKR-mT-lpt"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>

@@ -16,6 +16,7 @@
 #import "SonLislModel.h"
 #import "AllOrderListCell.h"
 #import "ShopViewController.h"
+#import "XIangQingViewController.h"
 
 static NSString *headerID = @"cityHeaderSectionID";
 static NSString *footerID = @"cityFooterSectionID";
@@ -92,6 +93,13 @@ static NSString *footerID = @"cityFooterSectionID";
     return 40;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    XIangQingViewController *XXVC = [[XIangQingViewController alloc] init];
+    SDFQModel *model = [[SDFQModel alloc] init];
+    model = self.cellAllay[indexPath.row];
+    XXVC.model = model;
+    XXVC.passID = model.goods_id;
+    XXVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:XXVC animated:YES];
     [self.mainTab deselectRowAtIndexPath:indexPath animated:NO];
 }
 
@@ -123,6 +131,17 @@ static NSString *footerID = @"cityFooterSectionID";
     titLabel.text = self.model.shop_name;
     return headerView;
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = NO;
+    [super viewWillAppear:animated];
+}
+
+//- (void)viewWillDisappear:(BOOL)animated {
+//    self.navigationController.navigationBarHidden = YES;
+//    [super viewWillDisappear:animated];
+//}
+
 
 - (void)titleBT:(UIButton *)sender {
     ShopViewController *shopVC = [[ShopViewController alloc] init];

@@ -90,6 +90,8 @@
     XITongListViewController *listVC = [[XITongListViewController alloc] init];
     XiTongModel *model = self.xiTongArray[indexPath.row];
     listVC.model = model;
+    NSString *str = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
+    listVC.typeID = str;
     self.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:listVC animated:YES
      ];

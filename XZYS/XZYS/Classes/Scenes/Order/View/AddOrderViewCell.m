@@ -31,7 +31,7 @@
     } else if ([_model.cotton_id isEqualToString:@"2"]){
         strnl = @"棉里";
     } 
-    self.nlLab.text = [NSString stringWithFormat:@"内里:%@", strnl];
+    self.nlLab.text = [NSString stringWithFormat:@"内里:  %@", strnl];
     _priceLabel.textColor = XZYSPinkColor;
     _numLabel.textColor = XZYSBlueColor;
     [_goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _model.goods_img]]];

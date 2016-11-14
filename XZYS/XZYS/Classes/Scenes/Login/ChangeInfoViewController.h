@@ -27,6 +27,6 @@
 @property (strong, nonatomic) IBOutlet UITextView *addressLabel;
 @property (strong, nonatomic) IBOutlet UIButton *sureButton;
 //@property (strong, nonatomic) IBOutlet UIButton *iconBtn;
-@property (nonatomic, strong)UIButton *iconBtn;
+@property (nonatomic, strong) UIButton *iconBtn;
 
 @end

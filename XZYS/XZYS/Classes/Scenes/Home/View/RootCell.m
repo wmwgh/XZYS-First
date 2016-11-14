@@ -59,7 +59,7 @@
         NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _oneModel.sales_num];
         _NumberLable.text = numStr;
     } else if (_oneModel.sales_num == nil) {
-        NSString *numStr = [NSString stringWithFormat:@"销量:%@件", _oneModel.num];
+        NSString *numStr = [NSString stringWithFormat:@"数量:%@件", _oneModel.num];
         _NumberLable.text = numStr;
     }
     NSString *priceStr = [NSString stringWithFormat:@"￥%@", _oneModel.price];

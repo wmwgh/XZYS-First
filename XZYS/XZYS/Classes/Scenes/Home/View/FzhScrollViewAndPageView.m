@@ -155,7 +155,7 @@
 {
     if (shouldStart) {//开启自动翻页
         if (!autoScrollTimer) {
-            autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(autoShowNextImage) userInfo:nil repeats:YES];
+            autoScrollTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(autoShowNextImage) userInfo:nil repeats:YES];
         }
     }else{//关闭自动翻页
         if (autoScrollTimer.isValid) {

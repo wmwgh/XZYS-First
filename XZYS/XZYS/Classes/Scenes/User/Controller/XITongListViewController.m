@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import <MBProgressHUD.h>
 #import <UIImageView+WebCache.h>
+#import "LastXTViewController.h"
 
 @interface XITongListViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic , strong) NSMutableArray *xiTongArray;
@@ -41,6 +42,18 @@
     
     [self requestData];
     [self createTableView];
+    [self requestNum];
+}
+
+- (void)requestNum {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    params[@"uid"] = appDelegate.userIdTag;
+    params[@"type"] = self.typeID;
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Msg/setMsgRead" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
 }
 
 #pragma mark -- TableView
@@ -84,16 +97,16 @@
 
 //section的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 0.0001;
+    return 0.001;
 }
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.mainTableView deselectRowAtIndexPath:indexPath animated:NO];
-    // 跳转到 筛选页面？？？？？？？？？？
-//    XITongListViewController *listVC = [[XITongListViewController alloc] init];
-//    listVC.model = self.xiTongArray[indexPath.row];
-//    [self.navigationController pushViewController:listVC animated:YES
-//     ];
+    LastXTViewController *listVC = [[LastXTViewController alloc] init];
+    listVC.model = self.xiTongArray[indexPath.row];
+    [self.navigationController pushViewController:listVC animated:YES
+     ];
 }
 
 - (void)requestData {
@@ -117,7 +130,7 @@
             hud.labelText = responseObject[@"msg"];
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         [self.mainTableView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

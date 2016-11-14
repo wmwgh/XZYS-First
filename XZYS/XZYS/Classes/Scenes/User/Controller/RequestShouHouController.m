@@ -46,6 +46,9 @@
     [super viewDidLoad];
     self.orderType = nil;
     self.title = @"申请售后";
+    self.reaseonText.layer.cornerRadius = 5;
+    self.reaseonText.layer.borderWidth = 1;
+    self.reaseonText.layer.borderColor = XZYSRGBColor(231, 231, 231).CGColor;
 //    NSLog(@"orderID::::%@", self.orderID);
 //    NSLog(@"goodsID::::%@", self.goodsID);
     // Do any additional setup after loading the view from its nib.
@@ -115,12 +118,12 @@
             if ([result isEqualToString:@"-1600"]) {
                 hud.labelText = responseObject[@"msg"];
                 hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
+                [hud hide:YES afterDelay:1];
                 [self.navigationController popViewControllerAnimated:YES];
             } else {
                 hud.labelText = responseObject[@"msg"];
                 hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
+                [hud hide:YES afterDelay:1];
             }
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         }];

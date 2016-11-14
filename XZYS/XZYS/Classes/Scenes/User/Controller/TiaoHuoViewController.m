@@ -83,7 +83,7 @@
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"商品已全部更新";
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         [self.mainTab reloadData];
         [self.mainTab.mj_header endRefreshing];
@@ -96,7 +96,7 @@
         hud.labelText = @"网络异常，加载失败！";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }];
 }
 
@@ -126,7 +126,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SonLislModel *model = [[SonLislModel alloc] init];
-    model = self.allDataArray[indexPath.section];
+    model = self.allDataArray[indexPath.row];
     TiaoHuoOrderCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     [cell setModel:model];
     return cell;
@@ -177,7 +177,7 @@
             hud.labelText = responseObject[@"msg"];
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         [self.mainTab reloadData];
         [self.mainTab.mj_header endRefreshing];
@@ -190,7 +190,7 @@
         hud.labelText = @"网络异常，加载失败！";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }];
 }
 

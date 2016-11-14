@@ -39,6 +39,7 @@
     NSMutableArray *pushAllDetailsArray;
     UIButton *MButton;
 }
+@property (nonatomic , strong) UIView *redView;
 @property (nonatomic , strong) NSMutableArray *spArray;
 @property (nonatomic , strong) NSMutableArray *SPTitleArray;
 @property (nonatomic, strong) UICollectionView *mianCollectionView;
@@ -52,6 +53,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self setReadView];
     // 获取导航栏
     [self loadsection];
     //设置默认的选中按钮
@@ -64,6 +66,25 @@
     self.tabBarController.tabBar.hidden = NO;
 }
 
+- (void)setReadView {
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    NSArray *ar = @[@"0", @"1", @"2"];
+    params[@"uid"] = appDelegate.userIdTag;
+    for (int i = 0; i < ar.count; i++) {
+        params[@"status"] = ar[i];
+        [manager POST:@"http://www.xiezhongyunshang.com/App/Msg/getMsgUnreadNum" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSString *str = responseObject[@"data"];
+            if ([str isEqualToString:@"0"]) {
+                self.redView.hidden = YES;
+            } else {
+                self.redView.hidden = NO;
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        }];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -99,7 +120,7 @@
     // 隐藏时候从父控件中移除
     hud.removeFromSuperViewOnHide = YES;
     // 1秒之后再消失
-    [hud hide:YES afterDelay:1.5];
+    [hud hide:YES afterDelay:1];
 }
 
 #pragma mark - 界面区
@@ -116,10 +137,17 @@
     [backImageView addSubview:BButton];
     
     MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 15, 20, 20);
+    MButton.frame = CGRectMake(SCREEN_WIDTH - 37, 13, 28, 25);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];
+    
+    
+    self.redView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 13, 11, 6, 6)];
+    self.redView.backgroundColor = [UIColor redColor];
+    self.redView.layer.cornerRadius = 3;
+    self.redView.hidden = YES;
+    [backImageView addSubview:self.redView];
     
     self.searchText = [[UITextField alloc] initWithFrame:CGRectMake(45, 10, SCREEN_WIDTH - 90, 30)];
     self.searchText.placeholder = @"搜索...";

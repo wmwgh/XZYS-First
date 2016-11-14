@@ -95,7 +95,7 @@
                 hud.labelText = @"登录失败，请重新登录";
                 // 隐藏时候从父控件中移除
                 hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
+                [hud hide:YES afterDelay:1];
             }
 
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -112,24 +112,40 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options
 {
     if ([url.host isEqualToString:@"safepay"]) {
-        // 支付跳转支付宝钱包进行支付，处理支付结果
-        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-        }];
-        
         // 授权跳转支付宝钱包进行支付，处理支付结果
-        [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
-            // 解析 auth code
-            NSString *result = resultDic[@"result"];
-            NSString *authCode = nil;
-            if (result.length>0) {
-                NSArray *resultArr = [result componentsSeparatedByString:@"&"];
-                for (NSString *subResult in resultArr) {
-                    if (subResult.length > 10 && [subResult hasPrefix:@"auth_code="]) {
-                        authCode = [subResult substringFromIndex:10];
-                        break;
-                    }
-                }
+//        [[AlipaySDK defaultService] processAuth_V2Result:url standbyCallback:^(NSDictionary *resultDic) {
+//             解析 auth code
+//            NSString *result = resultDic[@"result"];
+//            NSString *authCode = nil;
+//            if (result.length>0) {
+//                NSArray *resultArr = [result componentsSeparatedByString:@"&"];
+//                for (NSString *subResult in resultArr) {
+//                    if (subResult.length > 10 && [subResult hasPrefix:@"auth_code="]) {
+//                        authCode = [subResult substringFromIndex:10];
+//                        break;
+//                    }
+//                }
+//            }
+//            NSLog(@"%@", authCode);
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            NSInteger resultStatus = [[resultDic objectForKey:@"resultStatus"] integerValue];
+            NSString *resultMsg = @"";
+            if (resultStatus == 9000) {//交易成功
+                resultMsg = @"交易成功";
+            } else if (resultStatus == 8000) {
+                resultMsg = @"订单正在处理中";
+            } else if (resultStatus == 4000) {
+                resultMsg = @"订单支付失败";
+            } else if (resultStatus == 6001) {
+                resultMsg = @"用户中途取消";
+            } else if (resultStatus == 6002) {
+                resultMsg = @"网络连接出错";
+            } else {
+                resultMsg = @"交易失败";
             }
+            NSLog(@"-=-=-=-AppDelegate=-=-=-=-=%@", resultMsg);
+            //发出通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinish" object:self userInfo:[NSDictionary dictionaryWithObject:resultMsg forKey:@"sid"]];
         }];
     }
     return YES;

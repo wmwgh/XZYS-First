@@ -25,7 +25,7 @@
                     <rect key="frame" x="0.0" y="65" width="320" height="44"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d5e-Dy-ei1">
-                            <rect key="frame" x="99" y="2" width="216" height="40"/>
+                            <rect key="frame" x="105" y="2" width="210" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="SJT-vW-oUu"/>
                             </constraints>
@@ -33,10 +33,10 @@
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="数           量:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6s-s8-1dU">
-                            <rect key="frame" x="15" y="12" width="79" height="20"/>
+                            <rect key="frame" x="15" y="12" width="85" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="gtU-u6-efA"/>
-                                <constraint firstAttribute="width" constant="79" id="r3F-j3-VB1"/>
+                                <constraint firstAttribute="width" constant="85" id="r3F-j3-VB1"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -57,9 +57,9 @@
                     <rect key="frame" x="0.0" y="114" width="320" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="价           格:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nEZ-bC-rdc">
-                            <rect key="frame" x="15" y="12" width="79" height="20"/>
+                            <rect key="frame" x="15" y="12" width="85" height="20"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="79" id="4Tc-Xy-ddg"/>
+                                <constraint firstAttribute="width" constant="85" id="4Tc-Xy-ddg"/>
                                 <constraint firstAttribute="height" constant="20" id="5e0-vD-872"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -67,7 +67,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3WI-8B-cFs">
-                            <rect key="frame" x="99" y="2" width="216" height="40"/>
+                            <rect key="frame" x="105" y="2" width="210" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="Gvf-l3-ign"/>
                             </constraints>
@@ -89,17 +89,17 @@
                     <rect key="frame" x="0.0" y="163" width="320" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="店           名:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqI-Jf-b0M">
-                            <rect key="frame" x="15" y="12" width="79" height="20"/>
+                            <rect key="frame" x="15" y="12" width="85" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="FBg-Dw-fzP"/>
-                                <constraint firstAttribute="width" constant="79" id="WzX-eG-gB3"/>
+                                <constraint firstAttribute="width" constant="85" id="WzX-eG-gB3"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ntm-72-Qot">
-                            <rect key="frame" x="99" y="2" width="216" height="40"/>
+                            <rect key="frame" x="105" y="2" width="210" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="u1i-aG-p0T"/>
                             </constraints>
@@ -121,9 +121,9 @@
                     <rect key="frame" x="0.0" y="212" width="320" height="44"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="联系人姓名:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lEL-3m-EZJ">
-                            <rect key="frame" x="15" y="12" width="80" height="20"/>
+                            <rect key="frame" x="15" y="12" width="85" height="20"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="80" id="VKN-uZ-xkz"/>
+                                <constraint firstAttribute="width" constant="85" id="VKN-uZ-xkz"/>
                                 <constraint firstAttribute="height" constant="20" id="hLW-ba-lgp"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -131,7 +131,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="El2-m3-baL">
-                            <rect key="frame" x="100" y="2" width="215" height="40"/>
+                            <rect key="frame" x="105" y="2" width="210" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="8Wc-l5-YpP"/>
                             </constraints>
@@ -153,7 +153,7 @@
                     <rect key="frame" x="0.0" y="261" width="320" height="44"/>
                     <subviews>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNg-9H-0Sz">
-                            <rect key="frame" x="99" y="2" width="216" height="40"/>
+                            <rect key="frame" x="105" y="2" width="210" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="vqm-ej-yei"/>
                             </constraints>
@@ -161,10 +161,10 @@
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="联 系 方 式:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FyO-tn-s7k">
-                            <rect key="frame" x="15" y="12" width="79" height="20"/>
+                            <rect key="frame" x="15" y="12" width="85" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="3Lj-z8-vT8"/>
-                                <constraint firstAttribute="width" constant="79" id="ksw-Rv-xr9"/>
+                                <constraint firstAttribute="width" constant="85" id="ksw-Rv-xr9"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -194,10 +194,10 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="联系人地址:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eUr-60-Q7q">
-                            <rect key="frame" x="15" y="12" width="80" height="20"/>
+                            <rect key="frame" x="15" y="12" width="90" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="a4U-wi-lnE"/>
-                                <constraint firstAttribute="width" constant="80" id="g1h-OM-akM"/>
+                                <constraint firstAttribute="width" constant="90" id="g1h-OM-akM"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

@@ -51,7 +51,7 @@
         hud.mode = MBProgressHUDModeText;
         hud.labelText = responseObject[@"msg"];
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
         NSString *result = [NSString stringWithFormat:@"%@",  responseObject[@"status"]];
         if ([result isEqualToString:@"-1500"]) {
             //发出通知

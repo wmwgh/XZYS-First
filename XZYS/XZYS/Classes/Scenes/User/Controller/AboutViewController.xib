@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AboutViewController">
             <connections>
-                <outlet property="gongsiJJ" destination="eNP-Jp-cak" id="jDS-KX-6Hl"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -23,16 +22,6 @@
                         <constraint firstAttribute="height" constant="200" id="hTl-Tk-fWI"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="版本：0.1.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eNP-Jp-cak">
-                    <rect key="frame" x="137" y="370" width="100" height="20"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="20" id="kK1-27-h8m"/>
-                        <constraint firstAttribute="width" constant="100" id="xrn-QF-ghx"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    <nil key="highlightedColor"/>
-                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copynight(c)2015-2016xiezhongyunshang all right reserverd" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MY0-5n-ZtE">
                     <rect key="frame" x="20" y="612" width="335" height="35"/>
                     <constraints>
@@ -59,9 +48,7 @@
                 <constraint firstItem="MY0-5n-ZtE" firstAttribute="top" secondItem="gCp-SU-Sbb" secondAttribute="bottom" constant="5" id="6CT-Se-wXN"/>
                 <constraint firstItem="gCp-SU-Sbb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="Amo-Zv-O5G"/>
                 <constraint firstAttribute="trailing" secondItem="gCp-SU-Sbb" secondAttribute="trailing" constant="20" id="KxA-wd-xev"/>
-                <constraint firstItem="eNP-Jp-cak" firstAttribute="top" secondItem="G4L-bG-YdR" secondAttribute="bottom" constant="20" id="M1w-rJ-PAo"/>
                 <constraint firstItem="MY0-5n-ZtE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="cHs-je-8K2"/>
-                <constraint firstItem="eNP-Jp-cak" firstAttribute="centerX" secondItem="G4L-bG-YdR" secondAttribute="centerX" id="cmS-3w-h3c"/>
                 <constraint firstItem="G4L-bG-YdR" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="150" id="dMo-L7-ITM"/>
                 <constraint firstItem="G4L-bG-YdR" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="nty-97-4Bn"/>
             </constraints>

@@ -79,7 +79,7 @@
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"商品已全部更新";
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         [self.mainTab reloadData];
         [self.mainTab.mj_header endRefreshing];
@@ -92,7 +92,7 @@
         hud.labelText = @"网络异常，加载失败！";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }];
 }
 
@@ -173,7 +173,7 @@
             hud.labelText = responseObject[@"msg"];
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:2];
+            [hud hide:YES afterDelay:1];
         }
         [self.mainTab reloadData];
         [self.mainTab.mj_header endRefreshing];

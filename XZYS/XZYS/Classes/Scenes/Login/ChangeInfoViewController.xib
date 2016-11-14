@@ -110,9 +110,9 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="店铺地址:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHq-rP-KdP">
-                    <rect key="frame" x="20" y="338" width="65" height="20"/>
+                    <rect key="frame" x="20" y="338" width="80" height="20"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="65" id="44R-3B-PP4"/>
+                        <constraint firstAttribute="width" constant="80" id="44R-3B-PP4"/>
                         <constraint firstAttribute="height" constant="20" id="f98-Yd-yPY"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>

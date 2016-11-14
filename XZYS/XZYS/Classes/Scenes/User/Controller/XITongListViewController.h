@@ -11,4 +11,5 @@
 
 @interface XITongListViewController : UIViewController
 @property (nonatomic , strong) XiTongModel *model;
+@property (nonatomic , copy) NSString *typeID;
 @end

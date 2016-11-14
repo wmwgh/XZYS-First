@@ -41,7 +41,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
         
     } else if (self.yanZhengMa.text.length != 6){
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -50,7 +50,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } else if (self.passWord.text.length < 6){
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -58,7 +58,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } else if (![self.passWordAgain.text isEqualToString:self.passWord.text]) {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.mode = MBProgressHUDModeText;
@@ -66,7 +66,7 @@
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
         // 1秒之后再消失
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } else {
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         NSString *urlString = @"http://www.xiezhongyunshang.com/App/User/resetPassword";
@@ -99,7 +99,7 @@
             }
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             // 数据加载失败回调.
         }];
@@ -121,7 +121,7 @@
         hud.labelText = @"您还没有登录";
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } else {
         [manager POST:urlString parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             // 数据加载完后回调.
@@ -149,7 +149,7 @@
             }
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         }];
     }
@@ -194,7 +194,7 @@
         };
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 失败的原因可能有多种，常见的是用户名已经存在。
     }];
@@ -210,7 +210,7 @@
         hud.mode = MBProgressHUDModeText;
         hud.labelText = @"请输入正确的手机号码";
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:2];
+        [hud hide:YES afterDelay:1];
     }
 }
 // 判断密码
@@ -220,7 +220,7 @@
         hud.mode = MBProgressHUDModeText;
         hud.labelText = @"密码必须是6-30位的字符加数字";
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 
@@ -232,7 +232,7 @@
         hud.mode = MBProgressHUDModeText;
         hud.labelText = @"密码不一致,请重新输入";
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     }
 }
 

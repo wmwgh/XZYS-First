@@ -176,7 +176,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             hud.mode = MBProgressHUDModeText;
             hud.labelText = responseObject[@"msg"];
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         // 隐藏指示器
         [SVProgressHUD dismiss];
@@ -282,7 +282,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
         }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
@@ -324,8 +324,11 @@ static NSString *const firatID = @"firstHeader";//图和字和线
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
     [self yanzheng];
 }
+
+
 - (void)yanzheng {
     AppDelegate *appd = [[UIApplication sharedApplication] delegate];
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -475,7 +478,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"商品已全部更新";
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         [self.rootView.collectionView reloadData];
         //结束刷新
@@ -541,7 +544,7 @@ static NSString *const firatID = @"firstHeader";//图和字和线
     [backImageView addSubview:BButton];
     
     MButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    MButton.frame = CGRectMake(SCREEN_WIDTH - 32, 13, 20, 20);
+    MButton.frame = CGRectMake(SCREEN_WIDTH - 37, 13, 28, 25);
     [MButton setImage:[UIImage imageNamed:@"index_10.png"] forState:UIControlStateNormal];
     [MButton addTarget:self action:@selector(messageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [backImageView addSubview:MButton];

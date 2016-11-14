@@ -47,7 +47,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.margin = 10.f;
     hud.yOffset = 180;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:2];
+    [hud hide:YES afterDelay:1];
 }
 
 - (void)showHint:(NSString *)hint yOffset:(float)yOffset {
@@ -62,7 +62,7 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.yOffset = 180;
     hud.yOffset += yOffset;
     hud.removeFromSuperViewOnHide = YES;
-    [hud hide:YES afterDelay:2];
+    [hud hide:YES afterDelay:1];
 }
 
 - (void)hideHud{

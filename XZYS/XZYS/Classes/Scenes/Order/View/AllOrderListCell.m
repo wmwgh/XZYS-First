@@ -19,24 +19,37 @@
 
 - (void)setModel:(SonLislModel *)oneModel {
     _model = oneModel;
-
-    _goodsTitle.text = _model.goods_name;
-    _colorLabel.text = _model.goods_color;
-    _sizeLabel.text = _model.goods_size;
-    _numLabel.text = [NSString stringWithFormat:@"X%@", _model.num];
-    _priceLabel.text = [NSString stringWithFormat:@"￥%@", _model.price];
+    if (_model.goods_name != nil && ![_model.goods_name isEqualToString:@""]) {
+        _goodsTitle.text = _model.goods_name;
+    }
+    if (_model.goods_color != nil && ![_model.goods_color isEqualToString:@""]) {
+        _colorLabel.text = _model.goods_color;
+    }
+    if (_model.goods_size != nil && ![_model.goods_size isEqualToString:@""]) {
+        _sizeLabel.text = _model.goods_size;
+    }
+    if (_model.num != nil && ![_model.num isEqualToString:@""]) {
+        _numLabel.text = [NSString stringWithFormat:@"X%@", _model.num];
+    }
+    if (_model.price != nil && ![_model.price isEqualToString:@""]) {
+        _priceLabel.text = [NSString stringWithFormat:@"￥%@", _model.price];
+    }
     
-    NSString *strnl = nil;
-    if ([_model.cotton_id isEqualToString:@"1"]) {
-        strnl = @"单里";
-    } else if ([_model.cotton_id isEqualToString:@"2"]){
-        strnl = @"棉里";
-    } 
-    self.nlLab.text = [NSString stringWithFormat:@"内里:%@", strnl];
+    if (_model.cotton_id != nil && ![_model.cotton_id isEqualToString:@""]) {
+        NSString *strnl = nil;
+        if ([_model.cotton_id isEqualToString:@"1"]) {
+            strnl = @"单里";
+        } else if ([_model.cotton_id isEqualToString:@"2"]){
+            strnl = @"棉里";
+        }
+        self.nlLab.text = [NSString stringWithFormat:@"内里:  %@", strnl];
+    }
     
     _priceLabel.textColor = XZYSPinkColor;
     _numLabel.textColor = XZYSBlueColor;
-    [_goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _model.goods_img]]];
+    if (_model.goods_img != nil && ![_model.goods_img isEqualToString:@""]) {
+        [_goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", XZYS_PJ_URL, _model.goods_img]]];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

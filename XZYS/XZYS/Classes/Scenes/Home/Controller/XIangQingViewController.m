@@ -19,7 +19,7 @@
 #import "GoodsTableViewCell.h"
 #import "DetailView.h"
 #import "GuiGeView.h"
-#import "ShoppingCarViewController.h"
+#import "CarShoppingViewController.h"
 #import <UIImageView+WebCache.h>
 #import "FzhScrollViewAndPageView.h"
 #import "ShopViewController.h"
@@ -36,7 +36,7 @@
 #import "RootNlPickViewCell.h"
 
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
-@interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDataSource,UICollectionViewDelegate>
+@interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic , strong) NSMutableDictionary *dict;
 @property (nonatomic , strong) UIScrollView *backView;
@@ -238,23 +238,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     [self initLayoutSegmt];
     // 主scrollView
     [self createMainScrollView];
-    // 通知中心
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(sizeCallBack:)
-                                                 name:@"sizeBt"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(colorCallBack:)
-                                                 name:@"colorBt"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(deleCallBack:)
-                                                 name:@"deleBt"
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(NLCallBack:)
-                                                 name:@"nlBt"
-                                               object:nil];
+    
     [self setOrderNum];
     
 }
@@ -549,7 +533,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
         hud.labelText = responseObject[@"msg"];
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide= YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
         [self.sizeColorNumChn removeAllObjects];
         [self.sizeColorNum removeAllObjects];
         [self setOrderNum];
@@ -580,12 +564,19 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     params[@"cart_list"] = strjson;
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/cartAdd" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.labelText = responseObject[@"msg"];
-        // 隐藏时候从父控件中移除
-        hud.removeFromSuperViewOnHide= YES;
-        [hud hide:YES afterDelay:1.5];
+        NSString *str = responseObject[@"msg"];
+        if ([str isEqualToString:@"添加购物车失败！"]) {
+            [self.view addSubview:self.underView];
+            self.pickerBackView.frame = CGRectMake(70, 0, SCREEN_WIDTH - 70, self.underNum + 160);
+            [self.underView addSubview:self.pickerBackView];
+        } else {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = responseObject[@"msg"];
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide= YES;
+            [hud hide:YES afterDelay:1];
+        }
         [self.sizeColorNumOutChn removeAllObjects];
         [self.sizeColorNumOut removeAllObjects];
         [self.sizeColorNumChn removeAllObjects];
@@ -850,9 +841,15 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     self.LFLuisement = LFLuisement;
     [self.view addSubview:LFLuisement];
     
+    UIButton *backBT1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    backBT1.frame = CGRectMake(17, 32, 13, 20);
+    [backBT1 setImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal];
+    [self.view addSubview:backBT1];
+    
     UIButton *backBT = [UIButton buttonWithType:UIButtonTypeCustom];
-    backBT.frame = CGRectMake(17, 32, 13, 20);
-    [backBT setImage:[UIImage imageNamed:@"backButton"] forState:UIControlStateNormal];
+    backBT.frame = CGRectMake(3, 20, 40, 40);
+    backBT.backgroundColor = [UIColor clearColor];
+
     [backBT addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backBT];
     
@@ -882,8 +879,16 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     
     GuiGeView *guigeView = [GuiGeView loadFromNib];
     guigeView.frame = CGRectMake(SCREEN_WIDTH * 2, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 108);
+    NSMutableArray *arra = self.SpxqSizeArray;
+    for (int i = 0; i < arra.count; i++) {
+        for (int j = 0; j < arra.count - 1; j++) {
+            if([[arra objectAtIndex:j] compare:[arra objectAtIndex:j + 1] options:NSNumericSearch] == 1){
+                [arra exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
+            }
+        }
+    }
     NSString *sizeString = [NSString string];
-    for (NSString *sizeStr in self.SpxqSizeArray) {
+    for (NSString *sizeStr in arra) {
         sizeString = [sizeString stringByAppendingString:[NSString stringWithFormat:@"%@ ", sizeStr]];
     }
     NSString *colorString = [NSString string];
@@ -892,7 +897,8 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     }
     guigeView.yanse.text = colorString;
     guigeView.chicun.text = sizeString;
-    guigeView.xiemiancailiao.text = model.material;
+    NSString *stra = [NSString stringWithFormat:@"%@（%@）", model.material, model.material_remark];
+    guigeView.xiemiancailiao.text = stra;
     guigeView.xiegenleixing.text = model.heel;
     guigeView.gongneng.text = model.function;
     guigeView.fengge.text = model.style;
@@ -1140,7 +1146,7 @@ static NSInteger pageNumber = 0;
     self.gouwucheBT.titleLabel.font = [UIFont systemFontOfSize:14];
     self.gouwucheBT.frame = CGRectMake(btWidth * 3, 8, btWidth, 40);
     self.numLab = [[UILabel alloc] initWithFrame:CGRectMake(btWidth * 3, 8, 16, 16)];
-    self.numLab.backgroundColor = [UIColor redColor];
+    self.numLab.backgroundColor = XZYSBlueColor;
     self.numLab.layer.cornerRadius = 16 / 2;
     self.numLab.layer.masksToBounds = YES;
     self.numLab.textColor = [UIColor whiteColor];
@@ -1155,18 +1161,6 @@ static NSInteger pageNumber = 0;
     [self.view addSubview:self.backView];
 }
 
-- (void)gwcBadmeg {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    AppDelegate *aood = [[UIApplication sharedApplication] delegate];
-    params[@"uid"] = aood.userIdTag;
-    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Cart/getCartNum" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSString *numstr = responseObject[@"data"];
-        int num = [numstr intValue];
-#warning badgeValue ++++++++++++++++++++
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
-}
 
 - (void)yanzheng {
     AppDelegate *appd = [[UIApplication sharedApplication] delegate];
@@ -1208,7 +1202,7 @@ static NSInteger pageNumber = 0;
         }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide= YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
 
     }];
@@ -1224,10 +1218,11 @@ static NSInteger pageNumber = 0;
 }
 //  购物车
 - (void)gouwuche:(UIButton *)dender {
-    ShoppingCarViewController *carVC = [[ShoppingCarViewController alloc] init];
-    self.tabBarController.selectedIndex = 2;
-    self.hidesBottomBarWhenPushed = NO;
-    [self.tabBarController.navigationController pushViewController:carVC animated:YES];
+    CarShoppingViewController *carVC = [[CarShoppingViewController alloc] init];
+    carVC.dataID = @"21";
+//    self.tabBarController.selectedIndex = 2;
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:carVC animated:YES];
     self.hidesBottomBarWhenPushed = YES;
 }
 // 客服
@@ -1252,11 +1247,25 @@ static NSInteger pageNumber = 0;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sizeCallBack:)
+                                                 name:@"sizeBt"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(colorCallBack:)
+                                                 name:@"colorBt"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deleCallBack:)
+                                                 name:@"deleBt"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(NLCallBack:)
+                                                 name:@"nlBt"
+                                               object:nil];
     [self yanzheng];
     [self setOrderNum];
-}
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1264,6 +1273,7 @@ static NSInteger pageNumber = 0;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"sizeBt" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"colorBt" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"deleBt" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"nlBt" object:nil];
 }
 
 /*

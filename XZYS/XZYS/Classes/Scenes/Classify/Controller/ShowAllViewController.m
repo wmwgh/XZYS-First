@@ -293,7 +293,7 @@ static NSString *const identifier_cell = @"identifier_cell";
                     hud.mode = MBProgressHUDModeText;
                     hud.labelText = responseObject[@"msg"];
                     hud.removeFromSuperViewOnHide = YES;
-                    [hud hide:YES afterDelay:1.5];
+                    [hud hide:YES afterDelay:1];
                 }
             } else {
                 //结束刷新
@@ -302,7 +302,7 @@ static NSString *const identifier_cell = @"identifier_cell";
                 hud.mode = MBProgressHUDModeText;
                 hud.labelText = @"商品已全部更新";
                 hud.removeFromSuperViewOnHide = YES;
-                [hud hide:YES afterDelay:1.5];
+                [hud hide:YES afterDelay:1];
             }
             //刷新表格
             [self.rootView.collectionView reloadData];
@@ -320,7 +320,7 @@ static NSString *const identifier_cell = @"identifier_cell";
             hud.labelText = @"网络异常，加载失败！";
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }];
 }
 
@@ -350,7 +350,7 @@ static NSString *const identifier_cell = @"identifier_cell";
             // 隐藏时候从父控件中移除
             hud.removeFromSuperViewOnHide = YES;
             // 1秒之后再消失
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
         }
         
         [self.rootView.collectionView reloadData];
@@ -422,7 +422,7 @@ static NSString *const identifier_cell = @"identifier_cell";
             hud.mode = MBProgressHUDModeText;
             hud.labelText = responseObject[@"msg"];
             hud.removeFromSuperViewOnHide = YES;
-            [hud hide:YES afterDelay:1.5];
+            [hud hide:YES afterDelay:1];
             [self refreshbtn];
         }
         

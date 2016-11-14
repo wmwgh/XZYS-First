@@ -77,9 +77,9 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="颜色:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d12-lj-yGh">
-                            <rect key="frame" x="96" y="62.5" width="30" height="16"/>
+                            <rect key="frame" x="96" y="62" width="35" height="16"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="30" id="htk-Fg-Z5h"/>
+                                <constraint firstAttribute="width" constant="35" id="htk-Fg-Z5h"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -96,7 +96,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A9K-oe-WrT">
-                            <rect key="frame" x="128" y="62.5" width="36" height="16"/>
+                            <rect key="frame" x="133" y="62" width="36" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="36" id="7Hw-sA-j8c"/>
                                 <constraint firstAttribute="height" constant="16" id="CgD-wI-GQw"/>
@@ -106,9 +106,9 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="尺寸:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gzv-jf-TL5">
-                            <rect key="frame" x="184" y="62.5" width="30" height="16"/>
+                            <rect key="frame" x="189" y="62" width="35" height="16"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="30" id="ZLu-MJ-2NG"/>
+                                <constraint firstAttribute="width" constant="35" id="ZLu-MJ-2NG"/>
                                 <constraint firstAttribute="height" constant="16" id="iau-lw-LPK"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -116,7 +116,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Pt-Dp-VCA">
-                            <rect key="frame" x="216" y="62.5" width="36" height="16"/>
+                            <rect key="frame" x="226" y="62" width="36" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="36" id="Ow6-Jv-Zrc"/>
                                 <constraint firstAttribute="height" constant="16" id="hDH-d7-wGs"/>
@@ -126,17 +126,17 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="售后进度:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eac-Eg-zKy">
-                            <rect key="frame" x="96" y="94" width="61" height="21"/>
+                            <rect key="frame" x="96" y="94" width="66" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="D6L-29-r9t"/>
-                                <constraint firstAttribute="width" constant="61" id="G6u-i6-6Ju"/>
+                                <constraint firstAttribute="width" constant="66" id="G6u-i6-6Ju"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" red="0.28644334329999999" green="0.73040843109999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KLd-RH-GvH">
-                            <rect key="frame" x="159" y="94" width="50" height="21"/>
+                            <rect key="frame" x="164" y="94" width="50" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="50" id="Q4K-5A-e27"/>
                                 <constraint firstAttribute="height" constant="21" id="UuQ-aH-NmQ"/>
@@ -225,16 +225,6 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zjd-3A-rmX">
                     <rect key="frame" x="0.0" y="324" width="375" height="200"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="售后凭证：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KCi-jf-xMH">
-                            <rect key="frame" x="8" y="3" width="80" height="18"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="18" id="igz-mq-nnT"/>
-                                <constraint firstAttribute="width" constant="80" id="v49-rK-7RY"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UIF-nd-wAR">
                             <rect key="frame" x="134" y="25" width="107" height="107"/>
                             <constraints>
@@ -247,6 +237,16 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4kq-Zw-vgz">
                             <rect key="frame" x="10" y="25" width="107" height="107"/>
                         </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="售后凭证：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KCi-jf-xMH">
+                            <rect key="frame" x="8" y="3" width="80" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="18" id="igz-mq-nnT"/>
+                                <constraint firstAttribute="width" constant="80" id="v49-rK-7RY"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -269,9 +269,9 @@
                     <rect key="frame" x="0.0" y="219" width="375" height="100"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="售后理由:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LeP-Xf-3bd">
-                            <rect key="frame" x="8" y="3" width="66" height="18"/>
+                            <rect key="frame" x="8" y="3" width="75" height="18"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="66" id="1Oe-by-Coh"/>
+                                <constraint firstAttribute="width" constant="75" id="1Oe-by-Coh"/>
                                 <constraint firstAttribute="height" constant="18" id="5hn-ja-YsZ"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>

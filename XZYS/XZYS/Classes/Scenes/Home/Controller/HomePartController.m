@@ -1,12 +1,12 @@
 //
-//  SearchViewController.m
+//  HomePartController.m
 //  XZYS
 //
-//  Created by 杨利 on 16/8/11.
+//  Created by 杨利 on 16/11/6.
 //  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
-#import "SearchViewController.h"
+#import "HomePartController.h"
 #import "XZYS_Other.h"
 #import "RootCell.h"
 #import "ShowAllDoubleView.h"
@@ -17,28 +17,29 @@
 #import <MJRefresh.h>
 #import "XIangQingViewController.h"
 
-@interface SearchViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
+@interface HomePartController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic , strong) UILabel *lab;
 /// 搜索
 @property (strong, nonatomic) UITextField *searchText;
 @property (nonatomic ,strong) NSMutableArray *allDataArray;
 @property (nonatomic , strong) ShowAllDoubleView *rootView;
 @property (nonatomic, assign) int page;
+@property (nonatomic , copy) NSString *searchInID;
 @end
 
-@implementation SearchViewController
+@implementation HomePartController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.page = 2;
     // Do any additional setup after loading the view from its nib.
-//    [self requestData];
+    //    [self requestData];
     [self setNavigation];
     //创建UICollectionView
     [self setCollectionView];
     // 添加顶部刷新
     [self addRefresh];
-
+    
 }
 
 // 点击item
@@ -63,7 +64,10 @@
 
 - (void)requestData {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    dic[@"search"] = self.searchID;
+    if (self.searchInID != nil && ![self.searchInID isEqualToString:@""]) {
+        dic[@"search"] = self.searchInID;
+    }
+    dic[@"app_model_id"] = self.searchID;
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
     self.page = 2;
@@ -94,13 +98,16 @@
         //结束刷新
         [self.rootView.collectionView.mj_header endRefreshing];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-
+        
     }];
 }
 
 - (void)loadMoreData {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    dic[@"search"] = self.searchID;
+    if (self.searchInID != nil && ![self.searchInID isEqualToString:@""]) {
+        dic[@"search"] = self.searchInID;
+    }
+    dic[@"app_model_id"] = self.searchID;
     dic[@"page"] = [NSString stringWithFormat:@"%d", self.page];
     __weak typeof(self) weakSelf = self;
     [[AFHTTPSessionManager manager] GET:@"http://www.xiezhongyunshang.com/App/Goods/goodsList" parameters:dic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -193,17 +200,12 @@
 }
 
 - (void)search {
-    self.searchID = self.searchText.text;
+    self.searchInID = self.searchText.text;
     [self requestData];
 }
 
 - (void)backButtonClick:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 /*

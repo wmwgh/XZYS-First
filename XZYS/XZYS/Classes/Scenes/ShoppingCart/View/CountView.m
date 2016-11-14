@@ -51,7 +51,7 @@
 -(UIButton *)leftBtn{
     if (_leftBtn == nil) {
         self.leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _leftBtn.frame = CGRectMake(0, 0, self.frame.size.width * 2/7, self.frame.size.height);
+        _leftBtn.frame = CGRectMake(0, 0, self.frame.size.width * 2/7 + 3, self.frame.size.height);
         [_leftBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_leftBtn setImage:[UIImage imageNamed:@"shopCar_cut"] forState:UIControlStateNormal];
         [_leftBtn addTarget:self action:@selector(cutBtnClicked) forControlEvents:UIControlEventTouchUpInside];
@@ -69,7 +69,7 @@
 
 - (UITextField *)countTF{
     if (_countTF == nil) {
-        self.countTF = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftLineView.frame), 0, self.frame.size.width * 3/7 - 1, self.frame.size.height)];
+        self.countTF = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_leftLineView.frame), 0, self.frame.size.width * 2/7 + 3, self.frame.size.height)];
         _countTF.font = [UIFont systemFontOfSize:14];
         _countTF.textAlignment = NSTextAlignmentCenter;
         _countTF.keyboardType = UIKeyboardTypeNumberPad;
@@ -89,7 +89,7 @@
 -(UIButton *)rightBtn{
     if (_rightBtn == nil) {
         self.rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _rightBtn.frame = CGRectMake(CGRectGetMaxX(_rightLineView.frame), 0, self.frame.size.width * 2/7 - 1, self.frame.size.height);
+        _rightBtn.frame = CGRectMake(CGRectGetMaxX(_rightLineView.frame), 0, self.frame.size.width * 2/7 + 3, self.frame.size.height);
         [_rightBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [_rightBtn setImage:[UIImage imageNamed:@"gw_19"] forState:UIControlStateNormal];
         [_rightBtn addTarget:self action:@selector(plusBtnClicked) forControlEvents:UIControlEventTouchUpInside];

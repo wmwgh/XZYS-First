@@ -67,7 +67,7 @@
         hud.labelText = responseObject[@"msg"];
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:2];
+        [hud hide:YES afterDelay:1];
         [self resqusetData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
@@ -95,7 +95,7 @@
         hud.labelText = responseObject[@"msg"];
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:2];
+        [hud hide:YES afterDelay:1];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];}
 
@@ -146,7 +146,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 102;
+    return 107;
 }
 
 - (void)resqusetData {

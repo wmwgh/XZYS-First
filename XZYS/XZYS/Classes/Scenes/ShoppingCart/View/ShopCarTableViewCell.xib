@@ -69,10 +69,10 @@
                         </constraints>
                     </imageView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYy-9G-KyS" customClass="CountView">
-                        <rect key="frame" x="386" y="60" width="80" height="25"/>
+                        <rect key="frame" x="366" y="55" width="100" height="30"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="25" id="Das-Oz-CsD"/>
-                            <constraint firstAttribute="width" constant="80" id="G0R-gx-rNE"/>
+                            <constraint firstAttribute="height" constant="30" id="Das-Oz-CsD"/>
+                            <constraint firstAttribute="width" constant="100" id="G0R-gx-rNE"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="商品标题" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kez-GQ-31w">

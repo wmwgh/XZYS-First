@@ -26,6 +26,8 @@
     self.complateButton.layer.cornerRadius = 5;
     self.yjtextView.layer.cornerRadius = 5;
 }
+
+
 - (IBAction)sendMessage:(id)sender {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -52,7 +54,7 @@
         }
         // 隐藏时候从父控件中移除
         hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1.5];
+        [hud hide:YES afterDelay:1];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
     }];
 }
