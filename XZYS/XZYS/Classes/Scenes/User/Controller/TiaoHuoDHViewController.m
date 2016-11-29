@@ -1,12 +1,12 @@
 //
-//  TiaoHuoDetailController.m
+//  TiaoHuoDHViewController.m
 //  XZYS
 //
-//  Created by 杨利 on 16/9/12.
+//  Created by 杨利 on 16/11/14.
 //  Copyright © 2016年 吴明伟. All rights reserved.
 //
 
-#import "TiaoHuoDetailController.h"
+#import "TiaoHuoDHViewController.h"
 #import <UIImageView+WebCache.h>
 #import "XZYS_URL.h"
 #import <AFHTTPSessionManager.h>
@@ -15,13 +15,11 @@
 #import "XZYS_Other.h"
 #import "AppDelegate.h"
 #import <MBProgressHUD.h>
-
-
-@interface TiaoHuoDetailController ()
+@interface TiaoHuoDHViewController ()
 @property (nonatomic , strong) NSMutableArray *dataArray;
 @end
 
-@implementation TiaoHuoDetailController
+@implementation TiaoHuoDHViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -69,28 +67,6 @@
     }];
 }
 
-- (IBAction)cancelTaoHuo:(id)sender {
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    params[@"uid"] = appDelegate.userIdTag;
-    params[@"id"] = _model.ID;
-    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsDel.html" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.labelText = responseObject[@"msg"];
-        // 隐藏时候从父控件中移除
-        hud.removeFromSuperViewOnHide = YES;
-        [hud hide:YES afterDelay:1];
-        //发出通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"取消调货刷新UI" object:self];
-        [self.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        // 请求失败
-        // 显示加载错误信息
-        [SVProgressHUD showErrorWithStatus:@"网络异常，加载失败！"];
-    }];
-    
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

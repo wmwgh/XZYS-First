@@ -22,6 +22,7 @@
 #import <UIImageView+WebCache.h>
 #import "XZYS_URL.h"
 #import "XIangQingViewController.h"
+#import "SearchViewController.h"
 
 static NSString *headerID = @"HeaderSectionID";
 
@@ -223,9 +224,10 @@ static NSString *headerID = @"HeaderSectionID";
 }
 
 - (void)backAction1 {
-    HomeViewController *homeVC = [[HomeViewController alloc] init];
-    self.tabBarController.selectedIndex = 0;
-    [self.tabBarController.navigationController pushViewController:homeVC animated:YES];
+    SearchViewController *seachVC = [[SearchViewController alloc] init];
+    seachVC.sectionID = @"2";
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:seachVC animated:YES];
 }
 
 - (void)setTab {

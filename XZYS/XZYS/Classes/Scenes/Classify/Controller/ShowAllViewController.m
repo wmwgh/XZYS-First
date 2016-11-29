@@ -332,6 +332,13 @@ static NSString *const identifier_cell = @"identifier_cell";
     if (![self.lanmuID isEqual:[NSNull null]] && ![self.lanmuID isKindOfClass:[NSNull class]] && self.lanmuID != nil) {
         weakSelf.param[@"cate_id"] = self.lanmuID;
     }
+    if ([self.orderID isEqualToString:@"1"]) {
+        weakSelf.param[@"app_space_id"] = @"1";
+    } else if ([self.orderID isEqualToString:@"2"]) {
+        weakSelf.param[@"app_space_id"] = @"2";
+    } else if ([self.orderID isEqualToString:@"3"]){
+        weakSelf.param[@"app_space_id"] = @"3";
+    }
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
     [[AFHTTPSessionManager manager] GET:XZYS_ALL_URL parameters:weakSelf.param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

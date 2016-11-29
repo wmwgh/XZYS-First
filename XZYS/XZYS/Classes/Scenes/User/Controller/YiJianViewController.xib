@@ -46,7 +46,7 @@
                     <attributedString key="attributedText">
                         <fragment content="请输入您对我们的建议，我们会不断优化用户体验">
                             <attributes>
-                                <color key="NSColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="NSColor" red="0.1923259984794729" green="0.68870318956792398" blue="0.96981169871794859" alpha="1" colorSpace="calibratedRGB"/>
                                 <font key="NSFont" size="15" name="PingFangSC-Regular"/>
                             </attributes>
                         </fragment>

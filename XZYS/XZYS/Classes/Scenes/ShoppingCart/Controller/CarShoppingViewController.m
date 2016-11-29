@@ -23,6 +23,7 @@
 #import <MJRefresh.h>
 #import "ShopCarModel.h"
 #import "AddOrderViewController.h"
+#import "OrderListViewController.h"
 
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
@@ -48,9 +49,41 @@
 static NSString * indentifier = @"shopCarCell";
 @implementation CarShoppingViewController
 
+- (void)payCallBackb {
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.orderType = 2;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"支付成功";
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:1];
+    order.hidesBottomBarWhenPushed = YES;
+    [self.navigationController  pushViewController:order animated:YES];
+}
+
+- (void)payCallBackbb {
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.orderType = 1;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = @"支付失败";
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:1];
+    order.hidesBottomBarWhenPushed = YES;
+    [self.navigationController  pushViewController:order animated:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"购物车";
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(payCallBackb)  name:@"notifPayFinishb"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(payCallBackbb)  name:@"notifPayFinishbb"
+                                               object:nil];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.baseTable];
     self.labe = [[UILabel alloc] initWithFrame:CGRectMake(100, 300, SCREEN_WIDTH - 200, 30)];
@@ -370,6 +403,9 @@ static NSString * indentifier = @"shopCarCell";
             AddVC.cellAllary = _carAry;
             AddVC.orderAllary = _totalSelectedAry;
             AddVC.resultPrice = [NSString stringWithFormat:@"%.2f", self.totalMoney];
+            AddVC.whichVC = @"sp2";
+            AppDelegate *appde = [UIApplication sharedApplication].delegate;
+            appde.whichVC = @"sp2";
             self.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:AddVC animated:YES
              ];

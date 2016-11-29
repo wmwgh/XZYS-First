@@ -61,7 +61,7 @@
 -(UIButton *)tittleBtn{
     if (_tittleBtn == nil) {
         self.tittleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _tittleBtn.frame = CGRectMake(45, 11, 260, 37);
+        _tittleBtn.frame = CGRectMake(45, 11, 350, 37);
         _tittleBtn.backgroundColor = [UIColor clearColor];
         [_tittleBtn addTarget:self action:@selector(clicked1:) forControlEvents:UIControlEventTouchUpInside];
     }

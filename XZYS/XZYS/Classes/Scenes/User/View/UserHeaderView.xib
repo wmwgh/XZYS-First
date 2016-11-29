@@ -106,13 +106,13 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="my2-hg-fmi">
-                    <rect key="frame" x="234" y="45" width="125" height="25"/>
+                    <rect key="frame" x="269" y="45" width="90" height="25"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="125" id="7Ez-Rh-wqF"/>
+                        <constraint firstAttribute="width" constant="90" id="7Ez-Rh-wqF"/>
                         <constraint firstAttribute="height" constant="25" id="bdl-hH-Jww"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                    <state key="normal" title="修改个人资料&gt;&gt;" backgroundImage="djb.png">
+                    <state key="normal" title="个人资料&gt;&gt;" backgroundImage="djb.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>

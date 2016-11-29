@@ -15,29 +15,21 @@
             <rect key="frame" x="0.0" y="0.0" width="327" height="467"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bcB-MU-mf1">
-                    <rect key="frame" x="15" y="0.0" width="297" height="20"/>
-                    <attributedString key="attributedText">
-                        <fragment content="空">
-                            <attributes>
-                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name="PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                    </attributedString>
-                    <nil key="highlightedColor"/>
-                </label>
+                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oss-6h-vE2">
+                    <rect key="frame" x="0.0" y="0.0" width="327" height="467"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </webView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="bcB-MU-mf1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="4Xw-FW-yul"/>
-                <constraint firstAttribute="trailing" secondItem="bcB-MU-mf1" secondAttribute="trailing" constant="15" id="JaE-oy-Vad"/>
-                <constraint firstItem="bcB-MU-mf1" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="JlD-jP-Mdv"/>
+                <constraint firstItem="oss-6h-vE2" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="58A-me-26N"/>
+                <constraint firstItem="oss-6h-vE2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5hT-k9-Ano"/>
+                <constraint firstAttribute="bottom" secondItem="oss-6h-vE2" secondAttribute="bottom" id="GTf-h4-RsJ"/>
+                <constraint firstAttribute="trailing" secondItem="oss-6h-vE2" secondAttribute="trailing" id="nzX-St-Fwk"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="xiangqingLabel" destination="bcB-MU-mf1" id="VUs-XX-cBz"/>
+                <outlet property="webView" destination="oss-6h-vE2" id="CtZ-Qm-pIh"/>
             </connections>
             <point key="canvasLocation" x="207.5" y="211.5"/>
         </view>

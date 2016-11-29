@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PayViewController : UIViewController
-@property (nonatomic , copy) NSString *orderTyp;
+@property (nonatomic , copy) id orderTyp;
+@property (nonatomic , copy) NSString *fromTyp;
 @end

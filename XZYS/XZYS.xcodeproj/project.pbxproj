@@ -297,6 +297,12 @@
 		8FD726941D5B24370030E04B /* FzhScrollViewAndPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD726931D5B24370030E04B /* FzhScrollViewAndPageView.m */; };
 		8FD726981D5C03B10030E04B /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD726961D5C03B10030E04B /* SearchViewController.m */; };
 		8FD726991D5C03B10030E04B /* SearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FD726971D5C03B10030E04B /* SearchViewController.xib */; };
+		8FE2A8361DDA033E002FEEB7 /* TiaoHuoDHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2A8341DDA033E002FEEB7 /* TiaoHuoDHViewController.m */; };
+		8FE2A8371DDA033E002FEEB7 /* TiaoHuoDHViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FE2A8351DDA033E002FEEB7 /* TiaoHuoDHViewController.xib */; };
+		8FE2A83B1DDA07D5002FEEB7 /* TiaoHuoHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2A8391DDA07D5002FEEB7 /* TiaoHuoHViewController.m */; };
+		8FE2A83C1DDA07D5002FEEB7 /* TiaoHuoHViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FE2A83A1DDA07D5002FEEB7 /* TiaoHuoHViewController.xib */; };
+		8FE2A8401DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FE2A83E1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.m */; };
+		8FE2A8411DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8FE2A83F1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.xib */; };
 		8FFA0A751DA9E07D0089FC4A /* libHyphenateSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FFA0A741DA9E07D0089FC4A /* libHyphenateSDK.a */; };
 		8FFA0BC81DA9E2B80089FC4A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FFA0BC71DA9E2B80089FC4A /* libsqlite3.tbd */; };
 		8FFA0BCA1DA9E2C60089FC4A /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FFA0BC91DA9E2C60089FC4A /* libresolv.tbd */; };
@@ -902,6 +908,15 @@
 		8FD726961D5C03B10030E04B /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		8FD726971D5C03B10030E04B /* SearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchViewController.xib; sourceTree = "<group>"; };
 		8FD726A31D5C37F00030E04B /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		8FE2A8331DDA033E002FEEB7 /* TiaoHuoDHViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiaoHuoDHViewController.h; sourceTree = "<group>"; };
+		8FE2A8341DDA033E002FEEB7 /* TiaoHuoDHViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiaoHuoDHViewController.m; sourceTree = "<group>"; };
+		8FE2A8351DDA033E002FEEB7 /* TiaoHuoDHViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TiaoHuoDHViewController.xib; sourceTree = "<group>"; };
+		8FE2A8381DDA07D5002FEEB7 /* TiaoHuoHViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiaoHuoHViewController.h; sourceTree = "<group>"; };
+		8FE2A8391DDA07D5002FEEB7 /* TiaoHuoHViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiaoHuoHViewController.m; sourceTree = "<group>"; };
+		8FE2A83A1DDA07D5002FEEB7 /* TiaoHuoHViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TiaoHuoHViewController.xib; sourceTree = "<group>"; };
+		8FE2A83D1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiaoHuoHTableViewCell.h; sourceTree = "<group>"; };
+		8FE2A83E1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiaoHuoHTableViewCell.m; sourceTree = "<group>"; };
+		8FE2A83F1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TiaoHuoHTableViewCell.xib; sourceTree = "<group>"; };
 		8FFA0A551DA9E07D0089FC4A /* EMChatManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatManagerDelegate.h; sourceTree = "<group>"; };
 		8FFA0A561DA9E07D0089FC4A /* EMChatroom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroom.h; sourceTree = "<group>"; };
 		8FFA0A571DA9E07D0089FC4A /* EMChatroomManagerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomManagerDelegate.h; sourceTree = "<group>"; };
@@ -1843,6 +1858,12 @@
 				8F3A22FE1D867412009730A6 /* TiaoHuoDetailController.h */,
 				8F3A22FF1D867412009730A6 /* TiaoHuoDetailController.m */,
 				8F3A23001D867412009730A6 /* TiaoHuoDetailController.xib */,
+				8FE2A8381DDA07D5002FEEB7 /* TiaoHuoHViewController.h */,
+				8FE2A8391DDA07D5002FEEB7 /* TiaoHuoHViewController.m */,
+				8FE2A83A1DDA07D5002FEEB7 /* TiaoHuoHViewController.xib */,
+				8FE2A8331DDA033E002FEEB7 /* TiaoHuoDHViewController.h */,
+				8FE2A8341DDA033E002FEEB7 /* TiaoHuoDHViewController.m */,
+				8FE2A8351DDA033E002FEEB7 /* TiaoHuoDHViewController.xib */,
 				8FB3B1891D6D8AFD00064C2C /* ShouHouViewController.h */,
 				8FB3B18A1D6D8AFD00064C2C /* ShouHouViewController.m */,
 				8FB3B18B1D6D8AFD00064C2C /* ShouHouViewController.xib */,
@@ -1905,6 +1926,9 @@
 				8FA7D93D1D83941600296111 /* TiaoHuoOrderCell.h */,
 				8FA7D93E1D83941600296111 /* TiaoHuoOrderCell.m */,
 				8FA7D93F1D83941600296111 /* TiaoHuoOrderCell.xib */,
+				8FE2A83D1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.h */,
+				8FE2A83E1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.m */,
+				8FE2A83F1DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.xib */,
 				8F84211A1D6AEE3D007CE935 /* UserViewCell.h */,
 				8F84211B1D6AEE3D007CE935 /* UserViewCell.m */,
 				8F84211C1D6AEE3D007CE935 /* UserViewCell.xib */,
@@ -2657,6 +2681,7 @@
 				8FBFB7131D950B5B0059E252 /* AddressTableViewCell.xib in Resources */,
 				8FBFB67C1D8F6E310059E252 /* sc_dp.png in Resources */,
 				8FA9256A1D5845F900112FFD /* ClassifyViewController.xib in Resources */,
+				8FE2A8371DDA033E002FEEB7 /* TiaoHuoDHViewController.xib in Resources */,
 				8FBFB66D1D8E36AE0059E252 /* sc_bj.png in Resources */,
 				8FBFB6B31D92812F0059E252 /* shopCar_plus.png in Resources */,
 				8FBFB6AB1D913AEF0059E252 /* gw_17_1.png in Resources */,
@@ -2665,6 +2690,7 @@
 				8FB791371D5E178D00E29218 /* ShopCollectionViewCell.xib in Resources */,
 				8F331B681D7DD0DE007C2E22 /* sx_sjta.png in Resources */,
 				8FA6F5711D65584700C62CC8 /* GuiGeView.xib in Resources */,
+				8FE2A83C1DDA07D5002FEEB7 /* TiaoHuoHViewController.xib in Resources */,
 				8F331B631D7DD0DE007C2E22 /* scanLine@2x.png in Resources */,
 				8F331B651D7DD0DE007C2E22 /* scanscanBg.png in Resources */,
 				8F3A22F81D857FA8009730A6 /* RequestShouHouController.xib in Resources */,
@@ -2677,6 +2703,7 @@
 				8F331B581D7DD0DE007C2E22 /* info_65.png in Resources */,
 				8F331B5D1D7DD0DE007C2E22 /* LoginBack.jpg in Resources */,
 				8F331B4F1D7DD0DE007C2E22 /* info_29.png in Resources */,
+				8FE2A8411DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.xib in Resources */,
 				8F331B691D7DD0DE007C2E22 /* sx_xjtb.png in Resources */,
 				8F9FAE441D9A41390009E8BB /* dpbjt.jpg in Resources */,
 				8F331B6C1D7DD0DE007C2E22 /* yyzz.png in Resources */,
@@ -2898,6 +2925,7 @@
 				8FFA0CE21DA9E41E0089FC4A /* EMSDWebImageManager.m in Sources */,
 				8F36E3131DA63FAE00B36558 /* Order.m in Sources */,
 				8FD7265E1D59C3100030E04B /* SDZCModel.m in Sources */,
+				8FE2A8361DDA033E002FEEB7 /* TiaoHuoDHViewController.m in Sources */,
 				8FB7913C1D5E179900E29218 /* SMVerticalSegmentedControl.m in Sources */,
 				8F36E2E21DA28A5200B36558 /* DataVerifier.m in Sources */,
 				8FAF559C1D757F44000666A6 /* YiJianViewController.m in Sources */,
@@ -3014,6 +3042,7 @@
 				8FFA0CDB1DA9E41E0089FC4A /* MWZoomingScrollView.m in Sources */,
 				8F36E3071DA5046700B36558 /* ShouHouTableViewCell.m in Sources */,
 				8FA6F4EC1D62F22000C62CC8 /* XIangQingViewController.m in Sources */,
+				8FE2A83B1DDA07D5002FEEB7 /* TiaoHuoHViewController.m in Sources */,
 				8FBFB6FE1D936CF90059E252 /* ColorSizePickView.m in Sources */,
 				8FFA0D041DA9E41E0089FC4A /* EaseChineseToPinyin.m in Sources */,
 				8FAA83221D78176300F05542 /* BDImagePicker.m in Sources */,
@@ -3047,6 +3076,7 @@
 				8FAF55741D7191FF000666A6 /* ShopViewController.m in Sources */,
 				8F7DEAF11DCF04EB00A9BEEF /* HomePartController.m in Sources */,
 				8FB3B1DA1D6ED23C00064C2C /* RegiestView.m in Sources */,
+				8FE2A8401DDA0C74002FEEB7 /* TiaoHuoHTableViewCell.m in Sources */,
 				8FAF555F1D712909000666A6 /* AllOrderListCell.m in Sources */,
 				8FFA0D231DA9E41E0089FC4A /* EaseFaceView.m in Sources */,
 				8FAC28901DB9EA59006DB303 /* CarShoppingViewController.m in Sources */,

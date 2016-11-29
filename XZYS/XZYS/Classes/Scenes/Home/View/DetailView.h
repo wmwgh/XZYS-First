@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailView : UIView
-@property (strong, nonatomic) IBOutlet UILabel *xiangqingLabel;
+
+@property (strong, nonatomic) IBOutlet UIWebView *webView;
 
 @end

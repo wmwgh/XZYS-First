@@ -23,7 +23,7 @@
     self.myFlowLayout = [[UICollectionViewFlowLayout alloc] init];
     // 设置属性
     // 给定item的大小
-    self.myFlowLayout.itemSize = CGSizeMake([UIScreen mainScreen].bounds.size.width / 5, 25);
+    self.myFlowLayout.itemSize = CGSizeMake([UIScreen mainScreen].bounds.size.width / 4.1, 25);
     // 每两个item的最小间隙（垂直滚动）
     self.myFlowLayout.minimumInteritemSpacing = 5;
     // 每两个item的最小间隙（水平滚动方向）
@@ -32,7 +32,7 @@
     // 设置滚动方向
     self.myFlowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;// 垂直方向
     self.myFlowLayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 30);
-    self.myFlowLayout.sectionInset = UIEdgeInsetsMake(5, 20, 5, 20);        
+    self.myFlowLayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     
 }
 

@@ -16,8 +16,6 @@
 #import <MBProgressHUD.h>
 #import "OrderListViewController.h"
 
-#define pubKey @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDnI7NbBKIQEKOXuzzNMyOaueImHykr+6vVWSXWCUZJiSovgvTtYNjQV9eEk2ZHjii+LxHzt8Qf3vRvkT6MOtTl+gzRMk0qwI/Lpsz1ZPcMHuAdmMSgCFPYj0nCN5KRszX6GxggZa3wIU54b9ea5vbLuxnDMd8F/WyG48S+X5vjtwIDAQAB"
-
 @interface PayViewController ()
 @property (nonatomic , strong) NSMutableDictionary *dataDic;
 @property (nonatomic , strong) UILabel *mainLab;
@@ -50,11 +48,18 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
     params[@"uid"] = appDele.userIdTag;
-    NSMutableArray *array = [NSMutableArray array];
-    [array addObject:self.orderTyp];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    params[@"order_id"] = strjson;
+    
+    if ([self.fromTyp isEqualToString:@"123"]) {
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:self.orderTyp];
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        params[@"order_id"] = strjson;
+    } else if ([self.fromTyp isEqualToString:@"321"]) {
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.orderTyp options:NSJSONWritingPrettyPrinted error:nil];
+        NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        params[@"order_id"] = strjson;
+    }
     params[@"paytype"] = @"Alipayapp";
     [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Payment/paymentRequest" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         self.dataDic = responseObject[@"data"];
@@ -68,6 +73,7 @@
     NSString *seller_id = self.dataDic[@"seller_id"];
     NSString *partner = self.dataDic[@"partner"];
     NSString *privateKey = self.dataDic[@"sign"];
+    
     
 //    NSString *newsign = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)privateKey, NULL, (CFStringRef)@"!*'();:@&=+ $,./?%#[]", kCFStringEncodingUTF8));
     
@@ -102,8 +108,6 @@
     order.total_fee = self.dataDic[@"total_fee"];
     order._input_charset = self.dataDic[@"_input_charset"];
     
-    NSString *newString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)privateKey, NULL, (CFStringRef)@"!*'();:@&=+ $,./?%#[]", kCFStringEncodingUTF8));
-    
     //将商品信息拼接成字符串
     NSString *orderInfo = [order description];
     
@@ -111,7 +115,7 @@
     NSString *appScheme = @"app.XZYS";
     // NOTE: 获取私钥并将商户信息签名，外部商户的加签过程请务必放在服务端，防止公私钥数据泄露；
     //       需要遵循RSA签名规范，并将签名字符串base64编码和UrlEncode
-//        id<DataSigner> signer = CreateRSADataSigner(AliPrviteKey);
+//        id<DataSigner> signer = CreateRSADataSigner(privateKeyA);
 //        NSString *signedString = [signer signString:orderInfo];
     
     
@@ -123,12 +127,10 @@
 //    NSString *orderString = nil;
 //    if (signedString != nil) {
         orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
-                       orderInfo, newString, @"RSA"];
-        
-//        NSLog(@"---------------------------------------%@", orderString);
+                       orderInfo, privateKey, @"RSA"];
+        NSLog(@"%@", orderString);
         [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
-//            NSLog(@"++++++++++++++++++++++++++++++++++%@",resultDic[@"memo"]);
-//            NSLog(@"++++++++++++++++++++++++++++++++++%@",resultDic);
+
             NSInteger resultStatus = [[resultDic objectForKey:@"resultStatus"] integerValue];
             NSString *resultMsg = @"";
             if (resultStatus == 9000) {//交易成功
@@ -177,6 +179,7 @@
     self.mainLab.text = tagID;
     self.mainLab.hidden = NO;
 }
+
 
 
 - (void)didReceiveMemoryWarning {

@@ -167,9 +167,10 @@
     if ([bstr isEqualToString:@"goods_id:"]) {
         XIangQingViewController *searchVC = [[XIangQingViewController alloc] init];
         searchVC.passID = astr;
+        searchVC.orderType = @"999";
         [self.navigationController pushViewController:searchVC animated:YES];
     } else {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"无法识别：%@", stringValue] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"二维码非法"] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [_session startRunning];
         }]];

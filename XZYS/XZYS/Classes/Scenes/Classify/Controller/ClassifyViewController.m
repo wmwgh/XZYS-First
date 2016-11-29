@@ -312,7 +312,6 @@
 - (void)requestAllData {
     pushAllDetailsArray = [NSMutableArray array];
     [pushAllDetailsArray removeAllObjects];
-
     [[AFHTTPSessionManager manager] GET:XZYS_FLQBDH_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSArray *dataArray = [responseObject objectForKey:@"data"];
         NSString *flkey = [NSString string];
@@ -445,6 +444,11 @@
 - (void)qweClock:(UIButton *)sender {
     [self requestAllData];
     ShowAllViewController *showVC = [[ShowAllViewController alloc] init];
+    if (self.abc == 0) {
+        showVC.orderID = [NSString stringWithFormat:@"%ld", self.qwe + 1];
+    } else {
+        showVC.orderID = [NSString stringWithFormat:@"%d", self.abc + 1];
+    }
     showVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:showVC animated:YES];
     

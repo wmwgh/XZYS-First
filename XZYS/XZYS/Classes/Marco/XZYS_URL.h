@@ -21,7 +21,7 @@
 /// 获取四大区数据集（除调货区之外）
 #define XZYS_SDQ_URL @"http://www.xiezhongyunshang.com/App/Index/getAppModel"
 /// 获取调货区数据集
-#define XZYS_THQ_URL @"http://www.xiezhongyunshang.com/App/DispatchGoods/dispatchGoodsList.html"
+#define XZYS_THQ_URL @"http://www.xiezhongyunshang.com/App/Index/getAppDispatchGoodsModel"
 /// 商品搜索
 #define XZYS_SPS_URL @"http://www.xiezhongyunshang.com/App/Search/searchGoods/search/测试"
 /// 搜索店铺

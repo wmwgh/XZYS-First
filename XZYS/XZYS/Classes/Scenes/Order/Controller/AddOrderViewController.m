@@ -17,12 +17,17 @@
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
-#import "PayViewController.h"
+#import "OrderListViewController.h"
+#import "Order.h"
+#import "DataSigner.h"
+#import <AlipaySDK/AlipaySDK.h>
 
 static NSString *headerID = @"HeaderSID";
 static NSString *footerID = @"FooterSID";
 
 @interface AddOrderViewController ()<UITableViewDelegate,UITableViewDataSource>
+@property (nonatomic , copy) id orderTyp;
+
 @property (nonatomic , strong) NSMutableArray *dataArray;
 @property (nonatomic , strong) UITableView *mainTab;
 @property (nonatomic , strong) UIButton *titleButton;
@@ -32,6 +37,8 @@ static NSString *footerID = @"FooterSID";
 @property (nonatomic , strong) UITextField *messageText;
 @property (nonatomic , strong) NSMutableArray *array;
 @property (nonatomic , assign) float max;
+@property (nonatomic , strong) NSMutableDictionary *dataDic;
+@property (nonatomic , strong) NSString *mainLab;
 @end
 
 @implementation AddOrderViewController
@@ -50,6 +57,13 @@ static NSString *footerID = @"FooterSID";
     return _array;
 }
 
+- (NSMutableDictionary *)dataDic {
+    if (!_dataDic) {
+        _dataDic = [NSMutableDictionary dictionary];
+    }
+    return _dataDic;
+}
+
 - (void)viewDidLoad {
     self.title = @"确认订单";
     self.resultLab.text = self.resultPrice;
@@ -65,6 +79,133 @@ static NSString *footerID = @"FooterSID";
                                              selector:@selector(setAdd:)
                                                  name:@"传地址"
                                                object:nil];
+    // Do any additional setup after loading the view from its nib.
+   
+}
+
+#pragma pay  =======================
+- (void)requestData {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    AppDelegate *appDele = [[UIApplication sharedApplication] delegate];
+    params[@"uid"] = appDele.userIdTag;
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.orderTyp options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *strjson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    params[@"order_id"] = strjson;
+    params[@"paytype"] = @"Alipayapp";
+    
+    [[AFHTTPSessionManager manager] POST:@"http://www.xiezhongyunshang.com/App/Payment/paymentRequest" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        self.dataDic = responseObject[@"data"];
+        [self setPay];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }];
+}
+
+- (void)setPay {
+    // 这里的三个参数是公司和支付宝签约之后得到的，没有这三个参数无法完成支付
+    NSString *seller_id = self.dataDic[@"seller_id"];
+    NSString *partner = self.dataDic[@"partner"];
+    NSString *privateKey = self.dataDic[@"sign"];
+    
+    
+    //    NSString *newsign = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (CFStringRef)privateKey, NULL, (CFStringRef)@"!*'();:@&=+ $,./?%#[]", kCFStringEncodingUTF8));
+    
+    //partner和seller获取失败,提示
+    //partner和seller获取失败,提示
+    if ([seller_id length] == 0 ||
+        [partner length] == 0)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                        message:@"缺少appId或者私钥。"
+                                                       delegate:self
+                                              cancelButtonTitle:@"确定"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    /*
+     *生成订单信息及签名
+     */
+    //将商品信息赋予AlixPayOrder的成员变量
+    Order *order = [Order new];
+    
+    order.partner = self.dataDic[@"partner"];
+    order.body = self.dataDic[@"body"];
+    order.seller_id = self.dataDic[@"seller_id"];
+    order.out_trade_no = self.dataDic[@"out_trade_no"];
+    order.subject = self.dataDic[@"subject"];
+    order.service = self.dataDic[@"service"];
+    order.notify_url = self.dataDic[@"notify_url"];
+    order.payment_type = self.dataDic[@"payment_type"];
+    order.total_fee = self.dataDic[@"total_fee"];
+    order._input_charset = self.dataDic[@"_input_charset"];
+    
+    //将商品信息拼接成字符串
+    NSString *orderInfo = [order description];
+    
+    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
+    NSString *appScheme = @"app.XZYS";
+    // NOTE: 获取私钥并将商户信息签名，外部商户的加签过程请务必放在服务端，防止公私钥数据泄露；
+    //       需要遵循RSA签名规范，并将签名字符串base64编码和UrlEncode
+    //        id<DataSigner> signer = CreateRSADataSigner(privateKeyA);
+    //        NSString *signedString = [signer signString:orderInfo];
+    
+    
+    //    NSString *signedString = @"";
+    // NOTE: 如果加签成功，则继续执行支付
+    // 将签名成功字符串格式化为订单字符串,请严格按照该格式
+    NSString *orderString = nil;
+    if (orderInfo != nil) {
+        //    NSString *orderString = nil;
+        //    if (signedString != nil) {
+        orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
+                       orderInfo, privateKey, @"RSA"];
+        NSLog(@"%@", orderString);
+        [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+            
+            NSInteger resultStatus = [[resultDic objectForKey:@"resultStatus"] integerValue];
+            NSString *resultMsg = @"";
+            if (resultStatus == 9000) {//交易成功
+                resultMsg = @"交易成功";
+                if ([self.whichVC isEqualToString:@"sp1"]) {
+                    //发出通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinisha" object:self userInfo:nil];
+                } else if ([self.whichVC isEqualToString:@"sp2"]) {
+                    //发出通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinishb" object:self userInfo:nil];
+                }
+                
+            } else if (resultStatus == 8000) {
+                resultMsg = @"订单正在处理中";
+            } else if (resultStatus == 4000) {
+                resultMsg = @"订单支付失败";
+            } else if (resultStatus == 6001) {
+                resultMsg = @"用户中途取消";
+            } else if (resultStatus == 6002) {
+                resultMsg = @"网络连接出错";
+            } else {
+                resultMsg = @"交易失败";
+            }
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = resultMsg;
+            hud.removeFromSuperViewOnHide = YES;
+            [hud hide:YES afterDelay:1];
+        }];
+    }
+    
+    /*
+     以下是几个回调返回的resultDic值：
+     
+     9000 订单支付成功
+     8000 正在处理中
+     4000 订单支付失败
+     6001 用户中途取消
+     6002 网络连接出错
+     */
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -130,14 +271,11 @@ static NSString *footerID = @"FooterSID";
                 NSData *jData = [jsonString dataUsingEncoding:NSASCIIStringEncoding];
                 NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:jData options:NSJSONReadingAllowFragments error:nil];
                 NSArray *ary = jsonObject[@"order_ids"];
-                PayViewController *payVC = [[PayViewController alloc] init];
-                payVC.orderTyp = ary[0];
-                self.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:payVC animated:YES];
-                self.hidesBottomBarWhenPushed = YES;
+                self.orderTyp = ary;
                 self.resultLab.text = @"0";
                 self.cellAllary = nil;
-                [self.mainTab reloadData];
+                [self.navigationController popViewControllerAnimated:YES];
+                [self requestData];
             }
             
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

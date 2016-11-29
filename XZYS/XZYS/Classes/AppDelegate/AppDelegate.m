@@ -132,20 +132,38 @@
             NSString *resultMsg = @"";
             if (resultStatus == 9000) {//交易成功
                 resultMsg = @"交易成功";
-            } else if (resultStatus == 8000) {
-                resultMsg = @"订单正在处理中";
-            } else if (resultStatus == 4000) {
-                resultMsg = @"订单支付失败";
-            } else if (resultStatus == 6001) {
-                resultMsg = @"用户中途取消";
-            } else if (resultStatus == 6002) {
-                resultMsg = @"网络连接出错";
+                //发出通知
+                if ([self.whichVC isEqualToString:@"sp1"]) {
+                    //发出通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinisha" object:self userInfo:nil];
+                } else if ([self.whichVC isEqualToString:@"sp2"]) {
+                    //发出通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinishb" object:self userInfo:nil];
+                } else {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"付款刷新UI" object:self userInfo:nil];
+                }
             } else {
-                resultMsg = @"交易失败";
+                if (resultStatus == 8000) {
+                    resultMsg = @"订单正在处理中";
+                } else if (resultStatus == 4000) {
+                    resultMsg = @"订单支付失败";
+                } else if (resultStatus == 6001) {
+                    resultMsg = @"用户中途取消";
+                } else if (resultStatus == 6002) {
+                    resultMsg = @"网络连接出错";
+                } else {
+                    resultMsg = @"交易失败";
+                }
+                if ([self.whichVC isEqualToString:@"sp1"]) {
+                    //发出通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinishaa" object:self userInfo:nil];
+                } else if ([self.whichVC isEqualToString:@"sp2"]) {
+                    //发出通知
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinishbb" object:self userInfo:nil];
+                } else {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"付款失败刷新UI" object:self userInfo:nil];
+                }
             }
-            NSLog(@"-=-=-=-AppDelegate=-=-=-=-=%@", resultMsg);
-            //发出通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"notifPayFinish" object:self userInfo:[NSDictionary dictionaryWithObject:resultMsg forKey:@"sid"]];
         }];
     }
     return YES;

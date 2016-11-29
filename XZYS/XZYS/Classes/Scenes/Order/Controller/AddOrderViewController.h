@@ -22,5 +22,5 @@
 @property (nonatomic, copy) NSString *result2;
 @property (nonatomic, copy) NSString *result3;
 @property (nonatomic, copy) NSString *resultID;
-
+@property (nonatomic, copy) NSString *whichVC;
 @end

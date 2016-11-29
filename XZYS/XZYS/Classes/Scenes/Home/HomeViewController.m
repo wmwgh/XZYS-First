@@ -11,6 +11,7 @@
 #import "XZYS_URL.h"
 #import <Masonry.h>
 #import <SVProgressHUD.h>
+#import "TiaoHuoDHViewController.h"
 #import <MBProgressHUD.h>
 #import <AFHTTPSessionManager.h>
 #import <AFNetworking/AFNetworking.h>
@@ -39,6 +40,7 @@
 #import "TiaoHuoDetailController.h"
 #import "SonLislModel.h"
 #import "HomePartController.h"
+#import "TiaoHuoHViewController.h"
 
 @interface HomeViewController ()<UIScrollViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,FzhScrollViewDelegate>
 /// 搜索
@@ -200,53 +202,33 @@ static NSString *const secondID = @"secondHeader";//字和线
 
 - (void)requestTHQData {
     __weak typeof(self) weakSelf = self;
-    [weakSelf.THQdataArray removeAllObjects];
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    params[@"uid"] = appDelegate.userIdTag;
-    [[AFHTTPSessionManager manager] POST:XZYS_THQ_URL parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        NSString *order = [NSString stringWithFormat:@"%@", responseObject[@"status"]];
-        NSMutableArray *Arra = [NSMutableArray array];
-        if ([order isEqualToString:@"-101"]) {
-            NSString  *titStr = @"调货区";
-            [weakSelf.SPTTittleArray addObject:titStr];
-            NSArray *dataArray = [responseObject objectForKey:@"data"];
-            for (NSDictionary *dic in dataArray) {
-                SDFQModel *model = [[SDFQModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [Arra addObject:model];
-                [self.THQdataArray addObject:model];
-            }
-            [weakSelf.SPTArray addObject:Arra];
-        }
-        
+    [[AFHTTPSessionManager manager] GET:XZYS_THQ_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         // 请求成功，解析数据
-//        NSDictionary *dataDic = responseObject[@"data"];
-//        NSArray *dataArray = dataDic[@"goods_list"];
-//        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-//            NSString *titStr = nil;
-//            titStr = dataDic[@"name"];
-//            [weakSelf.SPTTittleArray addObject:titStr];
-//            NSMutableArray *arr = [NSMutableArray array];
-//            if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
-//                for (NSDictionary *dic in dataArray) {
-//                    SDFQModel *model = [[SDFQModel alloc] init];
-//                    [model setValuesForKeysWithDictionary:dic];
-//                    [arr addObject:model];
-//                    [self.THQdataArray addObject:model];
-//                }
-//                [weakSelf.SPTArray addObject:arr];
-//            }
-//        } else {
-//        }
+        NSDictionary *dataDic = responseObject[@"data"];
+        NSArray *dataArray = dataDic[@"goods_list"];
+        if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+            NSString *titStr = nil;
+            titStr = dataDic[@"name"];
+            [weakSelf.SPTTittleArray addObject:titStr];
+            NSMutableArray *arr = [NSMutableArray array];
+            if (dataArray != nil && ![dataArray isKindOfClass:[NSNull class]] && dataArray.count != 0) {
+                for (NSDictionary *dic in dataArray) {
+                    SDFQModel *model = [[SDFQModel alloc] init];
+                    [model setValuesForKeysWithDictionary:dic];
+                    [arr addObject:model];
+                    [self.THQdataArray addObject:model];
+                }
+                [weakSelf.SPTArray addObject:arr];
+            }
+        } else {
+        }
         [self.rootView.collectionView.mj_header endRefreshing];
         [self.rootView.collectionView reloadData];
         // 隐藏指示器
-//        [SVProgressHUD dismiss];
+        //        [SVProgressHUD dismiss];
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-
+        
     }];
 }
 
@@ -377,7 +359,7 @@ static NSString *const secondID = @"secondHeader";//字和线
         self.hidesBottomBarWhenPushed = NO;
     }
     if ([str isEqualToString:@"124"]) {
-        TiaoHuoViewController *thVC = [[TiaoHuoViewController alloc] init];
+        TiaoHuoHViewController *thVC = [[TiaoHuoHViewController alloc] init];
         self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:thVC animated:YES];
         self.hidesBottomBarWhenPushed = NO;
@@ -398,7 +380,7 @@ static NSString *const secondID = @"secondHeader";//字和线
     }
     if (typeId == 1) {
         if (indexPath.section == indexId) {
-            TiaoHuoDetailController *thVC = [[TiaoHuoDetailController alloc] init];
+            TiaoHuoDHViewController *thVC = [[TiaoHuoDHViewController alloc] init];
             SonLislModel *model = [[SonLislModel alloc] init];
             model = self.THQdataArray[indexPath.row];
             thVC.orderID = model.ID;

@@ -23,6 +23,7 @@
 #import <MJRefresh.h>
 #import "ShopCarModel.h"
 #import "AddOrderViewController.h"
+#import "OrderListViewController.h"
 
 #define kWidth self.view.frame.size.width
 #define kHeight self.view.frame.size.height
@@ -50,9 +51,32 @@
 static NSString * indentifier = @"shopCarCell";
 @implementation ShoppingCarViewController
 
+- (void)payCallBacka {
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.orderType = 2;
+    order.payResultMSG = @"支付成功";
+    order.payResultMSGAction = @"101";
+    order.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:order animated:YES];
+}
+- (void)payCallBackaa {
+    OrderListViewController *order = [[OrderListViewController alloc] init];
+    order.orderType = 1;
+    order.payResultMSG = @"支付失败";
+    order.payResultMSGAction = @"101";
+    order.hidesBottomBarWhenPushed = YES;
+    [self.navigationController  pushViewController:order animated:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    // 通知中心
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(payCallBacka)  name:@"notifPayFinisha"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(payCallBackaa)  name:@"notifPayFinishaa"
+                                               object:nil];
     self.title = @"购物车";
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.baseTable];
@@ -374,6 +398,9 @@ static NSString * indentifier = @"shopCarCell";
             AddVC.cellAllary = _carAry;
             AddVC.orderAllary = _totalSelectedAry;
             AddVC.resultPrice = [NSString stringWithFormat:@"%.2f", self.totalMoney];
+            AddVC.whichVC = @"sp1";
+            AppDelegate *appde = [UIApplication sharedApplication].delegate;
+            appde.whichVC = @"sp1";
             self.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:AddVC animated:YES
              ];

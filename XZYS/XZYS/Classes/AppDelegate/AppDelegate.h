@@ -14,7 +14,9 @@
     NSString *isLogin;
     int selectId;
     NSString *userIdTag;
+    NSString *whichVC;
 }
+@property (copy,nonatomic) NSString *whichVC;
 @property (copy,nonatomic) NSString *isLogin;
 @property (nonatomic , copy) NSString *userIdTag;
 @property (nonatomic , assign) int selectId;

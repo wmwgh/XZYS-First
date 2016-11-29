@@ -34,9 +34,10 @@
 #import "AddOutTableViewCell.h"
 #import "EaseUsersViewController.h"
 #import "RootNlPickViewCell.h"
+#import "HomeViewController.h"
 
 #define btWidth (SCREEN_WIDTH - SCREEN_WIDTH / 3) / 4
-@interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate>
+@interface XIangQingViewController ()<FzhScrollViewDelegate,LFLUISegmentedControlDelegate,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate,UIWebViewDelegate>
 
 @property (nonatomic , strong) NSMutableDictionary *dict;
 @property (nonatomic , strong) UIScrollView *backView;
@@ -455,6 +456,29 @@ static NSString *const pickNl_cell = @"pickNl_cell";
             }
             self.sizeColorNum = arar;
         }
+    } else {
+        if (self.colorStr == nil || self.colorStr == NULL) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"请选择颜色";
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide= YES;
+            [hud hide:YES afterDelay:1];
+        } else if (self.sizeStr == nil || self.sizeStr == NULL) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"请选择尺寸";
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide= YES;
+            [hud hide:YES afterDelay:1];
+        } else if (self.nlStr == nil || self.nlStr == NULL) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"请选择内里";
+            // 隐藏时候从父控件中移除
+            hud.removeFromSuperViewOnHide= YES;
+            [hud hide:YES afterDelay:1];
+        }
     }
     
     if ((self.colorStrChn != nil && self.sizeStrChn != nil && self.nlStrChn != nil) || (self.colorStrChn != NULL && self.sizeStrChn != NULL && self.nlStrChn != NULL)) {
@@ -522,6 +546,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
         [clDic setObject:ar[1] forKey:@"color_id"];
         [clDic setObject:ar[2] forKey:@"size_id"];
         [clDic setObject:ar[3] forKey:@"num"];
+        NSLog(@"%@", clDic);
         [self.dictArray addObject:clDic];
     }
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self.dictArray options:NSJSONWritingPrettyPrinted error:nil];
@@ -874,16 +899,51 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     SPXQModel *model = self.SPXQArray[0];
     DetailView *detailView = [DetailView loadFromNib];
     detailView.frame = CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 108);
-    detailView.xiangqingLabel.text = model.goods_datails;
-    [self.mainScrollView addSubview:detailView];
+//    NSString *strHTML = @"<div style=\"text-align:center;\"><img src=\"/Uploads/Editor/2016-11-20/5830edeb561bd.jpg\" alt="" /></div><div style=\"text-align:center;\"><br /></div>";
+    NSString *strHTML = model.goods_datails;
+    NSMutableString *targerStr = [[NSMutableString alloc] initWithString:strHTML];
+//
+    // 搜索制定字符 在指定位置插入字符串
+    NSRange range;
+    range = [targerStr rangeOfString:@"/Uploads/"];
+    if (range.location != NSNotFound) {
+//        NSLog(@"found at location = %lu, length = %lu",(unsigned long)range.location,(unsigned long)range.length);
+        [targerStr insertString:@"http://xiezhongyunshang.com" atIndex:range.location];
+        strHTML = targerStr;
+        NSMutableString *html = [NSMutableString string];
+        
+        [html appendString:@"<html>"];
+        [html appendString:@"<head>"];
+        [html appendString:@"<style>"];
+        [html appendString:@"</style>"];
+        [html appendString:@"</head>"];
+        [html appendString:@"<body style=\"font-size:14px\">"];
+        [html appendString:strHTML];
+        [html appendString:@"</body>"];
+        
+        [html appendString:@"</html>"];
+        detailView.webView.delegate = self;
+        detailView.webView.dataDetectorTypes = UIDataDetectorTypeAll;
+        detailView.webView.scalesPageToFit = YES;
+        
+        [detailView.webView loadHTMLString:html baseURL:[NSURL fileURLWithPath: [[NSBundle mainBundle] bundlePath]]];
+        [self.mainScrollView addSubview:detailView];
+        
+    }else{
+        NSLog(@"Not Found");
+    }
+    
+    
     
     GuiGeView *guigeView = [GuiGeView loadFromNib];
     guigeView.frame = CGRectMake(SCREEN_WIDTH * 2, 0, SCREEN_WIDTH, SCREEN_HEIGHT - 108);
     NSMutableArray *arra = self.SpxqSizeArray;
+    NSMutableArray *arraKey = self.SpxqSizeKeyArray;
     for (int i = 0; i < arra.count; i++) {
         for (int j = 0; j < arra.count - 1; j++) {
             if([[arra objectAtIndex:j] compare:[arra objectAtIndex:j + 1] options:NSNumericSearch] == 1){
                 [arra exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
+                [arraKey exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
             }
         }
     }
@@ -907,6 +967,17 @@ static NSString *const pickNl_cell = @"pickNl_cell";
     guigeView.xielicaizhi.text = model.linmater;
     guigeView.shiYong.text = model.audience;
     [self.mainScrollView addSubview:guigeView];
+}
+
+//将HTML字符串转化为NSAttributedString富文本字符串
+- (NSAttributedString *)attributedStringWithHTMLString:(NSString *)htmlString
+{
+    NSDictionary *options = @{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                               NSCharacterEncodingDocumentAttribute :@(NSUTF8StringEncoding) };
+    
+    NSData *data = [htmlString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    return [[NSAttributedString alloc] initWithData:data options:options documentAttributes:nil error:nil];
 }
 
 #pragma mark --- 轮播图
@@ -1050,7 +1121,7 @@ static NSString *const pickNl_cell = @"pickNl_cell";
         }
         for (int i = 0; i < count1; i++) {
             for (int j = 0; j < count1 - i - 1; j++) {
-                if([[arry objectAtIndex:j] compare:[arry1 objectAtIndex:j + 1] options:NSNumericSearch] == 1){
+                if([[arry1 objectAtIndex:j] compare:[arry1 objectAtIndex:j + 1] options:NSNumericSearch] == 1){
                     [arry1 exchangeObjectAtIndex:j withObjectAtIndex:(j + 1)];
                 }
             }
@@ -1132,6 +1203,7 @@ static NSInteger pageNumber = 0;
     self.shoucangBT = [UIButton buttonWithType:UIButtonTypeCustom];
     self.shoucangBT.titleLabel.font = [UIFont systemFontOfSize:14];
     self.shoucangBT.frame = CGRectMake(btWidth, 8, btWidth, 40);
+    [self.shoucangBT setImage:[UIImage imageNamed:@"sc"] forState:UIControlStateNormal];
     [self.shoucangBT addTarget:self action:@selector(shoucangAction:) forControlEvents:UIControlEventTouchUpInside];
     [bBackView addSubview:self.shoucangBT];
     
@@ -1236,7 +1308,13 @@ static NSInteger pageNumber = 0;
 }
 
 - (void)backButton:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self.orderType isEqualToString:@"999"]) {
+        HomeViewController *homeVC = [[HomeViewController alloc] init];
+        self.tabBarController.selectedIndex = 0;
+        [self.tabBarController.navigationController pushViewController:homeVC animated:YES];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

@@ -11,6 +11,6 @@
 @interface SearchViewController : UIViewController
 
 @property (nonatomic , copy) NSString *searchID;
-
+@property (nonatomic , copy) NSString *sectionID;
 
 @end

@@ -64,6 +64,10 @@
 - (void)requestData {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     dic[@"search"] = self.searchID;
+    if ([self.sectionID isEqualToString:@"2"]) {
+        [dic removeAllObjects];
+        dic[@"app_model_id"] = @"2";
+    }
     _allDataArray = [NSMutableArray array];
     [_allDataArray removeAllObjects];
     self.page = 2;

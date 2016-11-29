@@ -10,4 +10,5 @@
 
 @interface ShowAllViewController : UIViewController
 @property (nonatomic , copy) NSString *lanmuID;
+@property (nonatomic , copy) NSString *orderID;
 @end
